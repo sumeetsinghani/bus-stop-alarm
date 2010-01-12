@@ -32,8 +32,8 @@
 = Deadlines: =
 Put down their most commonly used email: <br />
     djtruong@cs.washington.edu <br />
-    dnufer@cs.washington.edu
-    huydang@cs.washington.edu
+    dnufer@cs.washington.edu <br />
+    huydang@cs.washington.edu <br />
 
 = EVERYONE MUST DO THESE: =
 
