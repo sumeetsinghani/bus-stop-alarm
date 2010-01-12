@@ -1,0 +1,50 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+
+Features (4)
+Major
+    Select bus route
+    Select stop
+        Major predefined stops
+        Using custom defined gps location
+        Using map to define stop location
+     User profile
+    
+    
+Minor
+    selectable ringtones
+        types of vibrations
+    advertising (applicable ads) - does google api give us links to ads?
+    help documentation - youtube video
+    background app minimization
+
+Software Toolset
+    Backend- how to store info (what to store) local locations on phone or on server
+
+
+
+Tasks:
+Download android sdk (version 1.6?) using eclipse (ALL)
+Get API key from google (David N)
+Setup repo on Google (David N) - Done
+Requirements outline - everyone do separately
+
+Deadlines:
+Put down their most commonly used email:
+djtruong@cs.washington.edu
+
+
+EVERYONE
+Monday 1/18/09 Requirements outline done (everyone write their own copy)
+Monday 1/18/09 create small android app 
+
+
+
+
