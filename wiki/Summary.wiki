@@ -31,7 +31,7 @@
 
     * Work in smaller groups on either the UI design or the Use Cases
       Groups:
-         UI: David Truong, David Nufer, Orkan Muradov
+         UI: David Truong, David Nufer, Orkan Muradov <br />
          Use Cases: Michael Eng, Huy Dang, Derek Cheng, PYONG BYON
 
 = Deadlines: =
