@@ -29,6 +29,11 @@
     * Setup repo on Google (David N) - Done
     * Requirements outline - everyone do separately
 
+    * Work in smaller groups on either the UI design or the Use Cases
+      Groups:
+         UI: David Truong, David Nufer, Orkan Muradov
+         Use Cases: Michael Eng, Huy Dang, Derek Cheng, PYONG BYON
+
 = Deadlines: =
 Put down their most commonly used email: <br />
     djtruong@cs.washington.edu <br />
@@ -40,4 +45,5 @@ Put down their most commonly used email: <br />
 = EVERYONE MUST DO THESE: =
 
 Monday 1/18/09 Requirements outline done (everyone write their own copy) <br />
-Monday 1/18/09 create small android app 
+Monday 1/18/09 Create small android app 
+Monday 1/18/09 Create mockup of of UI or Use cases with their respective groups
