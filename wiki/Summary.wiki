@@ -33,11 +33,9 @@
 Put down their most commonly used email: <br />
     djtruong@cs.washington.edu <br />
     dnufer@cs.washington.edu
-
+    huydang@cs.washington.edu
 
 = EVERYONE MUST DO THESE: =
 
 Monday 1/18/09 Requirements outline done (everyone write their own copy) <br />
 Monday 1/18/09 create small android app 
-
-
