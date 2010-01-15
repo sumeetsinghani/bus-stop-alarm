@@ -45,6 +45,6 @@ Put down their most commonly used email: <br />
 
 = EVERYONE MUST DO THESE: =
 
-Monday 1/18/09 Requirements outline done (everyone write their own copy) <br />
-Monday 1/18/09 Create small android app <br />
+<STRIKE> Monday 1/18/10</STRIKE> <b>Changed to Friday 1/15/10</b> Requirements outline done (everyone write their own copy)  <br />
+Monday 1/18/10 Create small android app <br />
 Monday 1/18/09 Create mockup of of UI or Use cases with their respective groups
