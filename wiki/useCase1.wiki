@@ -4,22 +4,23 @@
 
 *Primary factor*: App user who is taking a bus.
 
-*Scope*: Android app "Bus Stop Alarm", user starts using the app until user arrives at the stop
+*Scope*: Android App "Bus Stop Alarm", user starts using this App on a bus until he/she arrives at their desired bus stop.
 
-*Level*: user level
+*Level*: User level
 
 *Stakeholder and Interests:*
-    * User -- wants to set an alarm to wake him/her up on time at the pre-set location automatically
-    * App -- wants the destination bus of user.
+    * User -- wants to set an alarm to wake him/her up on time at their desired location.
+    * App -- wants the destination bus of user.      // ???
 
-*Precondition:* User has the program open, and has internet connection available.
+*Precondition:* User has the App open on his/her Android phone
+  // I deleted internet connection available because it would contradict step2 extension.
 
-*Minimal Guarantee:* alarm is set to properly predefined time.
+*Minimal Guarantee:* Alarm is set based on predefined time.
 
-*Success Guarantee:* The alarm is set correctly and wakes the user up to get out of bus on time. Save user activities to his profile for future suggestion.
+*Success Guarantee:* Alarm is set correctly and it alerts user to get off bus on time. User activities are saved in the system for future use.
 
 *Main Success Scenario:*    
-    * 1. User allows app to identify his/her location.
+    * 1. User allows App to identify his/her location.
     * 2. App finds user's location.
     * 3. User inputs a destination bus stop in the system.
     * 4. App provides all the bus routes that are currently available to user's place
@@ -44,7 +45,7 @@
     * 7a. App does not alert user on time, or it does not ring at all.
         7a1. User sends feedback to server, and quits the program.
     * 8a. User doesn't want to provide feedback
-        8a1. User backs out of use case.
+        8a1. User backs out of this use case.
 
 
 
