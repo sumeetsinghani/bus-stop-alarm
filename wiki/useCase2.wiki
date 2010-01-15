@@ -7,8 +7,8 @@
 *Success Guarantee:* Adjusts the alarm time accordingly.  <br />
 *Main Success Scenario:* 
   1. App uses GPS to determine current location.
-  1. App calculates new alarm time based on several factors.
-  1. Sets the new alarm time.
+  2. App calculates new alarm time based on several factors.
+  3. Sets the new alarm time.
 *Extensions:* 
   1a. GPS is unable to determine current location.
     * 1a1. App checks if the app has been unable to determine current location for an extended amount of time, and notifies the user if this is so.
