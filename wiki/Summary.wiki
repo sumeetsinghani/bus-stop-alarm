@@ -25,7 +25,7 @@
 
 = Tasks: =
     * Download android sdk (version 1.6?) using eclipse (ALL)
-    * Get API key from google (David N)
+    * Get API key from google <Strike>(David N)</strike> <b>(everyone needs to get their own key for googlemaps)<b>
     * Setup repo on Google (David N) - Done
     * Requirements outline - everyone do separately
 
