@@ -3,7 +3,7 @@
 *Primary Actor:* App <br />
 *Level:* Subfunction			 *_not sure on this one_* <br />
 *Preconditions:* User has the program open on his/her cell phone, a destination and bus route are selected by the user, the app has access to the Internet. <br />
-*Minimal Guarantee:* Does not adjust the alarm time. <br />
+*Minimal Guarantee:* App does not adjust the alarm time. <br />
 *Success Guarantee:* Adjusts the alarm time accordingly.  <br />
 *Main Success Scenario:* 
   * 1. App uses GPS to determine current location.
