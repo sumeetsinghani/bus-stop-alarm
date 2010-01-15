@@ -11,7 +11,7 @@
   * 3. Sets the new alarm time.
 *Extensions:* 
   * 1a. GPS is unable to determine current location.
-    * 1a1. App checks if the app has been unable to determine current location for an extended amount of time, and notifies the user if this is so.
-    * 1a2. App retains the most recently updated alarm time, and backs out of use case.
+   * 1a1. App checks if the app has been unable to determine current location for an extended amount of time, and notifies the user if this is so.
+   * 1a2. App retains the most recently updated alarm time, and backs out of use case.
   * 2a. Some of the factors cannot not be determined.
-    * 2a1. App retains the most recently updated alarm time, and backs out of use case.
+   * 2a1. App retains the most recently updated alarm time, and backs out of use case.
