@@ -31,21 +31,21 @@
 
 *Extensions:*
     * 1a. User doesn't allow system to identify his/her location.
-        1a1. User either backs out of use case or inputs the location he/she wants to start.
+      *  1a1. User either backs out of use case or inputs the location he/she wants to start.
     * 2a. App is unable to connect to Internet.
-        2a1. App checks the network setting and tries to reconnect.
-        2a2. If it fails, it shows an Internet disconnection message to user, then quits the program.
+      *  2a1. App checks the network setting and tries to reconnect.
+      *  2a2. If it fails, it shows an Internet disconnection message to user, then quits the program.
     * 3a. User inputs an invalid input destination.
-        3a1. User either backs out of this use case or tries it again.
+      *  3a1. User either backs out of this use case or tries it again.
     * 4a. There is no bus route available in the list.
-        4a1. App informs user that there is no bus route to choose. 
-        4a2. User either backs out of this use case or goes to step 3.    
+      *  4a1. App informs user that there is no bus route to choose. 
+      *  4a2. User either backs out of this use case or goes to step 3.    
     * 6a. User doesnt' agree with the alarm time.
-        6a1. User sets the alarm manually.
+      *  6a1. User sets the alarm manually.
     * 7a. App does not alert user on time, or it does not ring at all.
-        7a1. User sends feedback to server, and quits the program.
+      *  7a1. User sends feedback to server, and quits the program.
     * 8a. User doesn't want to provide feedback
-        8a1. User backs out of this use case.
+      *  8a1. User backs out of this use case.
 
 
 
