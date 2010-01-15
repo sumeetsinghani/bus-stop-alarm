@@ -1,10 +1,15 @@
 = Use Case 2: Adjusts Alarm =
 
 *Primary Actor:* App 
-*Level:* Subfunction			 *_not sure on this one_* 
+
+*Level:* Subfunction	  //not sure
+
 *Preconditions:* The program is on, a destination and a bus route are given, App has access to the Internet.
+
 *Minimal Guarantee:* App retains the current alarm time. (no update)
+
 *Success Guarantee:* App adjusts the alarm time based on the calculations.
+
 *Main Success Scenario:* 
   * 1. App uses GPS to determine current location.
   * 2. App calculates new alarm time based on several factors.
