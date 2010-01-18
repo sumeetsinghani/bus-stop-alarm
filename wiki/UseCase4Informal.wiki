@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Informal use case for retrieving a new alarm tone
 = Retrieve a New Alarm Tone =
 
 The user initiates a request for a list of alarm tones and sends it to the server. The server delivers a list of available alarms. The user checks the contents of the list and selects an alarm. The application verifies that the user does not already own the selected alarm and verifies there is enough space to store the alarm. The user initiates a request for the selected alarm to the server. The server delivers the selected alarm to the user. The user stores the alarm for future use.
