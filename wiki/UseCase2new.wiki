@@ -1,0 +1,26 @@
+= Use Case 2: Setting Alarm =
+
+*Primary Actor:* User 
+
+*Level:* User Level
+
+*Preconditions:* The program is on, a destination and a bus route are given.
+
+*Minimal Guarantee:* the chosen destination and bus route are retained.
+
+*Success Guarantee:* Alarm is set.
+
+*Main Success Scenario:* 
+  * 1. User chooses a ringtone/vibration.
+  * 2. App shows the remaining time and distance to destination.
+  * 3. User confirms the alarm setting.
+
+*Extensions:* 
+  * 1a. User chooses some ringtone/vibration, but phone does not support them.
+    *  1a1. App notifies user the problem.
+    *  1a2. App sets them off.
+
+ * 3a. User disagrees with the settings.
+  *  3a1. User backs out of this use case.
+ 
+ * 3b. User saves ....
