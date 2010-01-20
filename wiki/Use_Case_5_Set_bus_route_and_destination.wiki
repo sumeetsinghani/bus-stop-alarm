@@ -1,5 +1,3 @@
-#USE CASE 1(modified): SET A BUS ROUTE AND DESTINATION
-
 * Primary factor:* 
      person who is taking bus (User)
 * Scope:* 
