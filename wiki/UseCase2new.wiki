@@ -14,13 +14,19 @@
   * 1. User chooses a ringtone/vibration.
   * 2. App shows the remaining time and distance to destination.
   * 3. User confirms the alarm setting.
+  * 4. User saves the setting in the list of favorites.
 
 *Extensions:* 
-  * 1a. User chooses some ringtone/vibration, but phone does not support them.
-    *  1a1. App notifies user the problem.
-    *  1a2. App sets them off.
+  * 1a. User does not choose a ringtone/vibration.
+    *  1a1. App uses the default ringtone/vibration.
 
- * 3a. User disagrees with the settings.
+  * 1b. User chooses some ringtone/vibration, but phone does not support them.
+    *  1b1. App notifies user the problem.
+    *  1b2. App sets them off.
+
+ * 3a. User disagrees with the setting.
   *  3a1. User backs out of this use case.
  
- * 3b. User saves ....
+ * 4a. The setting cannot be saved.
+  *  4a1. App notifies user that the list of favorites is full.
+  * 4a2. (maybe.. App replaces the old one with it)
