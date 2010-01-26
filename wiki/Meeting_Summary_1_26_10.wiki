@@ -1,0 +1,20 @@
+Tasks
+
+All - send out answers to Coding style guidelines by Sunday Morning 1/31/10
+
+Due Next meeting February 2nd
+UML class diagram: David Nufer, Orkhan Muradov, Huy Dang
+UML sequence diagrams: Pyong Byon, Derek Cheng, Michael Eng
+Zero Feature Release February 1st
+
+2/5
+Presentation: David Truong
+Email Marty - regarding using the one bus away gui design (David)
+
+<u>Additional Tasks</u>
+Orkhan - GUI Interface 1/3/10
+Pyon & Derek - ringtones 1/4/10
+Huy & David N - Querying Bus API 1/4/10
+
+
+Notes: seattle bus by application for Android
