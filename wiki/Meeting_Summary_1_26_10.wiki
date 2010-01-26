@@ -2,7 +2,7 @@ Tasks
 
 All - send out answers to Coding style guidelines by Sunday Morning 1/31/10
 
-Due Next meeting February 2nd
+Due Next meeting February 2nd<br>
 UML class diagram: David Nufer, Orkhan Muradov, Huy Dang<br>
 UML sequence diagrams: Pyong Byon, Derek Cheng, Michael Eng<br>
 Zero Feature Release February 1st
