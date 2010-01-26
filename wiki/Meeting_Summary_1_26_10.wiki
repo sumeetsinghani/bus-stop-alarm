@@ -8,13 +8,13 @@ UML sequence diagrams: Pyong Byon, Derek Cheng, Michael Eng<br>
 Zero Feature Release February 1st
 
 2/5
-Presentation: David Truong
+Presentation: David Truong<br>
 Email Marty - regarding using the one bus away gui design (David)
 
 <u>Additional Tasks</u>
-Orkhan - GUI Interface 1/3/10
-Pyon & Derek - ringtones 1/4/10
-Huy & David N - Querying Bus API 1/4/10
-
-
+Orkhan - GUI Interface 1/3/10<br>
+Pyon & Derek - ringtones 1/4/10<br>
+Huy & David N - Querying Bus API 1/4/10<br>
+<br>
+<br>
 Notes: seattle bus by application for Android
