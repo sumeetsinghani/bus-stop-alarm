@@ -12,9 +12,9 @@ Presentation: David Truong<br>
 Email Marty - regarding using the one bus away gui design (David)
 
 <u>Additional Tasks</u>
-Orkhan - GUI Interface 1/3/10<br>
-Pyon & Derek - ringtones 1/4/10<br>
-Huy & David N - Querying Bus API 1/4/10<br>
+Orkhan - GUI Interface 2/3/10<br>
+Pyon & Derek - ringtones 2/4/10<br>
+Huy & David N - Querying Bus API 2/4/10<br>
 <br>
 <br>
 Notes: seattle bus by application for Android
