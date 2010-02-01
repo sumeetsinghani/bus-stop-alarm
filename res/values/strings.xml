@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_label">Search, BusStopAlarm!</string>
+    <string name="app_name">Bus Stop Alarm</string>
+     <string name="intro">Selected Stop: </string>
+  <string name="ringtone">Select a Ringtone</string>
+  <string name="proximity">Select a Unit</string>
+</resources>
