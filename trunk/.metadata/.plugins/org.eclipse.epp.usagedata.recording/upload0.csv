@@ -1,0 +1,26 @@
+what,kind,bundleId,bundleVersion,description,time
+started,bundle,org.eclipse.core.filesystem,1.2.0.v20090507,"org.eclipse.core.filesystem",1263450786694
+started,bundle,org.eclipse.ltk.core.refactoring,3.5.0.v20090513-2000,"org.eclipse.ltk.core.refactoring",1263450786706
+started,bundle,org.eclipse.ltk.ui.refactoring,3.4.100.v20090604,"org.eclipse.ltk.ui.refactoring",1263450786712
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450796258
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450798930
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450804010
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450807694
+executed,command,org.eclipse.ui,3.5.1.M20090902-1000,"org.eclipse.ui.edit.copy",1263450906540
+started,bundle,org.eclipse.debug.core,3.5.0.v20090526-1600,"org.eclipse.debug.core",1263450931461
+started,bundle,org.eclipse.jdt.launching,3.5.0.v20090527,"org.eclipse.jdt.launching",1263450931516
+started,bundle,org.eclipse.jdt.apt.core,3.3.201.R35x_v20090818-0235,"org.eclipse.jdt.apt.core",1263450931759
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450931811
+error,log,,,"Could not save master table to file '/home/david/Desktop/cse403-bus stop alarm/bus stop alarm/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources'.",1263450931886
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450932009
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450944691
+activated,view,org.eclipse.jdt.ui,3.5.1.r351_v20090821-0800,"org.eclipse.jdt.ui.PackageExplorer",1263450945855
+started,bundle,org.eclipse.wst.sse.core,1.1.401.v200909172215,"org.eclipse.wst.sse.core",1263450946169
+started,bundle,org.eclipse.compare.core,3.5.0.I20090430-0408,"org.eclipse.compare.core",1263450953039
+opened,editor,org.eclipse.jdt.ui,3.5.1.r351_v20090821-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1263450953175
+activated,editor,org.eclipse.jdt.ui,3.5.1.r351_v20090821-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1263450953460
+started,bundle,org.eclipse.core.variables,3.2.200.v20090521,"org.eclipse.core.variables",1263450953830
+activated,view,org.eclipse.jdt.ui,3.5.1.r351_v20090821-0800,"org.eclipse.jdt.ui.PackageExplorer",1263450957427
+started,bundle,org.eclipse.compare,3.5.0.I20090514-0808,"org.eclipse.compare",1263450959604
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263450968164
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1263451024344

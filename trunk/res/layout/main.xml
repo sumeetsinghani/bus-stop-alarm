@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:background="@drawable/black"
+	android:gravity="center_horizontal">
+	
+	<TextView android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:text="Bus Stop Alarm" 
+		android:textSize="12pt" />
+	
+
+	<LinearLayout android:id="@+id/RouteSearchBoxArea" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal">
+		
+		<TextView android:text="Route: " 
+			android:layout_width="wrap_content" 
+			android:layout_height="fill_parent" 
+			android:textSize="10pt" 
+			android:gravity="center"></TextView>
+		
+		<EditText android:id="@+id/RouteSearchBox" 
+			android:layout_width="wrap_content" 
+			android:layout_height="fill_parent" 
+			android:minWidth="50px" 
+			android:inputType="number" 
+			android:hint="Enter Route Number"></EditText>
+			
+		<Button android:text="Go" 
+			android:id="@+id/RouteSearchButton" 
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"></Button>
+			
+	</LinearLayout>
+	
+	<LinearLayout android:gravity="fill_vertical" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" >
+		
+		<TextView android:text="Recently Selected Routes:" 
+			android:textSize="8pt" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:padding="10px"></TextView>
+		
+		
+	</LinearLayout>
+	
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:background="@drawable/black" 
+		android:gravity="center_horizontal|bottom">
+
+		<Button android:text="Favorites"
+			android:id="@+id/FavButton" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+		</Button>
+
+		<Button android:text="Major Locations" 
+			android:id="@+id/MajorButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+		</Button>
+
+	</LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:text="@string/intro"
+		android:textSize="12pt" />
+	<TextView android:id="@+id/stopname" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="12pt" />
+
+	<CheckBox android:id="@+id/VibrateCheckbox" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:text="Vibrate" />
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:text="@string/ringtone"
+		android:textSize="10pt" />
+	<Spinner android:id="@+id/RingtoneSelector" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:prompt="@string/ringtone" />
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:text="Proximity:"
+		android:textSize="10pt" />
+	
+	<LinearLayout android:id="@+id/ProximityBarArea" 
+		android:gravity="fill_vertical" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:text="0"
+			android:textSize="8pt" 
+			android:padding="3px"/>
+		<SeekBar android:id="@+id/ProximityBar" 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:max="10" android:minWidth="270px"/>
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="10"
+			android:textSize="8pt" android:padding="3px"/>
+	</LinearLayout>
+	
+	<Spinner android:id="@+id/ProximityUnits" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:prompt="@string/proximity"/>
+		
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" 
+		android:gravity="bottom">
+		
+		<Button android:text="    Cancel    " 
+			android:id="@+id/CancelButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"/>
+		<Button android:text="Save as favorite" 
+			android:id="@+id/SetAsFavButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"/>
+		<Button android:text="        OK         " 
+			android:id="@+id/OKButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"/>
+			
+	</LinearLayout>
+</LinearLayout>
