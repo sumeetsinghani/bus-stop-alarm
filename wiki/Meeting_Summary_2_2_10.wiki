@@ -14,13 +14,13 @@ Huy and Michael - Phase 3 ZFR instructions document Part C Database
 
 Other tasks
 Derek and Pyong - ringtones (2/4)
-        - 
-1. request the bus route and stops from the server. Successfully show the complete route and stops on map ( with function zoom in/out)
-        - 
-2. request GPS signal for locating current position. Updating current distance between current position and destination in real time
-	- work on updating positions and distances
-3. Building database to contain list of favorite/major locations with recent bus route, save settings of alarm(including vibration and ringtones)
-	
+        
+1. request the bus route and stops from the server. 
+        - Huy and Michael
+2.  Updating current distance between current position and destination in real time
+	- ?
+3. Front end bus stops(displaying route on map)
+	- David N and Orkhan
 4. set up ringtones/vibration option with alarm clock to remind user on time
 	- Derek, Pyong
 5. Building the GUI design for major pages: main page, map page, favorite/major page, confirmation page.
