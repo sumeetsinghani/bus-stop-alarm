@@ -24,6 +24,7 @@ public class MainPage extends Activity {
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(v.getContext(), MapPage.class));
+				finish();
 			}	
 		});
 		
@@ -31,6 +32,7 @@ public class MainPage extends Activity {
 		FavButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(v.getContext(), LocationListPage.class));
+				finish();
 			}	
 		});
 		
@@ -38,6 +40,7 @@ public class MainPage extends Activity {
 		MajorButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(v.getContext(), LocationListPage.class));
+				finish();
 			}	
 		});
 	}

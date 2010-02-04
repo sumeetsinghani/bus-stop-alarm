@@ -33,6 +33,7 @@ public class LocationListPage extends ListActivity {
 	    	Intent i = new Intent(view.getContext(), ConfirmationPage.class);
 	    	i.putExtra("name", locationList.get(position).get("name"));
 	    	startActivity(i);
+	    	finish();
 	    }
 	  });
 	  
