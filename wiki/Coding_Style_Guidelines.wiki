@@ -1,0 +1,13 @@
+Using: Android Code Style Rules
+Link: http://source.android.com/submit-patches/code-style-guide
+Reason: the project aims for Android application, therefore it's reasonable to use this convention code style.
+Detailed: the detail is described carefully in the link above.
+
+To enforce a consistent coding style between group members: the project manager will have the responsibilities to look over the submission code on cvs to modify, remind teammates to follow the given code style rule. With the help of another one or two members, PM can remove redundant codes, fix the codes to make them easier to read and catch up. Also, PM can also require teammate who wrote specific does to re-submit the better version. This will ensure the works following from these submitted code can be done with no/little time wasting to understand the given codes in cvs.
+
+Tools used: git( do we have to?), Eclipse Galileo 1.2.1, PMD (from course link page)
+Methodologies: maintain calendar on code.google.com with every submission and modification. Every change in cvs has to have clear, detail comments about what are changed, the scope of changed, date, who is responsible, etc
+
+We plan on using the Android Code Style Rules as a model for our coding guidelines. We have decided to use this guideline to be consistent with the style used for other android applications.
+
+Consistency of the coding style between group members will be enforced by code reviews. Beginning each new piece of code that is uploaded to the svn we will 
