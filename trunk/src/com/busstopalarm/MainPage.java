@@ -1,6 +1,8 @@
 package com.busstopalarm;
 
 
+import java.io.IOException;
+
 import com.busstopalarm.R;
 
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 /**
  * Main page of the Bus Stop Alarm
  *
@@ -23,6 +26,15 @@ public class MainPage extends Activity {
 		final Button RouteSearchButton = (Button)findViewById(R.id.RouteSearchButton);
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				
+				try {
+					String s = DataFetcher.getRouteById("30");
+					Toast t = Toast.makeText(v.getContext(), s.subSequence(0, 500), Toast.LENGTH_LONG);
+					t.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				startActivity(new Intent(v.getContext(), MapPage.class));
 				finish();
 			}	
@@ -63,6 +75,7 @@ public class MainPage extends Activity {
 			final Intent q = new Intent(this, ConfirmationPage.class);
 			startActivity(q);
 			finish();
+		case 3:
 		case 4:
 			finish();
 		}
