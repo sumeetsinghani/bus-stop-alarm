@@ -45,8 +45,10 @@ public class MapPage extends MapActivity {
 			final Intent i = new Intent(this, MainPage.class);
 			startActivity(i);
 			finish();
+			break;
 		case 2:
 			finish();
+			break;
 		}
 		return false;
 	}

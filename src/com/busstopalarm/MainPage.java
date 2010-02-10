@@ -75,9 +75,11 @@ public class MainPage extends Activity {
 			final Intent q = new Intent(this, ConfirmationPage.class);
 			startActivity(q);
 			finish();
+			break;
 		case 3:
 		case 4:
 			finish();
+			break;
 		}
 		return false;
 
