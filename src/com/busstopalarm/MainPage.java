@@ -43,7 +43,7 @@ public class MainPage extends Activity {
 		final Button FavButton = (Button)findViewById(R.id.FavButton);
 		FavButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(v.getContext(), LocationListPage.class));
+				startActivity(new Intent(v.getContext(), FavoriteListPage.class));
 				finish();
 			}	
 		});
