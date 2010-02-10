@@ -23,6 +23,7 @@
 	<activity android:name=".ConfirmationPage" android:screenOrientation="portrait"> </activity>
 	<activity android:name=".MapPage"></activity>
 	<activity android:name=".LocationListPage" android:screenOrientation="portrait"></activity>
+	<activity android:name=".FavoriteListPage" android:screenOrientation="portrait"></activity>
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 
