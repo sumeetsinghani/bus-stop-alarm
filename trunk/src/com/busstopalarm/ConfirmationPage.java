@@ -1,13 +1,11 @@
 package com.busstopalarm;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -209,7 +207,7 @@ public class ConfirmationPage extends Activity {
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
 		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
-		  ringtoneList[i] = ringtoneCursor.getString(ringtoneManager.TITLE_COLUMN_INDEX);
+		  ringtoneList[i] = ringtoneCursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
 		  ringtoneCursor.moveToNext(); 
 		}
 	
@@ -228,7 +226,7 @@ public class ConfirmationPage extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
-				int index_ringtone = arg0.getId();
+				//int index_ringtone = arg0.getId();
 				//ringtoneCursor.get()
 				// adaptor.set..
 			}
