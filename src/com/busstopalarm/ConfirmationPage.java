@@ -229,7 +229,7 @@ public class ConfirmationPage extends Activity {
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
 				int index_ringtone = arg0.getId();
-				//ringtoneCursor.get
+				//ringtoneCursor.get()
 				// adaptor.set..
 			}
 
