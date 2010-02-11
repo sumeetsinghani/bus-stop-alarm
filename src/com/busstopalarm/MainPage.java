@@ -43,7 +43,9 @@ public class MainPage extends Activity {
 		final Button FavButton = (Button)findViewById(R.id.FavButton);
 		FavButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(v.getContext(), FavoriteListPage.class));
+				Intent i = new Intent(v.getContext(), LocationListPage.class);
+				i.putExtra("listType", LocationListPage.FAVORITES);
+				startActivity(i);
 				finish();
 			}	
 		});
@@ -51,7 +53,9 @@ public class MainPage extends Activity {
 		final Button MajorButton = (Button)findViewById(R.id.MajorButton);
 		MajorButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(v.getContext(), LocationListPage.class));
+				Intent i = new Intent(v.getContext(), LocationListPage.class);
+				i.putExtra("listType", LocationListPage.MAJOR);
+				startActivity(i);
 				finish();
 			}	
 		});
