@@ -52,8 +52,8 @@ public class BusDbAdapter {
                     + "count text not null, time text not null);";
     
     private static final String DATABASE_CREATE_MAJOR_DEST =
-        "create table major_destination (_id integer primary key autoincrement, "
-                + "route text not null, description text not null"
+        	"create table major_destination (_id integer primary key autoincrement, "
+                + "route text not null, description text not null, "
                 + "longtitude text not null, latitude text not null);";
 
     private static final String DATABASE_TABLE_DEST = "destination";
