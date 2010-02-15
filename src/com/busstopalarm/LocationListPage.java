@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.*;
 import android.widget.AdapterView.*;
@@ -21,6 +22,10 @@ public class LocationListPage extends ListActivity {
 	public static final int FAVORITES = 1;
 	public static final int MAJOR = 2;
 	
+	public BusDbAdapter mBusDbHelper;
+	public Cursor mCursor;
+	
+	
 	/**
 	 * a list is either LocatonListPage.FAVORTIES or LocatonListPage.MAJOR 
 	 */
@@ -33,6 +38,11 @@ public class LocationListPage extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
+	  
+	  //Try with DB
+	  mBusDbHelper = new BusDbAdapter(this);
+	  mBusDbHelper.open();
+	  
 	  
 	  listType = getIntent().getIntExtra("listType", 0);
 	  if (listType == 0) {
