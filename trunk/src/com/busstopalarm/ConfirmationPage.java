@@ -43,6 +43,7 @@ public class ConfirmationPage extends Activity {
 	private boolean vibration;
 	private Ringtone ringtone;
 	private BusRoute currentBusRoute;
+	
 	private static int time;      // time in seconds
 	private Uri ringtone_uri;
 	
@@ -366,6 +367,7 @@ public class ConfirmationPage extends Activity {
 		switch (item.getItemId()) {
 		case 1:
 			finish();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 
