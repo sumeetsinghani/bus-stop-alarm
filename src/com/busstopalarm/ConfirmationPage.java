@@ -195,8 +195,24 @@ public class ConfirmationPage extends Activity {
 	
 	}  // ends onCreate method
 
+	// For distance between two points, we will use Euclidean distance. The Earth is not an Euclidean plane, but this will
+	// give a good approximation. Assuming Euclidean plane, this algorithm sums a number of straight line distances.
+	// This means the calculated distance will never underestimate the actual distance, which is good.	
+	// not implemented yet!
+	public static double calculateInitialDistance() {
+		// get starting s busstop in busroute
+			// will the starting busstop be specified by the user or does the app have to figure it out?
+		// get ending d busstop in busroute
+		// double dist = 0.0;
+		// for (int i = s; i < d; i++) {
+		//     dist += calculateDist(busroute[i],busroute[i+1];
+		// return dist;
+		return 0.0;
+	}
 	
-	public static String timeConverter(){
+	public static String timeConverter() {
+		if (time < 0)
+			return ("timeConverter(): Error! time should not be negative.");
 		if (time < 60)
 			return time + " seconds left until alarm goes off";
 		if (time < 120)
