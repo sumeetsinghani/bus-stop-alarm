@@ -217,6 +217,14 @@ public class ConfirmationPage extends Activity {
 		return 0.0;
 	}
 	
+	// Updates the average speed based on previous average speed and current speed.
+	// If implemented like this, we need a average speed field?
+	// We could start with an initial average speed (equivalent to 30 mph?) and do a something like
+	// avg = k*avg + (1-k)current where 0 <= k <= 1.
+	public static void updateAverageSpeed() {
+		
+	}
+
 	public static String timeConverter() {
 		if (time < 0)
 			return ("timeConverter(): Error! time should not be negative.");
