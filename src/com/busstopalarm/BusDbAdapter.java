@@ -1,5 +1,10 @@
 package com.busstopalarm;
 
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,8 +24,9 @@ public class BusDbAdapter {
 	 * DESTINATION TABLE
 	 */
     public static final String KEY_DEST_ROUTE = "route_id";
+    public static final String KEY_DEST_STOPID = "stop_id";
     public static final String KEY_DEST_DESC = "description";
-    public static final String KEY_DEST_LONG = "longtitude";
+    public static final String KEY_DEST_LONG = "longitude";
     public static final String KEY_DEST_LAT = "latitude";
     public static final String KEY_DEST_COUNT = "count";  //if the bus route is used, increase count. Fav return the top 20 routes
     public static final String KEY_DEST_TIME = "time"; //get current time from phone, used to get recent routes.
@@ -47,14 +53,15 @@ public class BusDbAdapter {
 
     private static final String DATABASE_CREATE_DEST=
             "create table destination (_id integer primary key autoincrement, "
-                    + "route_id text not null, description text not null, "
-                    + "longtitude text not null, latitude text not null, "
-                    + "count text not null, time text not null);";
+                    + "route_id text not null, stop_id text not null, " 
+                    + "description text not null, "
+                    + "longitude text not null, latitude text not null, "
+                    + "count integer not null, time text not null);";
     
     private static final String DATABASE_CREATE_MAJOR_DEST =
         	"create table major_destination (_id integer primary key autoincrement, "
-                + "route text not null, description text not null, "
-                + "longtitude text not null, latitude text not null);";
+                + "route_id text not null, description text not null, "
+                + "longitude text not null, latitude text not null);";
 
     private static final String DATABASE_TABLE_DEST = "destination";
     private static final String DATABASE_TABLE_MAJOR_DEST = "major_destination";
@@ -121,6 +128,7 @@ public class BusDbAdapter {
      * otherwise return a -1 to indicate failure.
      * 
      * @param route_id The Id of the bus route
+     * @param stop_id The Id of the bus stop
      * @param destination The description of the destination, e.x: 45th & 15th
      * @param longitude The longitude of the destination
      * @param latitude The latitude of the destination
@@ -128,18 +136,20 @@ public class BusDbAdapter {
      * @param time The time of this route being used
      * @return rowId or -1 if failed
      */
-    public long createDest(String route_id, String destination, String longitude, String latitude,
-    					   String count, String time) {
+    public long createDest(String route_id, String stop_id, String destination, 
+    						String longitude, String latitude, int count, String time) {
     	
-    	//TODO: any time select the destination from favorite list, increate the count by 1
     	//TODO: any time new destination is added, check if it exists in table, If yes, increments count by 1
+    	
     	
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_DEST_ROUTE, route_id);
+        initialValues.put(KEY_DEST_STOPID, stop_id);
         initialValues.put(KEY_DEST_DESC, destination);
         initialValues.put(KEY_DEST_LONG, longitude);
         initialValues.put(KEY_DEST_LAT, latitude);
         initialValues.put(KEY_DEST_COUNT, count);
+        //String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).toString();
         initialValues.put(KEY_DEST_TIME, time);
         
         return mDb.insert(DATABASE_TABLE_DEST, null, initialValues);
@@ -166,6 +176,14 @@ public class BusDbAdapter {
         return mDb.insert(DATABASE_TABLE_MAJOR_DEST, null, initialValues);
     }
 
+    /**
+     * Delete all destination from the destination table
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteAllDestinations() {
+        return mDb.delete(DATABASE_TABLE_DEST, null, null) > 0;
+    }
+    
     /**
      * Delete the destination with the given rowId
      * 
@@ -266,10 +284,75 @@ public class BusDbAdapter {
      * @param description value to set destination description to
      * @return true if the destination was successfully updated, false otherwise
      */
-    public boolean updateDestDesc(long rowId, String description) {
-        ContentValues args = new ContentValues();
-        args.put(KEY_DEST_DESC, description);
-
+    public boolean updateDest(long rowId, String route_id, String stop_id, 
+    		String destination,	String longitude, String latitude){//, String count) {
+    	//TODO: any time select the destination from favorite list, increase the count by 1
+    	
+    	
+    	ContentValues args = new ContentValues();
+        args.put(KEY_DEST_ROUTE, route_id);
+        args.put(KEY_DEST_DESC, destination);
+        args.put(KEY_DEST_LONG, longitude);
+        args.put(KEY_DEST_LAT, latitude);
+        
+        int count = getDestCount(route_id, stop_id) + 1;
+        args.put(KEY_DEST_COUNT, count);
+        
+        String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).toString();
+        args.put(KEY_DEST_TIME, time);
+        
         return mDb.update(DATABASE_TABLE_DEST, args, KEY_DEST_ROWID + "=" + rowId, null) > 0;
     }
+    
+    /**
+    * Update the major destination using the details provided. The major
+    * destination to be updated is specified using the rowId, and it is altered 
+    * to use the description values passed in
+    * 
+    * @param rowId id of note to update
+    * @param description value to set destination description to
+    * @return true if the destination was successfully updated, false otherwise
+    */
+   public boolean updateMajorDestDesc(long rowId, String route_id, String destination, 
+   		String longitude, String latitude) {
+       ContentValues args = new ContentValues();
+       args.put(KEY_DEST_ROUTE, route_id);
+       args.put(KEY_DEST_DESC, destination);
+       args.put(KEY_DEST_LONG, longitude);
+       args.put(KEY_DEST_LAT, latitude);
+       
+       return mDb.update(DATABASE_TABLE_MAJOR_DEST, args, KEY_DEST_ROWID + "=" + rowId, null) > 0;
+   }
+   
+   /**
+    * Checks if a favorite is already in the database based off routeId and stopId combination match.
+    * @param routeId the id of the route of the potential favorite
+    * @param stopId the id of the stop of the potential favorite
+    * @return boolean value, True == the combination already represents a favorite in the database;  False == the combination doesn't match any combination in the database
+    */
+   	public boolean checkIfDest(String route_id, String stop_id){
+   		Cursor mCursor = null;
+   		mCursor = mDb.query(true, DATABASE_TABLE_DEST, new String[] {KEY_DEST_ROWID,}
+   			, KEY_DEST_ROUTE + "='" + route_id +"' " +
+   			"AND "+KEY_DEST_STOPID + " = '"+stop_id+"'", null, null, null, null, null);
+
+   		if (mCursor.getCount() != 0) {
+               return true;
+           }
+   		
+           return false;
+   	}
+   	
+   	public int getDestCount(String route_Id, String stop_Id){
+   		Cursor mCursor = null;
+   		mCursor = mDb.query(true, DATABASE_TABLE_DEST, new String[] {KEY_DEST_COUNT,}
+   			, KEY_DEST_ROUTE + "='" + route_Id +"' " +
+   			"AND "+KEY_DEST_STOPID + " = '"+stop_Id+"'", null, null, null, null, null);
+
+   		if (mCursor.getCount() != 0) {
+               return mCursor.getColumnIndexOrThrow(BusDbAdapter.KEY_DEST_COUNT);
+           }
+           return 0;
+   	}
+
 }
