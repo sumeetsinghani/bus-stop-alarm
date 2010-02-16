@@ -198,6 +198,9 @@ public class ConfirmationPage extends Activity {
 	// For distance between two points, we will use Euclidean distance. The Earth is not an Euclidean plane, but this will
 	// give a good approximation. Assuming Euclidean plane, this algorithm sums a number of straight line distances.
 	// This means the calculated distance will never underestimate the actual distance, which is good.	
+	// To calculate the remaining distance once alarm has started, we need to get the current location with the GPS.
+	// Then we need to find the closest busstop to the current location (with caveat), then do sum of straight lines again.
+	// The return values will be in some unit that will need to be converted to either miles or km. 
 	// not implemented yet!
 	public static double calculateInitialDistance() {
 		// get starting s busstop in busroute
@@ -207,6 +210,10 @@ public class ConfirmationPage extends Activity {
 		// for (int i = s; i < d; i++) {
 		//     dist += calculateDist(busroute[i],busroute[i+1];
 		// return dist;
+		return 0.0;
+	}
+	
+	public static double calculateRemainingDistance() {
 		return 0.0;
 	}
 	
