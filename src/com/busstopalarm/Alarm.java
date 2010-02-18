@@ -2,24 +2,32 @@ package com.busstopalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
-public class Alarm extends Activity { //extends Service {
+public class Alarm extends Activity {
 
 	// this TAG is for debugging
 	private static final String TAG = "inAlarmClass";
+	//private static final int NOTIFICATION_ID1 = 100001;
+	//private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
+	//private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
 	
 	private String proximityUnit;
 	private boolean vibration;
 	private Ringtone ringtone;
 	private Uri ringtone_uri;
-	private int time;
+	private static int time;
+	private final Context ctx;
 	
 	/*
 	@Override
@@ -30,15 +38,16 @@ public class Alarm extends Activity { //extends Service {
 */
 	
 	// Alarm constructor
-	public Alarm (String proximityUnit, boolean vibration, Ringtone ringtone,
+	@SuppressWarnings("static-access")
+	public Alarm (Context ctx, String proximityUnit, boolean vibration, Ringtone ringtone,
 			Uri ringtone_uri ,int time) {
 		
-		  if (ringtone_uri == null) {               
-			//  ringtone_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			  ringtone_uri = Uri.parse("file://C:/Users/byonil/Desktop/175379_KeSha_TiK_ToK.mp3");
-			  
-			  }
 		
+		  if (ringtone_uri == null) {               
+			  ringtone_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+			 // ringtone_uri = Uri.parse("file://C:/Users/byonil/Desktop/175379_KeSha_TiK_ToK.mp3");
+			 }
+		this.ctx = ctx;
 		this.proximityUnit = proximityUnit;
 		this.vibration = vibration;
 		this.ringtone = ringtone;
@@ -46,93 +55,77 @@ public class Alarm extends Activity { //extends Service {
 		this.time = time;
 	
 	}
-
 	
-	public void setAlarm(Context context) {
+	public void setAlarm() {
+		Log.v(TAG, "error here? 1 ");
+		Intent intent = new Intent(ctx, OneTimeAlarmReceiver.class);
 		
+		Log.v(TAG, "error here? 2 ");
 		
-		/* to insert in Manifext.xml
-		 <receiver android:name=".OneTimeAlarmReceiver"
-			    android:enabled="true" >
-			        </receiver>
-		*/
-		
-		
-		/*
-		Intent intent = new Intent(this, RepeatingAlarmReceiver.class);
-
-		intent.putExtra("Ringtone", Uri.parse("file:///sdcard/audiofile.mp3"));
-		intent.putExtra("vibrationPatern", new long[] { 200, 300 });
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5 * 1000), (24 * 60 * 60 * 1000), pendingIntent);
-
-		
-		
-		
-		
-		NotificationManager manger = (NotificationManager)     context.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.icon, "Wake up alarm", System.currentTimeMillis());
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
-		notification.setLatestEventInfo(context, "Context Title", "Context text", contentIntent);
-		notification.flags = Notification.FLAG_INSISTENT;
-
-		notification.sound = (Uri) intent.getParcelableExtra("Ringtone");
-		notification.vibrate = (long[]) intent.getExtras().get("vibrationPatern");
-
-		// The PendingIntent to launch our activity if the user selects this notification
-		manger.notify(NOTIFICATION_ID, notification);
-
-		
-	
-		
-		
-		
-	//	PendingIntent pendingIntent = PendingIntent.getBroadcast(Activity.this, 0, intent, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-		
-	//	NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		
-		Intent intent = new Intent(this, OneTimeAlarmReceiver.class);
 		intent.putExtra("Ringtone", ringtone_uri);
 		intent.putExtra("Vibration", vibration);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        
-		Log.v(TAG, "vibrate " + intent.getBooleanExtra("Vibration", false));
-		Log.v(TAG, "ringtone " + intent.getParcelableExtra("Ringtone"));
+		
+	
+	
+	
+	/*
+		
+		Log.v(TAG, "error here? 3 ");
+		
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, PENDING_INTENT_REQUEST_CODE1,
+				intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		Log.v(TAG, "error here? 4 ");
 		
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
 		
-		Toast.makeText(this, "Alarm set", Toast.LENGTH_LONG).show();
+		Log.v(TAG, "error here? 5 ");
+		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
+
+		Log.v(TAG, "error here? 6 ");
+		NotificationManager manager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Log.v(TAG, "error here? 7 ");
+		// this notification appears on top of the screen for a short time when you click on the OK Button.
+		Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!", System.currentTimeMillis());
+		
+		Log.v(TAG, "error here? 8 ");
+		// this contentIntent is invoked when you clicked on the notification -> it goes to the confirmation page
+		PendingIntent contentIntent = PendingIntent.getActivity(ctx, PENDING_INTENT_REQUEST_CODE2, 
+				new Intent(ctx, ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		Log.v(TAG, "error here? 9 ");
+		notification.setLatestEventInfo(ctx, "Bus Stop Alarm", timeConverter(), contentIntent);
+		notification.flags = Notification.FLAG_INSISTENT;
+		
+		Log.v(TAG, "error here? 10 ");
+		
+		// The PendingIntent to launch our activity if the user selects this notification
+		manager.notify(NOTIFICATION_ID1, notification);
+
+		Log.v(TAG, "Alarm set ");
+		
+		Toast.makeText(this, "Bus Stop Alarm is set", Toast.LENGTH_LONG).show();
+		
 		
 		*/
-		
 	}
-	
-	
 	
 	
 /*
-	public void setDestination(BusStop destination) {
-		this.destination = destination;
+	
+	public static String timeConverter(){
+		if (time < 60)
+			return time + " seconds left until alarm goes off";
+		if (time < 120)
+			return "1 minute  " + time%60 + " seconds left until alarm goes off";
+		if (time < 3600) 
+			return time/60 + " minutes  " + time % 60 + " seconds left until alarm goes off";
+		else
+			return time/3600 + "hour(s)  " + (time%3600)/60 + " minutes left until alarm goes off";
 	}
-
-
-	public BusStop getDestination() {
-		return destination;
-	}
-
-
-	public void setProximity(double proximity) {
-		this.proximity = proximity;
-	}
-
-
-	public double getProximity() {
-		return proximity;
-	}
-*/
+	
+	*/
 
 	public void setProximityUnit(String proximityUnit) {
 		this.proximityUnit = proximityUnit;
@@ -165,7 +158,7 @@ public class Alarm extends Activity { //extends Service {
 
 
 	public void setTime(int time) {
-		this.time = time;
+		Alarm.time = time;
 	}
 
 
@@ -183,30 +176,5 @@ public class Alarm extends Activity { //extends Service {
 		return ringtone_uri;
 	}
 
-
-	
-
-	/*
-	public void setCurrentBusRoute(BusRoute currentBusRoute) {
-		this.currentBusRoute = currentBusRoute;
-	}
-
-
-	public BusRoute getCurrentBusRoute() {
-		return currentBusRoute;
-	}
-	
-	*/
-	
-	
-  /*
-	Intent intentAlarm = new Intent(this, RepeatingAlarmReceiver.class);
-	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intentAlarm, 0);
-
-	AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-	alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5 * 1000), 10 * 1000, pendingIntent);
-	Toast.makeText(this, "Alarm set", Toast.LENGTH_LONG).show();
-	*/
-	
 	
 }  // ends Alarm class
