@@ -24,17 +24,18 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
 
 public class ConfirmationPage extends Activity {
 	
 // this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-	private static final int NOTIFICATION_ID = 111;
-	private static final int PENDING_INTENT_REQUEST_CODE = 1234567;
+    private static final int NOTIFICATION_ID = 111;
+	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
+	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
 	
     
 	private BusStop destination;
@@ -46,6 +47,7 @@ public class ConfirmationPage extends Activity {
 	
 	private static int time;      // time in seconds
 	private Uri ringtone_uri;
+	private Alarm alarmObject;
 	
 	//private NotificationManager mManager;
 	
@@ -57,8 +59,9 @@ public class ConfirmationPage extends Activity {
 		vibration = false;
 		ringtone = null;
 		currentBusRoute = null;
-		time = 4;  // 4 seconds for testing
+		time = 10;  // 10 seconds for testing
 		ringtone_uri = null;
+		
 	}
 	
 	/** Called when the activity is first created. */
@@ -82,74 +85,49 @@ public class ConfirmationPage extends Activity {
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				
-			// call Calculate(destination, currentBusRoute, proximity, proximityUnit)
-				/*
 				Intent intent = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
-				intent.putExtra("Ringtone", ringtone_uri);
-				intent.putExtra("Vibration", vibration);
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		        
-				
-				
-				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-				alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
-				
-				
-				*/
-				
-	
-				
-				Intent intent = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
-
 				
 				  if (ringtone_uri == null) {               
-						//  ringtone_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-						  ringtone_uri = Uri.parse("file://Z:/cse403/175379_KeSha_TiK_ToK.mp3");
-						  
-						  }
+					     ringtone_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+					//  ringtone_uri = Uri.parse("file://Z:/cse403/175379_KeSha_TiK_ToK.mp3");  
+				  }
 				
 				intent.putExtra("Ringtone", ringtone_uri);
-				//intent.putExtra("vibrationPatern", new long[] { 200, 300 });
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+				intent.putExtra("Vibration", vibration);
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE1,
+						intent, PendingIntent.FLAG_CANCEL_CURRENT);
+				
 				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 				alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
 
 				NotificationManager manager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 				Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!", System.currentTimeMillis());
-				PendingIntent contentIntent = PendingIntent.getActivity(v.getContext(), 0, new Intent(v.getContext(), ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
-				notification.setLatestEventInfo(v.getContext(), "Bus Stop Alarm Title", timeConverter(), contentIntent);
+				PendingIntent contentIntent = PendingIntent.getActivity(v.getContext(), PENDING_INTENT_REQUEST_CODE2, 
+						new Intent(v.getContext(), ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
+				
+				notification.setLatestEventInfo(v.getContext(), "Bus Stop Alarm", timeConverter(), contentIntent);
 				notification.flags = Notification.FLAG_INSISTENT;
 				
 				//Log.v(TAG, "vibrate " + intent.getBooleanExtra("Vibration", false));
-				Log.v(TAG, "ringtone " + intent.getParcelableExtra("Ringtone"));
+				//Log.v(TAG, "ringtone " + intent.getParcelableExtra("Ringtone"));
 
+				/*
 				notification.sound = (Uri) intent.getParcelableExtra("Ringtone");
 				if (vibration)
 				  notification.defaults |= Notification.DEFAULT_VIBRATE;
-
-				// The PendingIntent to launch our activity if the user selects this notification
+				 */
+				
 				manager.notify(NOTIFICATION_ID, notification);
 
-				Log.v(TAG, "Alarm set ");
+				Log.v(TAG, "Alarm is set ");
+			
+				Toast.makeText(ConfirmationPage.this, "Alarm is set", Toast.LENGTH_LONG).show();
 				
 				
-				
-			//	Toast.makeText(this, "Alarm set", Toast.LENGTH_LONG).show();
-				
-				
-				/*
-				Intent intent = new Intent(ConfirmationPage.this, MainPage.class);
-				
-				Notification notification = new Notification(R.drawable.icon,
-		                	"Notify", System.currentTimeMillis());
-		        	notification.setLatestEventInfo(ConfirmationPage.this, "App Name", "Description of the notification",
-			                PendingIntent.getActivity(ConfirmationPage.this.getBaseContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
-			        mManager.notify(111, notification);
-				*/
-	
-				
-	//		Alarm alarmObject =	new Alarm (proximityUnit, vibration, ringtone, ringtone_uri, time);
-		//	alarmObject.setAlarm(v.getContext());
+			//Alarm alarmObject =	new Alarm (ConfirmationPage.this, proximityUnit, vibration, ringtone, ringtone_uri, time);
+				//Alarm alarmObject =	new Alarm (proximityUnit, vibration, ringtone, ringtone_uri, time);
+				//alarmObject =	new Alarm (ConfirmationPage.this, proximityUnit, vibration, ringtone, ringtone_uri, time);
+				//alarmObject.setAlarm(v);
 			
 			//Log.v(TAG, "Alarm destination: " + alarmObject.getDestination());
 			//Log.v(TAG, "Alarm proximity: " + alarmObject.getProximity());
@@ -175,11 +153,13 @@ public class ConfirmationPage extends Activity {
 			 	* same requestCode as the PendingIntent alarm we want to cancel. In this case, it is PENDING_INTENT_REQUEST_CODE.
 		         	* Note: The intent and PendingIntent have to be the same as the ones used to create the alarms.
 		         	*/
+				
+				/*
 				Intent intent1        = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
 				PendingIntent sender1 = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE, intent1, 0);
 				AlarmManager am1 = (AlarmManager) getSystemService(ALARM_SERVICE);
 				am1.cancel(sender1);
-               
+               */
 				
 				finish();
 			}	
