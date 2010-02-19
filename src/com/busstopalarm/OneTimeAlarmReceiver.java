@@ -18,7 +18,7 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	    
-	/*
+	
 	NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 
@@ -40,9 +40,6 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 		notification.defaults |= Notification.DEFAULT_LIGHTS;
 		
 		manager.notify(NOTIFICATION_ID2, notification);
-
-		
-		*/
 		
 		Log.v(TAG, "Alarm is ringing now! ");
 	
