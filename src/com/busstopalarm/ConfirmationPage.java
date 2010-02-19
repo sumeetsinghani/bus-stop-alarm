@@ -1,5 +1,11 @@
 package com.busstopalarm;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -72,6 +78,19 @@ public class ConfirmationPage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	
+			boolean ifLoadRecentSettings = false;
+				try {
+					ifLoadRecentSettings = loadRecentSettings();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+	
+		Log.v(TAG, "check if successfully loaded the recent settings:  " + ifLoadRecentSettings); 
+		
 		setContentView(R.layout.confirmation);
 		
 		String stop = getIntent().getStringExtra("name");
@@ -79,7 +98,7 @@ public class ConfirmationPage extends Activity {
 		stopView.setText(stop);
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		notificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-		Log.v(TAG, "here?? "); 
+
 		
 
 		// OK Button confirms the alarm setting
@@ -88,6 +107,7 @@ public class ConfirmationPage extends Activity {
 		final Button OKButton = (Button)findViewById(R.id.OKButton);
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				
 				
 				Intent intent = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
 				
@@ -168,15 +188,44 @@ public class ConfirmationPage extends Activity {
 			}	
 		});
 		
-		
-	
 	    getVibrate();
 		getRingtones();
 		getProximity();
 		getProximityUnits();
-		
 	
 	}  // ends onCreate method
+
+	
+	// this method loads from res/raw/favorite_settings_data to read the user's 
+	// recent settings saved.
+	private boolean loadRecentSettings() throws IOException{
+		InputStream in = getResources().openRawResource(R.raw.favorite_settings_data);
+		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) 
+  			return false;
+  		String line;
+  		String[] setting_result = new String[4];
+  		
+  		for (int k = 0; k < setting_result.length; k++){
+    		line = bin.readLine();
+    		setting_result[k] = line;
+    	}
+  		bin.close();
+  		setSettings(setting_result[0], setting_result[1], setting_result[2], 
+				   setting_result[3]);
+  		return true;
+	}
+
+	// this method is for setting the confirmation page with these user pre-defined settings 
+	private void setSettings(String data_vibrate, String data_ringtone, String data_proximity,
+			String data_proximity_unit) {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "check from settings_data - vibrate:  "+ data_vibrate);
+		Log.v(TAG, "check from settings_data - ringtone:  "+ data_ringtone);
+		Log.v(TAG, "check from settings_data - proximity:  "+ data_proximity);
+		Log.v(TAG, "check from settings_data - proximity_unit:  "+ data_proximity_unit);
+		// set	
+	}
 
 	// For distance between two points, we will use Euclidean distance. The Earth is not an Euclidean plane, but this will
 	// give a good approximation. Assuming Euclidean plane, this algorithm sums a number of straight line distances.
@@ -294,9 +343,9 @@ public class ConfirmationPage extends Activity {
 					CharSequence selectedUnit = (CharSequence) arg0.getSelectedItem();
 					selectedUnit.toString();
 					proximityUnit = (String) selectedUnit;
-					Log.v(TAG, "prox.units - index: " + index_prox);
-					Log.v(TAG, "prox.units - selectedUnit: " + selectedUnit);
-					Log.v(TAG, "prox.units - Id: " + arg0.getId());
+				//	Log.v(TAG, "prox.units - index: " + index_prox);
+				//	Log.v(TAG, "prox.units - selectedUnit: " + selectedUnit);
+				//	Log.v(TAG, "prox.units - Id: " + arg0.getId());
 					
 					//ringtoneCursor.get
 					// adaptor.set..
@@ -325,10 +374,10 @@ public class ConfirmationPage extends Activity {
 		
 		//Ringtone ringtone = ringtoneManager.getRingtone(0);
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
-		Log.v(TAG, "ringtones column count: " + ringtoneCursor.getColumnCount());
+	//	Log.v(TAG, "ringtones column count: " + ringtoneCursor.getColumnCount());
 		
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
-		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
+	//	Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
 		  ringtoneList[i] = ringtoneCursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
 		  ringtoneCursor.moveToNext(); 
