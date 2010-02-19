@@ -33,7 +33,7 @@ public class ConfirmationPage extends Activity {
 	
 // this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-    private static final int NOTIFICATION_ID = 111;
+    private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
 	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
 	
@@ -49,7 +49,8 @@ public class ConfirmationPage extends Activity {
 	private Uri ringtone_uri;
 	private Alarm alarmObject;
 	
-	//private NotificationManager mManager;
+	private NotificationManager notificationManager;
+	private AlarmManager alarmManager;
 	
 	// constructor
 	public ConfirmationPage() {
@@ -61,10 +62,13 @@ public class ConfirmationPage extends Activity {
 		currentBusRoute = null;
 		time = 10;  // 10 seconds for testing
 		ringtone_uri = null;
-		
+			
 	}
 	
-	/** Called when the activity is first created. */
+	/** Called when the activity is first created.
+	 *  
+	 *  
+	 *  */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,11 +77,11 @@ public class ConfirmationPage extends Activity {
 		String stop = getIntent().getStringExtra("name");
 		TextView stopView = (TextView) findViewById(R.id.stopname);
 		stopView.setText(stop);
-
+		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		notificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		Log.v(TAG, "here?? "); 
 		
-		// mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		
 		// OK Button confirms the alarm setting
 		// it creates Alarm object
 		// then, it goes back to MainPage
@@ -94,13 +98,13 @@ public class ConfirmationPage extends Activity {
 				
 				intent.putExtra("Ringtone", ringtone_uri);
 				intent.putExtra("Vibration", vibration);
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE1,
+				PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE1,
 						intent, PendingIntent.FLAG_CANCEL_CURRENT);
 				
-				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-				alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
+			//	AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+				alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent_alarm);
 
-				NotificationManager manager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+			//	NotificationManager manager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 				Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!", System.currentTimeMillis());
 				PendingIntent contentIntent = PendingIntent.getActivity(v.getContext(), PENDING_INTENT_REQUEST_CODE2, 
 						new Intent(v.getContext(), ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
@@ -117,7 +121,7 @@ public class ConfirmationPage extends Activity {
 				  notification.defaults |= Notification.DEFAULT_VIBRATE;
 				 */
 				
-				manager.notify(NOTIFICATION_ID, notification);
+				notificationManager.notify(NOTIFICATION_ID1, notification);
 
 				Log.v(TAG, "Alarm is set ");
 			
@@ -151,16 +155,15 @@ public class ConfirmationPage extends Activity {
 				
 				/* To show how alarms are canceled we will create a new Intent and a new PendingIntent with the
 			 	* same requestCode as the PendingIntent alarm we want to cancel. In this case, it is PENDING_INTENT_REQUEST_CODE.
-		         	* Note: The intent and PendingIntent have to be the same as the ones used to create the alarms.
+		         	* Note: The intent and PendingIntent have to be the same as the ones used to create the alarm.
 		         	*/
 				
-				/*
-				Intent intent1        = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
-				PendingIntent sender1 = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE, intent1, 0);
-				AlarmManager am1 = (AlarmManager) getSystemService(ALARM_SERVICE);
-				am1.cancel(sender1);
-               */
-				
+				Intent intent = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
+				PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE1,
+						intent, PendingIntent.FLAG_CANCEL_CURRENT);
+			//	AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
+				alarmManager.cancel(pendingIntent_alarm);
+                notificationManager.cancel(NOTIFICATION_ID1);
 				finish();
 			}	
 		});
