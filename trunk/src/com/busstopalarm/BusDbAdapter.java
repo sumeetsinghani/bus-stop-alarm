@@ -1,5 +1,11 @@
 package com.busstopalarm;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import android.content.Context;
@@ -59,7 +65,8 @@ public class BusDbAdapter {
      * Database Query Statements
      */
     private static final String DATABASE_CREATE_DEST=
-            "CREATE TABLE destination (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "CREATE TABLE "
+            + " destination (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
             + " route_id TEXT NOT NULL, route_desc TEXT NOT NULL, " 
             + " stop_id TEXT NOT NULL, stop_desc TEXT NOT NULL, " 
             + " count INTEGER NOT NULL, time TEXT NOT NULL, "
@@ -523,6 +530,64 @@ public class BusDbAdapter {
    	}
    	//==================================================================
    	
-   	
+   	/**
+   	 * Reading the text file in /res/raw/ folder to create the new database.
+   	 * This one should be called in the MainPage when the application is first 
+   	 * open.
+   	 * 
+   	 * In order to check if the table exists, use the helper function 
+   	 * getDestTbSize(). If the return value is zero, then the table is empty,
+   	 * and it's necessary to read file. Otherwise, stop!
+   	 * 
+   	 *  Reason don't include that check in this helper: for test convenience 
+   	 * 
+   	 * @param testFlag read main majorDb file if the flag value is 0
+   	 * 				   read majorDb_sample file if the the flag value is 1
+   	 * 				   read favoriteDb_sample file if the flag value is 2
+   	 * @return True if reading the file and put new destinations to 
+   	 * 		   database successfully. False if not reading the file at all.
+   	 */
+   	public boolean readDbFile(int testFlag) throws IOException, FileNotFoundException {
+   		/*
+   		 * Not sure if I should attach this condition into this function
+   		 * or just let coder decide what to do based on helper function 
+   		 * isTbExist(). 
+   		 * Because whether reading file or not, the DB is not gonna change
+   		 * just decrease the performance because each time open the app, this
+   		 * function is called.
+   		 */
+   		
+   		InputStream in=null;
+   		if (testFlag == 0){
+   			in = mCtx.getResources().openRawResource(R.raw.majordb);
+   		} else if (testFlag == 1){
+   			in = mCtx.getResources().openRawResource(R.raw.majordb_sample);
+   		} else if (testFlag == 2){
+   			in = mCtx.getResources().openRawResource(R.raw.favoritedb_sample);
+   		}
+   		
+  		BufferedReader bin = new BufferedReader(new InputStreamReader(in) );
+  		if (bin == null) return false;
+  		String line;
+  		String[] result;
+  		while(true) {
+    		line = bin.readLine();
+  			if (line == null) break;
+    		result = line.split("\t");
+    		/*
+    		Log.v("BusDbAdapter 1st", result[0]);
+    		Log.v("BusDbAdapter 2nd", result[1]);
+    		Log.v("BusDbAdapter 3rd", result[2]);
+    		Log.v("BusDbAdapter 4th", result[3]);
+    		Log.v("BusDbAdapter 5th", result[4]);
+    		*/
+    		createDest(result[0], result[1], result[2], 
+    				   result[3], Integer.parseInt(result[4]));
+    	}
+  		bin.close();
+  		return true;
+   	}
 
+
+   
 }
