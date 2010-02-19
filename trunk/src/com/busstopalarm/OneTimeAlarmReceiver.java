@@ -12,13 +12,13 @@ import android.widget.Toast;
 
 public class OneTimeAlarmReceiver extends BroadcastReceiver {
 	private static final String TAG = "inOneTimeAlarmReceiver";
-	private static final int NOTIFICATION_ID2 = 100002;
+	private static final int NOTIFICATION_ID2 = 1002;
 	//private static final int PENDING_INTENT_REQUEST_CODE3 = 1000003;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	    
-	
+	/*
 	NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 
@@ -42,7 +42,7 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 		manager.notify(NOTIFICATION_ID2, notification);
 
 		
-		
+		*/
 		
 		Log.v(TAG, "Alarm is ringing now! ");
 	
