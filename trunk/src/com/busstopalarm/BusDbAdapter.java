@@ -1,7 +1,20 @@
+/**
+ * Author: Huy Dang
+ * Date: 02/21/2010
+ * 
+ * Simple destination database access helper class. Defines the basic CRUD 
+ * operations for retrieving bus information, such as bus route id, bus route
+ * description, stop id, stop description, number of time using the destination,
+ * the time stamp to keep track the recent use. 
+ * The class main purpose is for LocationListPage to view its entries
+ *
+ * TODO: Adds method to initialize the database for major destinations at the 
+ * 		 begin. Therefore, this helper class now is also used in MainPage
+ *  	 because we initial database at the first page
+ */
 package com.busstopalarm;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,17 +28,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-/**
- * Simple destination database access helper class. Defines the basic CRUD 
- * operations for retrieving bus information, such as bus route id, bus route
- * description, stop id, stop description, number of time using the destination,
- * the time stamp to keep track the recent use. 
- * The class main purpose is for LocationListPage to view its entries
- *
- * TODO: Add method to initialize the database for major destinations at the 
- * 		 begin. Therefore, this helper class now is also used in MainPage
- *  	 because we initial database at the first page
- */
 public class BusDbAdapter {
 	
 	private final Context mCtx;
@@ -72,58 +74,58 @@ public class BusDbAdapter {
             + " count INTEGER NOT NULL, time TEXT NOT NULL, "
             + " major INTEGER NOT NULL);";
 
-    private static final String DATABASE_INSERT_DEST=
+    private static final String DATABASE_INSERT_DEST =
     		" INSERT INTO destination" +
     		" (route_id, route_desc, stop_id, stop_desc, count, time, major) " +
     		" VALUES (?,?,?,?,?,?,?);";	
     	
-    private static final String DATABASE_UPDATE_DEST_DESC=
+    private static final String DATABASE_UPDATE_DEST_DESC =
 			" UPDATE destination " +
 			" SET route_desc = ? , stop_desc = ? " +
 			" WHERE route_id = ? AND stop_id = ? ;";
 
-    private static final String DATABASE_UPDATE_DEST_TIME_COUNT=
+    private static final String DATABASE_UPDATE_DEST_TIME_COUNT =
 			" UPDATE destination " +
 			" SET count = ? , time = ? " +
 			" WHERE route_id = ? AND stop_id = ? ;";
 
-    private static final String DATABASE_RETRIEVE_BY_ROUTEID_STOPID=
+    private static final String DATABASE_RETRIEVE_BY_ROUTEID_STOPID =
     		" SELECT * FROM destination " +
     		" WHERE route_id = ? AND stop_id = ? ;";
     
-    private static final String DATABASE_RETRIEVE_BY_ROWID=
+    private static final String DATABASE_RETRIEVE_BY_ROWID =
     		" SELECT * FROM destination " +
     		" WHERE _id = ? ;";
     
-    private static final String DATABASE_DELETE_ALL_DEST=
+    private static final String DATABASE_DELETE_ALL_DEST =
     		" DELETE FROM destination;";
     
-    private static final String DATABASE_DELETE_ONE_DEST=
+    private static final String DATABASE_DELETE_ONE_DEST =
 	    	" DELETE FROM destination " +
 			" WHERE route_id = ? AND stop_id = ? ;";
     
-    private static final String DATABASE_DELETE_ONE_DEST_BY_ROWID=
+    private static final String DATABASE_DELETE_ONE_DEST_BY_ROWID =
 			" DELETE FROM destination " +
 			" WHERE _id = ? ;";
     	
-    private static final String DATABASE_FETCH_ALL_DEST=
+    private static final String DATABASE_FETCH_ALL_DEST =
     		" SELECT * FROM destination ;";
     
-    private static final String DATABASE_FETCH_ONE_DEST=
+    private static final String DATABASE_FETCH_ONE_DEST =
     		" SELECT * FROM destination " +
     		" WHERE _id = ? ;";
     
-    private static final String DATABASE_GET_FAVORITE_DEST=
+    private static final String DATABASE_GET_FAVORITE_DEST =
     		" SELECT * FROM destination " +
     		" ORDER BY count DESC" +
     		" LIMIT ?  ;";
     
-    private static final String DATABASE_GET_RECENT_DEST=
+    private static final String DATABASE_GET_RECENT_DEST =
 			" SELECT * FROM destination " +
 			" ORDER BY time DESC" +
 			" LIMIT ?  ;";
     
-    private static final String DATABASE_GET_MAJOR_DEST=
+    private static final String DATABASE_GET_MAJOR_DEST =
 			" SELECT * FROM destination " +
 			" WHERE major = 1 " +
 			" ORDER BY count DESC" +
@@ -165,7 +167,7 @@ public class BusDbAdapter {
     }
 
     /**
-     * Open the destination database. If it cannot be opened, try to create a 
+     * Opens the destination database. If it cannot be opened, try to create a 
      * new instance of the database. If it cannot be created, throw an exception 
      * to signal the failure
      * 
@@ -180,7 +182,7 @@ public class BusDbAdapter {
     }
     
     /**
-     * Close the destination database. If there's no current database running,
+     * Closes the destination database. If there's no current database running,
      * simply do nothing
      */
     public void close() {
@@ -189,7 +191,7 @@ public class BusDbAdapter {
 
 
     /**
-     * Create a new destination using the route_id, description, longitude,
+     * Creates a new destination using the route_id, description, longitude,
      * latitude, count, and time provided. If the destination is
      * successfully created return the new rowId for that destination, 
      * otherwise return a -1 to indicate failure.
@@ -204,13 +206,14 @@ public class BusDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createDest(String route_id, String route_desc,
-    					   String stop_id, String stop_desc, int major){
+    					   String stop_id, String stop_desc, int major) {
     						
     	/*
     	 * Check if the entry is already in the table
     	 */
-    	if (checkIfDestExist(route_id, stop_id))
+    	if (checkIfDestExist(route_id, stop_id)) {
     		return -1;
+    	}
     	
     	/*
     	 * Get the new time stamp, which is used to retrieve recent used route
@@ -221,8 +224,8 @@ public class BusDbAdapter {
     	/*
     	 * The new destination which is put in Db will have initial "count" of 1
     	 */
-    	String[] args = new String[]{route_id, route_desc, stop_id, stop_desc,
-    							   "1", time, Integer.toString(major)};
+    	String[] args = {route_id, route_desc, stop_id, stop_desc,
+    					 "1", time, Integer.toString(major)};
     	
     	Cursor mCursor = mDb.rawQuery(DATABASE_INSERT_DEST, args);
     	
@@ -234,13 +237,14 @@ public class BusDbAdapter {
     	
     }
 
-    /*
+    /* NOTES:
      * The commented code should work too (untested). The difference between
      * two type of codes is the test runner are likely hate the transaction
      * set up. It actually messed up the result among tests.
      */
+    
     /**
-     * Delete the destination with the given rowId
+     * Deletes the destination with the given rowId
      * TODO: Haven't tested any function which is relevant to the rowId since
      *       system generates the id itself. Need the LocationListPage to bind
      *       the rowId to its context in order to make a call to Db.
@@ -251,42 +255,45 @@ public class BusDbAdapter {
     public boolean deleteDest(long rowId) {
     	
     	/*
-    	String[] args = new String[]{Long.toString(rowId)};
+    	String[] args = {Long.toString(rowId)};
     	mDb.rawQuery(DATABASE_DELETE_ONE_DEST_BY_ROWID, args);
     	*/
     	int nRows = 0;
         mDb.beginTransaction();
-    	try {
+    	
+        try {
 	        nRows = mDb.delete(DATABASE_TABLE_DEST, 
 	        				   KEY_DEST_ROWID + "=" + rowId, null);
 	        mDb.setTransactionSuccessful();
-    	} catch (SQLException anyDbError){
-    		//error logging
-    	}finally {
+    	} catch (SQLException anyDbError) {
+    		Log.v("BusDbAdapter", "SQLException when deleting entry in DB");
+    	} finally {
     		mDb.endTransaction();
     	}
-    	return nRows >0;
+    	
+    	return nRows > 0;
     }
     
     /*
-     * NOTE****: 
+     * NOTES: 
      * For unknown reason, I have to use execSQL here. The function doesn't work
      * when I use rawQuery() here.
      */
+    
     /**
-     * Delete one destination entry using route_id and stop_id
+     * Deletes one destination entry using route_id and stop_id
      * 
      * @param route_id id of the bus route
      * @param stop_id id of the bus stop
      */
     public void deleteDest(String route_id, String stop_id) {
-    	String[] args = new String[]{route_id, stop_id};        
+    	String[] args = {route_id, stop_id};        
     	mDb.execSQL(DATABASE_DELETE_ONE_DEST, args);
     }
     
     
     /**
-     * Delete all destination from the destination table
+     * Deletes all destination from the destination table
      * 
      * @return true if all destinations deleted, false otherwise
      */
@@ -295,7 +302,7 @@ public class BusDbAdapter {
     }
 
     /**
-     * Return a Cursor over the list of all destinations in the table
+     * Returns a Cursor over the list of all destinations in the table
 	 * destination of the database
      * 
      * @return Cursor over all destinations
@@ -305,17 +312,17 @@ public class BusDbAdapter {
     }
     
     /**
-     * Return the number of rows in the current destination table
+     * Returns the number of rows in the current destination table
      * 
      *  @return number of rows in the destination table
      */
-    public int getDestTbSize(){
+    public int getDestTbSize() {
     	Cursor mCursor = mDb.rawQuery(DATABASE_FETCH_ALL_DEST, new String[]{});
     	return mCursor.getCount();
     }
     
     /**
-     * Return a Cursor positioned at the destination that matches given rowId
+     * Returns a Cursor positioned at the destination that matches given rowId
      * 
      * @param rowId id of destination to retrieve
      * @return Cursor positioned to matching destination, if found
@@ -334,12 +341,13 @@ public class BusDbAdapter {
     	if (mCursor != null) {
             mCursor.moveToFirst();
         }
+    	
         return mCursor;
 
     }
     
     /**
-     * Update the destination using the details provided. The destination to be 
+     * Updates the destination using the details provided. The destination to be 
      * updated is specified using the route_id and stop_id, and it is altered to
      * use the description values passed in
      * 
@@ -348,28 +356,27 @@ public class BusDbAdapter {
      * @return 1 if the destination is successfully updated. 0 otherwise.
      */
     public int updateDestDesc(String route_id, 
-    					String route_desc, String stop_id, String stop_desc){
+    					String route_desc, String stop_id, String stop_desc) {
     
-    	String[] args = new String[]{route_desc, stop_desc, route_id, stop_id};
+    	String[] args = {route_desc, stop_desc, route_id, stop_id};
     	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
     	return mCursor.getCount();
     	
     }
     
     /**
-     * Update the time stamp and count value of the given destination entry.
+     * Updates the time stamp and count value of the given destination entry.
      * This should only be call in Confirmation page when user finally chooses
      * this destination as his/her choice.
      * 
      * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return 1 if the destination is successfully updated. 0 otherwise.
-     */public int updateDestDesc_TimeCount(String route_id, String stop_id){
+     */public int updateDestDesc_TimeCount(String route_id, String stop_id) {
     	String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).
 								   toString();
     	int count = Integer.parseInt(getDestCount(route_id, stop_id)) + 1;
-    	String[] args = new String[]
-    	                    { Integer.toString(count), time, route_id, stop_id};
+    	String[] args = { Integer.toString(count), time, route_id, stop_id};
     	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
     	return mCursor.getCount();
     }
@@ -382,81 +389,83 @@ public class BusDbAdapter {
     * @param stop_id Id of the bus stop
     * @return true if the destination is already in the table. false otherwise.
     */
-   	public boolean checkIfDestExist(String route_id, String stop_id){
+   	public boolean checkIfDestExist(String route_id, String stop_id) {
    		Cursor mCursor = null;
    		mCursor = mDb.rawQuery(DATABASE_RETRIEVE_BY_ROUTEID_STOPID, 
    							   new String[]{route_id, stop_id});
 
-   		if (mCursor.getCount() != 0)
+   		if (mCursor.getCount() != 0) {
                return true;
+   		}
+   		
         return false;
    	}
    	
    	
     //==================================================================
    	/**
-   	 * Return rowID for specific (route_id, stop_id)
+   	 * Returns rowID for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the rowID for the current destination entry
      */
-   	public String getDestRowID(String route_id, String stop_id){
+   	public String getDestRowID(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_ROWID, route_id, stop_id);
    	}
    	
    	/**
-   	 * Return bus route description for specific (route_id, stop_id)
+   	 * Returns bus route description for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the description of current destination bus route
      */
-   	public String getDestRouteDesc(String route_id, String stop_id){
+   	public String getDestRouteDesc(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_ROUTE_DESC, route_id, stop_id);
    	}
    	
    	/**
-   	 * Return bus stop description for specific (route_id, stop_id)
+   	 * Returns bus stop description for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the description of current destination bus stop
      */
-   	public String getDestStopDesc(String route_id, String stop_id){
+   	public String getDestStopDesc(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_STOP_DESC, route_id, stop_id);
    	}
    	
    	/**
-   	 * Return count value for specific (route_id, stop_id)
+   	 * Returns count value for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the count value of current destination entry
      */
-   	public String getDestCount(String route_id, String stop_id){
+   	public String getDestCount(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_COUNT, route_id, stop_id);
    	}
    	
    	/**
-   	 * Return time stamp value for specific (route_id, stop_id)
+   	 * Returns time stamp value for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the time stamp value of current destination entry
      */
-   	public String getDestTime(String route_id, String stop_id){
+   	public String getDestTime(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_TIME, route_id, stop_id);
    	}
    	
    	/**
-   	 * Return major flag value for specific (route_id, stop_id)
+   	 * Returns major flag value for specific (route_id, stop_id)
    	 * 
    	 * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return the major flag value of current destination entry
      */
-   	public String getDestMajorVal(String route_id, String stop_id){
+   	public String getDestMajorVal(String route_id, String stop_id) {
    		return getDestColumn(KEY_DEST_MAJOR, route_id, stop_id);
    	}
    	
@@ -465,15 +474,16 @@ public class BusDbAdapter {
    	 * Using those wrapper classes above instead.
    	 */
    	private String getDestColumn(String columnName, 
-   								 String route_id, String stop_id){
-   		Cursor mCursor = null;
-   		mCursor = mDb.rawQuery(DATABASE_RETRIEVE_BY_ROUTEID_STOPID,
+   								 String route_id, String stop_id) {
+   		
+   		Cursor mCursor = mDb.rawQuery(DATABASE_RETRIEVE_BY_ROUTEID_STOPID,
    							   new String[]{route_id, stop_id});
    		
    		int column_index = mCursor.getColumnIndex(columnName);
    		
-   		if (mCursor.getCount() == 0)
+   		if (mCursor.getCount() == 0) {
    			return null;
+   		}
    		
    		mCursor.moveToFirst();
    		return mCursor.getString(column_index); 
@@ -482,35 +492,35 @@ public class BusDbAdapter {
    	
    	//=================================================================
    	/**
-   	 * Return the list of favorite destinations based on number of times each
+   	 * Returns the list of favorite destinations based on number of times each
    	 * of them has been used
    	 * 
    	 * @param limit number of favorite destinations to return
      * @return Cursor The cursor points to the list of favorite destinations
      */
-   	public Cursor getFavoriteDest(int limit){
+   	public Cursor getFavoriteDest(int limit) {
    		return getListDest(DATABASE_GET_FAVORITE_DEST, limit);
    	}
    	
    	/**
-   	 * Return the list of recent destinations based on number of times each
+   	 * Returns the list of recent destinations based on number of times each
    	 * of them has been used
    	 * 
    	 * @param limit number of recent destinations to return
      * @return Cursor The cursor points to the list of recent destinations
      */
-   	public Cursor getRecentDest(int limit){
+   	public Cursor getRecentDest(int limit) {
         return getListDest(DATABASE_GET_RECENT_DEST, limit);
    	}
    	
    	/**
-   	 * Return the list of major destinations based on number of times each
+   	 * Returns the list of major destinations based on number of times each
    	 * of them has been used
    	 * 
    	 * @param limit number of major destinations to return
      * @return Cursor The cursor points to the list of major destinations
      */
-   	public Cursor getMajorDest(int limit){
+   	public Cursor getMajorDest(int limit) {
    		return getListDest(DATABASE_GET_MAJOR_DEST, limit);
    	}
    	
@@ -518,10 +528,9 @@ public class BusDbAdapter {
    	 * Private function to return specific type of destination.
    	 * Using those wrapper classes above instead.
    	 */
-   	private Cursor getListDest(String query, int limit){
-   		Cursor mCursor = null; 
-   		mCursor = mDb.rawQuery(query, 
-   							   new String[]{Integer.toString(limit)});
+   	private Cursor getListDest(String query, int limit) {
+   		Cursor mCursor = mDb.rawQuery(query, 
+   							          new String[]{Integer.toString(limit)});
    		
    		if (mCursor != null) {
             mCursor.moveToFirst();
@@ -531,7 +540,7 @@ public class BusDbAdapter {
    	//==================================================================
    	
    	/**
-   	 * Reading the text file in /res/raw/ folder to create the new database.
+   	 * Reads the text file in /res/raw/ folder to create the new database.
    	 * This one should be called in the MainPage when the application is first 
    	 * open.
    	 * 
@@ -547,7 +556,8 @@ public class BusDbAdapter {
    	 * @return True if reading the file and put new destinations to 
    	 * 		   database successfully. False if not reading the file at all.
    	 */
-   	public boolean readDbFile(int testFlag) throws IOException, FileNotFoundException {
+   	public boolean readDbFile(int testFlag) throws IOException, 
+   												   FileNotFoundException {
    		/*
    		 * Not sure if I should attach this condition into this function
    		 * or just let coder decide what to do based on helper function 
@@ -558,21 +568,26 @@ public class BusDbAdapter {
    		 */
    		
    		InputStream in=null;
-   		if (testFlag == 0){
+   		if (testFlag == 0) {
    			in = mCtx.getResources().openRawResource(R.raw.majordb);
-   		} else if (testFlag == 1){
+   		} else if (testFlag == 1) {
    			in = mCtx.getResources().openRawResource(R.raw.majordb_sample);
-   		} else if (testFlag == 2){
+   		} else if (testFlag == 2) {
    			in = mCtx.getResources().openRawResource(R.raw.favoritedb_sample);
    		}
    		
-  		BufferedReader bin = new BufferedReader(new InputStreamReader(in) );
-  		if (bin == null) return false;
+  		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) {
+  			return false;
+  		}
+  		
   		String line;
   		String[] result;
-  		while(true) {
+  		while (true) {
     		line = bin.readLine();
-  			if (line == null) break;
+  			if (line == null) {
+  				break;
+  			}
     		result = line.split("\t");
     		/*
     		Log.v("BusDbAdapter 1st", result[0]);
