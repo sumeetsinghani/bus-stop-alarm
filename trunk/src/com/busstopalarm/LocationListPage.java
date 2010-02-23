@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.*;
 import android.widget.AdapterView.*;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,13 +67,15 @@ public class LocationListPage extends ListActivity {
 	  });
 	  
 	  registerForContextMenu(getListView());
-	  fillList();
+	  
+	  // populate list items
+	  fillList(mBusDbHelper);
 	}
 	
 	/** 
 	 * temporary method for ZFR.  Should be removed when real data can be put into list
 	 */
-	private void fillList() {
+	/*private void fillList() {
 		for (int i = 0; i < 20; i++) {
 			HashMap<String, String> item = new HashMap<String, String>();
 			if (listType == FAVORITES) {
@@ -83,6 +86,31 @@ public class LocationListPage extends ListActivity {
 			locationList.add(item);
 		}
 		listAdapter.notifyDataSetChanged();
+	}*/
+	
+	/**
+	 * fills the list with stops from the local database
+	 * 
+	 * @param db the database adapter to use
+	 */
+	private void fillList(BusDbAdapter db) {
+		Cursor c;
+		if (listType == FAVORITES) {
+			c = db.getFavoriteDest(100); // TODO: 100 is arbitrary choice, maybe change later
+		} else { // listType == MAJOR
+			c = db.getMajorDest(100);
+		}
+		int nameIndex = c.getColumnIndex("stop_desc");
+		int routeIdIndex = c.getColumnIndex("route_id");
+		if (c != null) {
+			for (int i = 0; i < c.getCount(); i++) {
+				HashMap<String, String> item = new HashMap<String, String>();
+				item.put("name", "Route " + c.getString(routeIdIndex) +  ": " + c.getString(nameIndex));
+				c.moveToNext();
+				locationList.add(item);
+			}
+			listAdapter.notifyDataSetChanged();
+		}
 	}
 	
 	/**

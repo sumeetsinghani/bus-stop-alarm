@@ -1,6 +1,9 @@
+// hello
+
 package com.busstopalarm;
 
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.busstopalarm.R;
@@ -8,6 +11,7 @@ import com.busstopalarm.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,9 +30,9 @@ public class MainPage extends Activity {
 		final Button RouteSearchButton = (Button)findViewById(R.id.RouteSearchButton);
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
 				try {
 					String s = DataFetcher.getRouteById("30");
+					//String s = DataFetcher.OneBusAway(1, 30);
 					Toast t = Toast.makeText(v.getContext(), s.subSequence(0, 500), Toast.LENGTH_LONG);
 					t.show();
 				} catch (IOException e) {
@@ -53,12 +57,30 @@ public class MainPage extends Activity {
 		final Button MajorButton = (Button)findViewById(R.id.MajorButton);
 		MajorButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				Log.d("MAIN", "MAJOR BUTTON PUSHED");
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.MAJOR);
 				startActivity(i);
 				finish();
 			}	
 		});
+		
+
+		///////// test //////////
+		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
+		ad.open();
+		try {
+			Log.d("MAIN", "major db sample" + ad.readDbFile(1));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		///////// test //////////
+		
+		
 	}
 
 	@Override

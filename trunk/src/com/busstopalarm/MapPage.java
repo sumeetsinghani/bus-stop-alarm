@@ -22,6 +22,8 @@ import com.busstopalarm.ItemizedOverlayHelper;
 import com.busstopalarm.R;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -56,7 +58,8 @@ public class MapPage extends MapActivity {
 		//overlays for adding drawings on the map
 		mapOverlays = mapView.getOverlays();	
 		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		itemizedOverlay = new ItemizedOverlayHelper(this.getResources().getDrawable(R.drawable.position));
+		Drawable marker = this.getResources().getDrawable(R.drawable.position);
+		itemizedOverlay = new ItemizedOverlayHelper(marker);
 		Location loc = lm.getLastKnownLocation("gps");
 
 		//fetching users location and displaying it

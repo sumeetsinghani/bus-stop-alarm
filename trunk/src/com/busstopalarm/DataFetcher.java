@@ -38,6 +38,7 @@ public class DataFetcher {
 	public static String getRouteById(String RouteID) throws IOException {
 		URL u = new URL(HOST_NAME +  "route/1_" + RouteID + ".xml?key=" + API_KEY);
 		Scanner in = new Scanner(new InputStreamReader(u.openStream()));
+		//StringBuilder sb = new StringBuilder();
 		
 		String xmlString = "";
 		while (in.hasNextLine()) {
