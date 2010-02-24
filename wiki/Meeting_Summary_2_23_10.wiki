@@ -10,6 +10,6 @@ Integration testing – we did sandwich integration<br>
 Android UI automation testing<br>
 Usability<br>
 <br>
-<b>Timeline of Due Dates:<b><br>
+<b>Timeline of Due Dates:</b><br>
 Unit Testing - Thursday evening<br>
 Code Reviews - Monday <br>
