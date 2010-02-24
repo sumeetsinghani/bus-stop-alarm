@@ -100,6 +100,11 @@ public class MainPage extends Activity {
 			startActivity(q);
 			finish();
 			break;
+		case 2:
+			final Intent helpPage = new Intent(this, HelpPage.class);
+			startActivity(helpPage);
+			finish();
+			break;
 		case 3:
 		case 4:
 			finish();
