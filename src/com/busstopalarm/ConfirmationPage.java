@@ -111,6 +111,24 @@ public class ConfirmationPage extends Activity {
 	}
 
 	/**
+	 * this is for the purpose of updating time
+	 *
+	 */
+	public void setTime(int time_input){
+		time = time_input;
+	}
+	
+	/**
+	 * getter for time
+	 * @return int time
+	 */
+	public int getTime(){
+		return time;
+	}
+	
+	
+	
+	/**
 	 * it gets the default proximity from the file
 	 * "favorite_settings_data" that holds the data saved when the user
 	 * saved settings as a favorite
@@ -429,7 +447,7 @@ public class ConfirmationPage extends Activity {
 		if (time < 3600) 
 			return time/60 + " minutes  " + time % 60 + " seconds left until alarm goes off";
 		else
-			return time/3600 + "hour(s)  " + (time%3600)/60 + " minutes left until alarm goes off";
+			return time/3600 + " hour(s)  " + (time%3600)/60 + " minutes left until alarm goes off";
 	}
 
 	/**
