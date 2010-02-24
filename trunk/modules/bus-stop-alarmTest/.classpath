@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/bus-stop-alarm"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="/homes/iws/huydang/Desktop/robotium-solo-1.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Orxan/workspace/bus-stop-alarmTest/robotium-solo-1.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
