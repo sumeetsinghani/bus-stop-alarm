@@ -1,4 +1,8 @@
 package com.busstopalarm;
+/*
+ * @author David Nufer
+ */
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
