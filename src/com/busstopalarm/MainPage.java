@@ -1,5 +1,3 @@
-// hello
-
 package com.busstopalarm;
 
 
