@@ -20,8 +20,8 @@ public final class R {
     }
     public static final class id {
         public static final int CancelButton=0x7f080006;
-        public static final int FavButton=0x7f080013;
-        public static final int MajorButton=0x7f080014;
+        public static final int FavButton=0x7f080014;
+        public static final int MajorButton=0x7f080015;
         public static final int OKButton=0x7f080008;
         public static final int ProximityBar=0x7f080004;
         public static final int ProximityBarArea=0x7f080003;
@@ -36,13 +36,14 @@ public final class R {
         public static final int linlayoutBase=0x7f080009;
         public static final int linlayoutButtons=0x7f08000d;
         public static final int listItemName=0x7f08000f;
-        public static final int mainlayout=0x7f080015;
-        public static final int mapview=0x7f080016;
+        public static final int mainlayout=0x7f080016;
+        public static final int mapview=0x7f080017;
+        public static final int recent_routes=0x7f080013;
         public static final int scrollview=0x7f08000a;
         public static final int stopname=0x7f080000;
         public static final int txtExample=0x7f08000c;
         public static final int widget30=0x7f08000b;
-        public static final int zoomview=0x7f080017;
+        public static final int zoomview=0x7f080018;
     }
     public static final class layout {
         public static final int confirmation=0x7f030000;

@@ -2,18 +2,24 @@ package com.busstopalarm;
 
 
 import java.io.FileNotFoundException;
+
 import java.io.IOException;
 
 import com.busstopalarm.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 /**
  * Main page of the Bus Stop Alarm
@@ -26,22 +32,30 @@ public class MainPage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		final Button RouteSearchButton = (Button)findViewById(R.id.RouteSearchButton);
+		
+		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				String routeText = ((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
 				try {
-					String s = DataFetcher.getRouteById(30);
-					//String s = DataFetcher.OneBusAway(1, 30);
-					Toast t = Toast.makeText(v.getContext(), s.subSequence(0, 500), Toast.LENGTH_LONG);
-					t.show();
+					if (routeText.matches("[0-9]{1,5}")) {
+						int routeNumber = Integer.parseInt(routeText);
+						String s = DataFetcher.getRouteById(routeNumber);
+						startActivity(new Intent(v.getContext(), MapPage.class));
+						Toast t = Toast.makeText(v.getContext(), s.subSequence(0, 500), Toast.LENGTH_LONG);
+						t.show();
+					} else {
+						Toast t = Toast.makeText(v.getContext(), "Invalid Route Number", Toast.LENGTH_LONG);
+						t.show();
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				startActivity(new Intent(v.getContext(), MapPage.class));
-				finish();
 			}	
 		});
 		
+		// favorite button behavior
 		final Button FavButton = (Button)findViewById(R.id.FavButton);
 		FavButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -52,10 +66,10 @@ public class MainPage extends Activity {
 			}	
 		});
 		
+		// major button behavior
 		final Button MajorButton = (Button)findViewById(R.id.MajorButton);
 		MajorButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Log.d("MAIN", "MAJOR BUTTON PUSHED");
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.MAJOR);
 				startActivity(i);
@@ -63,21 +77,29 @@ public class MainPage extends Activity {
 			}	
 		});
 		
-
-		///////// test //////////
+		// TODO: add recent routes to main page
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
-		try {
-			Log.d("MAIN", "major db sample" + ad.readDbFile(1));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		Cursor recent = ad.getRecentDest(5);
+		LinearLayout recentList = (LinearLayout)findViewById(R.id.recent_routes);
+		int routeIndex = recent.getColumnIndex("route_id");
+		int routeDescIndex = recent.getColumnIndex("route_desc");
+		while (!recent.isAfterLast()) {
+			final TextView recentItem = new TextView(this);
+			recentItem.setClickable(true);
+			
+			recentItem.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Toast t = Toast.makeText(getApplicationContext(), recentItem.getText(), Toast.LENGTH_SHORT);
+					t.show();
+				}	
+			});
+			
+			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+			recentItem.setText("Route " + recent.getString(routeIndex) + ", " + recent.getString(routeDescIndex));
+			recentList.addView(recentItem);
+			recent.moveToNext();
 		}
-		///////// test //////////
-		
 		
 	}
 
@@ -106,7 +128,6 @@ public class MainPage extends Activity {
 			finish();
 			break;
 		case 3:
-		case 4:
 			finish();
 			break;
 		}
