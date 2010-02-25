@@ -206,14 +206,14 @@ public class WhiteBoxGUIMainPageTests extends ActivityInstrumentationTestCase2<M
 		assertEquals("Confirmation button links to a wrong class", expected, actual);	
 	}
 
-/*need to run this test when help page is implemented	
+	//tests if help page button links to help page
 	public void test_HelpButtonLinksToRightClass() throws Throwable{
 		solo.pressMenuItem(2);
 		String expected = "com.busstopalarm.HelpPage";
 		String actual = solo.getCurrentActivity().toString().replaceAll("@.*", "");
 		assertEquals("Help button links to a wrong class", expected, actual);	
 	}
-*/
+
 	
 	//test if exit button in menu exits the program
 	public void test_ExitButtonLinksToRightClass() throws Throwable{
