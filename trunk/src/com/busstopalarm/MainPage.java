@@ -29,7 +29,7 @@ public class MainPage extends Activity {
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				try {
-					String s = DataFetcher.getRouteById("30");
+					String s = DataFetcher.getRouteById(30);
 					//String s = DataFetcher.OneBusAway(1, 30);
 					Toast t = Toast.makeText(v.getContext(), s.subSequence(0, 500), Toast.LENGTH_LONG);
 					t.show();
