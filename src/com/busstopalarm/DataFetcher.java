@@ -35,7 +35,7 @@ public class DataFetcher {
 	 * @param RouteID
 	 * @throws IOException
 	 */
-	public static String getRouteById(String RouteID) throws IOException {
+	public static String getRouteById(int RouteID) throws IOException {
 		URL u = new URL(HOST_NAME +  "route/1_" + RouteID + ".xml?key=" + API_KEY);
 		Scanner in = new Scanner(new InputStreamReader(u.openStream()));
 		//StringBuilder sb = new StringBuilder();
@@ -53,7 +53,7 @@ public class DataFetcher {
 	 * @param RouteID is the bus route id of the route in Seattle.
 	 * @return ArrayList of polylines containing the encoded polyline and the endcoded level.
 	 */
-	public ArrayList<Polyline> getPolylines(String RouteID) {
+	public ArrayList<Polyline> getPolylines(int RouteID) {
 		ArrayList<Polyline> polylines = new ArrayList<Polyline>();
 		JSONObject json = null;
 		
