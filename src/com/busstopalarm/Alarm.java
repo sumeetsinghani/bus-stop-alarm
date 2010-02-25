@@ -32,16 +32,25 @@ public class Alarm extends BroadcastReceiver {
 	private static final int NOTIFICATION_ID2 = 1002;
 	//private static final int PENDING_INTENT_REQUEST_CODE3 = 1000003;
 
-
+ // this variable is for testing
+	private boolean ifSuccessful;
+	
+	public Alarm(){
+		ifSuccessful = false; 
+	}
+	
+	
+	
 	/**
 	 * this is called when the BroadcastReceiver receives the intent from the system
-	 * it alerts the user with the notification (possibly with ringtone and vibrate)
+	 * it alerts the user with the notification (possibly with ringtone and vibrate)\
+	 * if it successfully goes through this method it will set ifSuccessful to true.
 	 * @param context in which the work is being done
 	 * @param intent which contains what to do
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-
+        ifSuccessful = false;
 		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		// this notification appears on top of the screen for a short time when you click on the OK Button.
@@ -66,7 +75,15 @@ public class Alarm extends BroadcastReceiver {
 		manager.notify(NOTIFICATION_ID2, notification);
 		Log.v(TAG, "Alarm is ringing now! ");
 		Toast.makeText(context, "Hey Wake up! (Alarm is ringing now!)", Toast.LENGTH_LONG).show();
+		ifSuccessful = true;
 	}
+	
+	
+	public boolean getIfSuccessful() {
+		return ifSuccessful;
+	}
+	
+	
 
 
 } // class ends
