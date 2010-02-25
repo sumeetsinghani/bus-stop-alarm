@@ -35,11 +35,11 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Vibrate_beforeChecked() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final CheckBox checkBox= (CheckBox)
-			cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
+		final CheckBox checkBox= 
+			(CheckBox) cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
 		
 		boolean isChecked = checkBox.isChecked();
-		assertEquals("Vibrate box is not initially empty", false, isChecked);
+		assertFalse("Vibrate box is not initially empty", isChecked);
 	}
 	
 	/**
@@ -49,8 +49,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Vibrate_afterChecked() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final CheckBox checkBox= (CheckBox)
-			cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
+		final CheckBox checkBox= 
+			(CheckBox) cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -59,7 +59,7 @@ public class ConfirmationPageTests extends
 		});
 		
 		boolean isChecked = checkBox.isChecked();
-		assertEquals("can't check this vibrate box", true, isChecked);
+		assertTrue("can't check this vibrate box", isChecked);
 	}
 	
 	/**
@@ -72,11 +72,11 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Proximity_isSelectable(){
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final SeekBar proxBar = (SeekBar) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		final SeekBar proxBar = 
+			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		
 		boolean result = proxBar.isIndeterminate();
-		assertEquals("the bar should be in zero mode", false, result);
+		assertFalse("the bar should be in zero mode", result);
 	}
 	
 	/**
@@ -86,8 +86,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Proximity_Scrolledleft() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final SeekBar proxBar = (SeekBar) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		final SeekBar proxBar = 
+			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -111,8 +111,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Proximity_Scrolled5() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final SeekBar proxBar = (SeekBar) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		final SeekBar proxBar = 
+			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -138,8 +138,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Proximity_ScrolledMax() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final SeekBar proxBar = (SeekBar) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		final SeekBar proxBar = 
+			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		final int max = proxBar.getMax();
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -159,8 +159,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_Proximity_ScrolledMax2() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final SeekBar proxBar = (SeekBar) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		final SeekBar proxBar = 
+			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		final int max = proxBar.getMax() + 20;
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -179,8 +179,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_ProximityUnitMiles() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Spinner proxUnit = (Spinner) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
+		final Spinner proxUnit = 
+			(Spinner) cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
 		final int pos = 0; final int a = proxUnit.pointToPosition(pos, 0);
 		
 		
@@ -195,8 +195,8 @@ public class ConfirmationPageTests extends
 	 */	
 	public void test_ProximityUnitKms() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Spinner proxUnit = (Spinner) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
+		final Spinner proxUnit = 
+			(Spinner) cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
 		final int pos = 1; 		
 		
 		String result = proxUnit.getItemAtPosition(pos).toString();
@@ -211,8 +211,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_ProximityUnitMinutes() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Spinner proxUnit = (Spinner) 
-			cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
+		final Spinner proxUnit = 
+			(Spinner) cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
 		final int pos = 2; 		
 		
 		String result = proxUnit.getItemAtPosition(pos).toString();
@@ -226,11 +226,11 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_CancelButton_Clickable() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Button cancelButton = (Button) 
-			cp.findViewById(com.busstopalarm.R.id.CancelButton);
+		final Button cancelButton = 
+			(Button) cp.findViewById(com.busstopalarm.R.id.CancelButton);
 		
 		boolean isClicked = cancelButton.isClickable();
-		assertEquals("can't click cancel button", true, isClicked);	
+		assertTrue("can't click cancel button", isClicked);	
 	}
 	
 	/**
@@ -240,8 +240,8 @@ public class ConfirmationPageTests extends
 	 */
 	public void test_SaveButton_Clickable() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Button saveButton = (Button) 
-			cp.findViewById(com.busstopalarm.R.id.SetAsFavButton);
+		final Button saveButton = 
+			(Button) cp.findViewById(com.busstopalarm.R.id.SetAsFavButton);
 		
 		boolean isClicked = saveButton.isClickable();
 		assertEquals("can't click save button", true, isClicked);	
@@ -249,15 +249,16 @@ public class ConfirmationPageTests extends
 	
 	/**
 	 * Tests if the Ok button is clickable
+	 * 
 	 * @throws Throwable
 	 */
 	public void test_OKButton_Clickable() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Button OKButton = (Button) 
-			cp.findViewById(com.busstopalarm.R.id.OKButton);
+		final Button OKButton = 
+			(Button) cp.findViewById(com.busstopalarm.R.id.OKButton);
 		
 		boolean isClicked = OKButton.isClickable();
-		assertEquals("can't click OK button", true, isClicked);	
+		assertTrue("can't click OK button", isClicked);	
 	}
 	
 	protected void tearDown() throws Exception {
