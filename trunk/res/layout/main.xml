@@ -28,7 +28,9 @@
 			android:layout_height="fill_parent" 
 			android:minWidth="50px" 
 			android:inputType="number" 
-			android:hint="Enter Route Number" android:width="200px" android:maxWidth="200px"></EditText>
+			android:hint="Enter Route Number" 
+			android:width="200px" 
+			android:maxWidth="200px"></EditText>
 			
 		<Button android:text="Go" 
 			android:id="@+id/RouteSearchButton" 
@@ -40,21 +42,27 @@
 	
 	<LinearLayout android:gravity="fill_vertical" 
 		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" >
+		android:layout_height="wrap_content" 
+		android:orientation="vertical">
 		
 		<TextView android:text="Recently Selected Routes:" 
-			android:textSize="8pt" 
+			android:textSize="10pt" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
 			android:padding="10px"></TextView>
 		
+		<LinearLayout android:id="@+id/recent_routes" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:orientation="vertical">
+				
+		</LinearLayout>
 		
 	</LinearLayout>
 	
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" 
-		android:background="@drawable/black" 
+		android:layout_height="fill_parent" 
 		android:gravity="center_horizontal|bottom">
 
 		<Button android:text="Favorites"
