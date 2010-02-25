@@ -41,8 +41,8 @@ public class MainPageTests extends ActivityInstrumentationTestCase2<MainPage> {
 				routeSearchBox.performClick();
 			}
 		});
-		assertTrue("Route Search Box starts not empty", "".equals(
-					routeSearchBox.getText().toString()));	
+		assertEquals("Route Search Box starts not empty", 
+					 "", routeSearchBox.getText().toString());	
 		
 	}
 	
@@ -64,7 +64,8 @@ public class MainPageTests extends ActivityInstrumentationTestCase2<MainPage> {
 		});
 		
 		sendKeys("7");		
-		assertEquals("7", routeSearchBox.getText().toString());	
+		assertEquals("Route Search Box doesn't contain 7",
+					 "7", routeSearchBox.getText().toString());	
 	}
 	
 	/**
@@ -345,24 +346,32 @@ public class MainPageTests extends ActivityInstrumentationTestCase2<MainPage> {
 				routeSearchBox.getText().toString());	
 	}
 	
-	
-	
+	/**
+	 * Tests if the route search button is clickable
+	 * 
+	 * @throws Throwable
+	 */
 	public void test_RouteSearchButton_Clickable() throws Throwable{
 		MainPage mp = (MainPage) getActivity();
 		
-		final Button routeSearchButton = (Button) 
-			mp.findViewById(com.busstopalarm.R.id.RouteSearchButton);
+		final Button routeSearchButton = 
+			(Button) mp.findViewById(com.busstopalarm.R.id.RouteSearchButton);
 		
 		boolean isClicked = routeSearchButton.isClickable();
-		assertEquals("can't click button", true, isClicked);
+		assertTrue("can't click button", isClicked);
 		
 	}
 	
+	/**
+	 * Tests if the route search button is clicked yet.
+	 * 
+	 * @throws Throwable
+	 */
 	public void test_RouteSearchButton_isClicked() throws Throwable{
 		MainPage mp = (MainPage) getActivity();
 		
-		final Button routeSearchButton = (Button) 
-			mp.findViewById(com.busstopalarm.R.id.RouteSearchButton);
+		final Button routeSearchButton = 
+			(Button) mp.findViewById(com.busstopalarm.R.id.RouteSearchButton);
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -371,27 +380,36 @@ public class MainPageTests extends ActivityInstrumentationTestCase2<MainPage> {
 			
 		});
 		
-		assertEquals("Stay in the same page", 1,routeSearchButton.getVisibility());	
+		assertEquals("Stay in the same page", 
+					 1,routeSearchButton.getVisibility());	
 	}
 	
-	
-	
+	/**
+	 * Tests if the Favorite button is clickable
+	 * 
+	 * @throws Throwable
+	 */	
 	public void test_FavoritesButton_Clickable() throws Throwable{
 		MainPage mp = (MainPage) getActivity();
 		final Button favButton = (Button) 
 			mp.findViewById(com.busstopalarm.R.id.FavButton);
 		
 		boolean isClicked = favButton.isClickable();
-		assertEquals("can't click button", true, isClicked);	
+		assertTrue("can't click Favorite button", isClicked);	
 	}
 	
+	/**
+	 * Tests if the Major button is clickable
+	 * 
+	 * @throws Throwable
+	 */
 	public void test_MajorsButton_Clickable() throws Throwable{
 		MainPage mp = (MainPage) getActivity();
 		final Button majButton = (Button) 
 			mp.findViewById(com.busstopalarm.R.id.MajorButton);
 		
 		boolean isClicked = majButton.isClickable();
-		assertEquals("can't click button", true, isClicked);	
+		assertTrue("can't click Major button", isClicked);	
 	}
 	
 	
