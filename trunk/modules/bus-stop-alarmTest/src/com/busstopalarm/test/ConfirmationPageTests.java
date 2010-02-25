@@ -31,6 +31,7 @@ public class ConfirmationPageTests extends
 	
 	/**
 	 * Tests if a checkbox for vibration setting is initial empty
+	 * 
 	 * @throws Throwable
 	 */
 	public void test_Vibrate_beforeChecked() throws Throwable{
