@@ -28,12 +28,13 @@
 			android:layout_height="fill_parent" 
 			android:minWidth="50px" 
 			android:inputType="number" 
-			android:hint="Enter Route Number"></EditText>
+			android:hint="Enter Route Number" android:width="200px" android:maxWidth="200px"></EditText>
 			
 		<Button android:text="Go" 
 			android:id="@+id/RouteSearchButton" 
 			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"></Button>
+			android:layout_height="fill_parent" 
+			android:keepScreenOn="true"></Button>
 			
 	</LinearLayout>
 	
