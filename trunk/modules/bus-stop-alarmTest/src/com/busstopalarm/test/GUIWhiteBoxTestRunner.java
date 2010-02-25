@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class GUIWhiteBoxTestRunner extends InstrumentationTestRunner{
 	
-	 @Override
+	    @Override
 	    public TestSuite getAllTests() {
 	        InstrumentationTestSuite suite = new InstrumentationTestSuite(this);
 	        suite.addTestSuite(WhiteBoxGUIMainPageTests.class);
