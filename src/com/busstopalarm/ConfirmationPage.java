@@ -69,7 +69,7 @@ public class ConfirmationPage extends Activity {
 	private BusStop destination;
 	private BusRoute currentBusRoute;
 	 */
-
+	
 	// these below are the data saved in the "favorite_settings_data" file in sdcard
 	// to be retrieved from the file to load the recent settings
 	private String dataVibrate;
@@ -85,6 +85,7 @@ public class ConfirmationPage extends Activity {
 	private NotificationManager notificationManager;
 	private AlarmManager alarmManager;
 
+	
 	/**
 	 * ConfirmationPage constructor
 	 */
@@ -109,6 +110,7 @@ public class ConfirmationPage extends Activity {
 		time = 10;  // 10 seconds for testing
 	}
 
+	
 	/**
 	 * this is for the purpose of updating time
 	 *
@@ -117,6 +119,7 @@ public class ConfirmationPage extends Activity {
 		time = time_input;
 	}
 
+	
 	/**
 	 * getter for time
 	 * @return int time
@@ -125,6 +128,7 @@ public class ConfirmationPage extends Activity {
 		return time;
 	}
 
+	
 	/**
 	 * vibrate setter
 	 * @param boolean vibrate input
@@ -133,6 +137,7 @@ public class ConfirmationPage extends Activity {
 		vibration = vibrate_input;
 	}
 
+	
 	/**
 	 * getter for vibration
 	 * @return boolean vibration
@@ -141,6 +146,7 @@ public class ConfirmationPage extends Activity {
 		return vibration;
 	}
 
+	
 	/**
 	 * setter for ringtone uri
 	 * @param Uri ringtone uri
@@ -149,6 +155,7 @@ public class ConfirmationPage extends Activity {
 		ringtoneUri = ringtone_input;
 	}
 
+	
 	/**
 	 * getter for ringtone uri
 	 * @return Uri ringtone uri
@@ -170,6 +177,7 @@ public class ConfirmationPage extends Activity {
 		return 3;  // hard wired value for now
 	}
 
+	
 	/** 
 	 * it gets the default proximityUnit from the file
 	 * "favorite_settings_data" that holds the data saved when the user
@@ -180,18 +188,7 @@ public class ConfirmationPage extends Activity {
 		return dataProximityUnit;
 	}
 
-	/** 
-	 * it gets the default ringtone uri from the file
-	 * "favorite_settings_data" that holds the data saved when the user
-	 * saved settings as a favorite
-	 * @return Uri
-	 */
-	private Uri default_rington_uri() {
-		if (dataRingtone == null)
-			return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-		return null;
-	}
-
+	
 
 	/** 
 	 * it gets the default vibrate from the file "favorite_settings_data" which
@@ -544,20 +541,18 @@ public class ConfirmationPage extends Activity {
 
 		// get all types of sounds (ringtones, notifications, alarms)
 		ringtoneManager.setType(RingtoneManager.TYPE_ALL);
-
-		//	int ringtonePosition; = ringtoneManager.getRingtonePosition(ringtoneUri)
-
+		
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
-
 		int defaultRingtoneIndex = 0;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
 		//	Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
+			ringtoneCursor.moveToNext();
 			String titleOfRingtone = ringtoneCursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+			Log.v(TAG, "ringtone list:  " + titleOfRingtone);
 			ringtoneList[i] = titleOfRingtone;
 			if (dataRingtone != null && dataRingtone.equals(titleOfRingtone))
 				defaultRingtoneIndex = i;
-			ringtoneCursor.moveToNext(); 
 		}
 
 		//String ringtoneList = ringtone.getTitle(this);	
@@ -568,7 +563,7 @@ public class ConfirmationPage extends Activity {
 				ringtoneList);
 		ringtoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		ringtoneSpinner.setAdapter(ringtoneAdapter);
-
+		
 		if (defaultRingtoneIndex != 0)
 			ringtoneSpinner.setSelection(defaultRingtoneIndex);
 
@@ -584,6 +579,7 @@ public class ConfirmationPage extends Activity {
 
 				Log.v(TAG, "under onItemSelected(index ringtone): " + indexRingtone);
 				Log.v(TAG, "under onItemSelected(ringtoneTitleToSave): " + ringtoneTitleToSave);
+				Log.v(TAG, "under onItemSelected(ringtoneUri): " + ringtoneUri);
 
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
