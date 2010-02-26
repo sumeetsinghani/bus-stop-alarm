@@ -29,6 +29,7 @@ public class Alarm {
 	private double proximity;
 	private String proximityUnit;
 	private Context ctx;
+	private boolean alarmSuccessful;
 	
 	private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
@@ -38,24 +39,77 @@ public class Alarm {
 	public Alarm(int time, boolean vibration, Uri ringtoneUri, 
 			double proximity, String proximityUnit, Context ctx) {
 		
-		this.time = time;
+		this.time = setUpTime(time);
 		this.vibration = vibration;
 		this.ringtoneUri = ringtoneUri;
-		this.proximity = proximity;
+		this.proximity = setUpProximity(proximity);
 		this.proximityUnit = proximityUnit;
 		this.ctx = ctx;
+		alarmSuccessful = false;
 		
 		alarmManager = (AlarmManager) ctx.getSystemService(ctx.ALARM_SERVICE);
 		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
+	/**
+	 * initializes proximity 
+	 * if proximity is less than 0, then it will return 0
+	 * @param proximityInput
+	 * @return double 
+	 */
+	private double setUpProximity(double proximityInput) {
+		if (proximityInput < 0.0)
+		  return 0.0;
+		return proximityInput;
+	}
+
+	public boolean getAlarmSuccessful(){
+		return alarmSuccessful;
+	}
+	
+	/**
+	 * getter for Context
+	 * @return Context
+	 */
+	public Context getContext() {
+		return ctx;
+	}
+
+	/**
+	 * initializes time
+	 * if time is less than 0, then it will return 0
+	 * @param timeInput
+	 * @return int
+	 */
+	private int setUpTime(int timeInput) {
+		if (timeInput < 0)
+			return 0;
+		return timeInput;
+	}
+
+
+	/**
+	 * getter for vibration
+	 * @return boolean
+	 */
+	public boolean getVibration(){
+		return vibration;
+	}
+	
+	/**
+	 * getter for ringtoneUri
+	 * @return Uri
+	 */
+	public Uri getRingtoneUri(){
+		return ringtoneUri;
+	}
 	
 	/**
 	 * setter for proximity
 	 * @param proximityInput
 	 */
 	public void setProximity(double proximityInput){
-		proximity = proximityInput;
+		proximity = setUpProximity(proximityInput);;
 	}
 	
 	/**
@@ -81,7 +135,7 @@ public class Alarm {
 	 *
 	 */
 	public void setTime(int timeInput){
-		time = timeInput;
+		time = setUpTime(timeInput);
 	}
 
 	/**
@@ -103,6 +157,7 @@ public class Alarm {
 	 */
 	
 		public void setAlarm() {
+			alarmSuccessful = false;
 			Intent intent = new Intent(ctx, OneTimeAlarmReceiver.class);
 
 			intent.putExtra("Ringtone", ringtoneUri);
@@ -122,21 +177,22 @@ public class Alarm {
 			notification.flags = Notification.FLAG_INSISTENT;
 			notificationManager.notify(NOTIFICATION_ID1, notification);
 			Log.v(TAG, "Alarm is set ");
-
 			Log.v(TAG, "Alarm vibration: " + vibration);
 			Log.v(TAG, "Alarm ringtoneUri: " + ringtoneUri);
 			Log.v(TAG, "Alarm proximity: " + proximity);
 			Log.v(TAG, "Alarm proximityUnit: " + proximityUnit);
-				
+			alarmSuccessful = true;
 		}
 		
+	
+
 		/**
 		 * this method converts time (remaining) into easily readable format   
 		 * 
 		 * 
 		 * @return String remaining time message
 		 */
-		public static String timeConverter(int time_input) {
+		public String timeConverter(int time_input) {
 			if (time_input < 0)
 				return ("timeConverter(): Error! time should not be negative.");
 			if (time_input < 60)
