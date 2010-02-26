@@ -1,89 +1,155 @@
 /**
  * Author: Pyong Byon
- * Date: 02/23/2010
+ * Date: 02/25/2010
+ * Alarm class
  * 
- * Alarm class which extends BroadcastReceiver to alert the user by notifying
- * with the selected ringtone / vibrate when it receives the signal from the system
- * It wakes up the phone if the phone is sleeping
- * if given ringotne is null, it does not ring
- * if given vibrate is null, it does not vibrate
- * TODO: alarm update consistently
- * 		    
  */
-
 
 package com.busstopalarm;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
-public class Alarm extends BroadcastReceiver {
+public class Alarm {
 
-	// this TAG is for debugging
 	private static final String TAG = "inAlarmClass";
-
-	private static final int NOTIFICATION_ID2 = 1002;
-	//private static final int PENDING_INTENT_REQUEST_CODE3 = 1000003;
-
- // this variable is for testing
-	private boolean ifSuccessful;
 	
-	public Alarm(){
-		ifSuccessful = false; 
+	private NotificationManager notificationManager;
+	private AlarmManager alarmManager;
+	
+	private int time;  // time in seconds
+	private boolean vibration;
+	private Uri ringtoneUri;
+	private double proximity;
+	private String proximityUnit;
+	private Context ctx;
+	
+	private static final int NOTIFICATION_ID1 = 1001;
+	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
+	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
+	
+	
+	public Alarm(int time, boolean vibration, Uri ringtoneUri, 
+			double proximity, String proximityUnit, Context ctx) {
+		
+		this.time = time;
+		this.vibration = vibration;
+		this.ringtoneUri = ringtoneUri;
+		this.proximity = proximity;
+		this.proximityUnit = proximityUnit;
+		this.ctx = ctx;
+		
+		alarmManager = (AlarmManager) ctx.getSystemService(ctx.ALARM_SERVICE);
+		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
-	
 	
 	
 	/**
-	 * this is called when the BroadcastReceiver receives the intent from the system
-	 * it alerts the user with the notification (possibly with ringtone and vibrate)\
-	 * if it successfully goes through this method it will set ifSuccessful to true.
-	 * @param context in which the work is being done
-	 * @param intent which contains what to do
+	 * setter for proximity
+	 * @param proximityInput
 	 */
-	@Override
-	public void onReceive(Context context, Intent intent) {
-        ifSuccessful = false;
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		// this notification appears on top of the screen for a short time when you click on the OK Button.
-		Notification notification = new Notification();
-
-		//notification.setLatestEventInfo(getBaseContext(), "Bus Stop Alarm", timeConverter(), contentIntent);
-		notification.flags = Notification.FLAG_INSISTENT;
-
-		Log.v(TAG, "vibrate " + intent.getBooleanExtra("Vibration", false));
-		Log.v(TAG, "ringtone " + intent.getParcelableExtra("Ringtone"));
-
-		Uri ringtoneUri = (Uri) intent.getParcelableExtra("Ringtone");
-		if (ringtoneUri != null)
-			notification.sound = ringtoneUri;
-
-		boolean vibration = intent.getBooleanExtra("Vibration", false);
-
-		if (vibration)
-			notification.defaults |= Notification.DEFAULT_VIBRATE;
-
-		notification.defaults |= Notification.DEFAULT_LIGHTS;
-		manager.notify(NOTIFICATION_ID2, notification);
-		Log.v(TAG, "Alarm is ringing now! ");
-		Toast.makeText(context, "Hey Wake up! (Alarm is ringing now!)", Toast.LENGTH_LONG).show();
-		ifSuccessful = true;
+	public void setProximity(double proximityInput){
+		proximity = proximityInput;
+	}
+	
+	/**
+	 * getter for proximity
+	 * @return proximity
+	 */
+	public double getProximity(){
+		return proximity;
+	}
+	
+	/**
+	 * 
+	 * getter for proximity unit
+	 * @return proximity unit
+	 */
+	public String getProximityUnit(){
+		return proximityUnit;
 	}
 	
 	
-	public boolean getIfSuccessful() {
-		return ifSuccessful;
+	/**
+	 * this is for the purpose of updating time
+	 *
+	 */
+	public void setTime(int timeInput){
+		time = timeInput;
 	}
-	
-	
+
+	/**
+	 * getter for time
+	 * @return int time
+	 */
+	public int getTime(){
+		return time;
+	}
 
 
-} // class ends
+	/**
+	 * this method is called when OK Button is pushed in Confirmation page
+	 * it sets an alarm in the alarm manager with the pending intent and intent which holds
+	 * ringtone and vibrate to be sent over to OneTimeAlarmReceiver
+	 * Then, it immediately notifies with notification up on top of the screen
+	 * 
+	 * 
+	 */
+	
+		public void setAlarm() {
+			Intent intent = new Intent(ctx, OneTimeAlarmReceiver.class);
+
+			intent.putExtra("Ringtone", ringtoneUri);
+			intent.putExtra("Vibration", vibration);
+			PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(ctx, 
+					PENDING_INTENT_REQUEST_CODE1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
+					(time * 1000), pendingIntent_alarm);
+			Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!",
+					System.currentTimeMillis());
+			PendingIntent contentIntent = PendingIntent.getActivity(ctx, PENDING_INTENT_REQUEST_CODE2, 
+					new Intent(ctx, ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
+
+			notification.setLatestEventInfo(ctx, "Bus Stop Alarm", timeConverter(getTime()),
+					contentIntent);
+			notification.flags = Notification.FLAG_INSISTENT;
+			notificationManager.notify(NOTIFICATION_ID1, notification);
+			Log.v(TAG, "Alarm is set ");
+
+			Log.v(TAG, "Alarm vibration: " + vibration);
+			Log.v(TAG, "Alarm ringtoneUri: " + ringtoneUri);
+			Log.v(TAG, "Alarm proximity: " + proximity);
+			Log.v(TAG, "Alarm proximityUnit: " + proximityUnit);
+				
+		}
+		
+		/**
+		 * this method converts time (remaining) into easily readable format   
+		 * 
+		 * 
+		 * @return String remaining time message
+		 */
+		public static String timeConverter(int time_input) {
+			if (time_input < 0)
+				return ("timeConverter(): Error! time should not be negative.");
+			if (time_input < 60)
+				return time_input + " seconds left until alarm goes off";
+			if (time_input < 120)
+				return "1 minute  " + time_input%60 + " seconds left until alarm goes off";
+			if (time_input < 3600) 
+				return time_input/60 + " minutes  " + time_input % 60 + " seconds left until alarm goes off";
+			else
+				return time_input/3600 + " hour(s)  " + (time_input%3600)/60 + " minutes left until alarm goes off";
+		}
+
+
+	
+	
+}  // ends Alarm class

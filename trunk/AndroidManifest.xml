@@ -25,9 +25,10 @@
 	<activity android:name=".HelpPage" android:screenOrientation="portrait" android:theme = "@android:style/Theme.Dialog"></activity>
 	<activity android:name=".LocationListPage" android:screenOrientation="portrait"></activity>
 	
-	<receiver android:name=".Alarm"
+	<receiver android:name=".OneTimeAlarmReceiver"
 	          android:process=":remote" />
 	
+	 
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.GET_TASKS" /> 
