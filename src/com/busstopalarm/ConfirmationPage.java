@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -81,7 +80,7 @@ public class ConfirmationPage extends Activity {
 	private String ringtoneTitleToSave;
 
 	// time (in seconds) is used for Alarm, alarm goes off after time seconds
-	private static int time;      
+	private int time;      
 
 	private NotificationManager notificationManager;
 	private AlarmManager alarmManager;
@@ -157,8 +156,8 @@ public class ConfirmationPage extends Activity {
 	public Uri getRingtoneUri(){
 		return ringtoneUri;
 	}
-	
-	
+
+
 	/**
 	 * it gets the default proximity from the file
 	 * "favorite_settings_data" that holds the data saved when the user
@@ -235,6 +234,11 @@ public class ConfirmationPage extends Activity {
 		Log.v(TAG, "dataRingtone:  " + dataRingtone);
 		Log.v(TAG, "dataProximity:  " + dataProximity);
 		Log.v(TAG, "dataProximityUnit:  " + dataProximityUnit);
+		
+		Log.v(TAG, "vibrate:  " + vibration);
+		Log.v(TAG, "ringtone:  " + ringtoneUri);
+		Log.v(TAG, "proximity:  " + proximity);
+		Log.v(TAG, "proximityUnit:  " + proximityUnit);
 
 		setContentView(R.layout.confirmation);
 		String stop = getIntent().getStringExtra("name");
@@ -263,56 +267,16 @@ public class ConfirmationPage extends Activity {
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				boolean ifAlarmSet = setAlarm(v);
-				if (ifAlarmSet)
-					Toast.makeText(ConfirmationPage.this, "Alarm is set", Toast.LENGTH_LONG).show();
-				else
-				 Toast.makeText(ConfirmationPage.this, "Alarm cannot be set!", Toast.LENGTH_LONG).show();
-				
+				Alarm alarmObject = new Alarm(time, vibration, ringtoneUri, proximity, proximityUnit, 
+						ConfirmationPage.this);
+				alarmObject.setAlarm();
+				Toast.makeText(ConfirmationPage.this, "Alarm is set", Toast.LENGTH_LONG).show();
+
 				startActivity(new Intent(v.getContext(), MainPage.class));
 				finish();
 			}
 		});
 	} // ends okButton method
-
-	/**
-	 * this method is called when OK Button is pushed
-	 * it sets an alarm in the alarm manager with the pending intent and intent which holds
-	 * ringtone and vibrate to be sent over to alarm class
-	 * Then, it immediately notifies with notification up on top of the screen
-	 * Also, a toast pops up saying "Alarm is set"
-	 * @param View v
-	 */
-	public boolean setAlarm(View v){
-		Intent intent = new Intent(ConfirmationPage.this, Alarm.class);
-
-		intent.putExtra("Ringtone", ringtoneUri);
-		intent.putExtra("Vibration", vibration);
-		PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(getBaseContext(), PENDING_INTENT_REQUEST_CODE1,
-				intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-		//	AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent_alarm);
-
-		//	NotificationManager manager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!",
-				System.currentTimeMillis());
-		PendingIntent contentIntent = PendingIntent.getActivity(v.getContext(), PENDING_INTENT_REQUEST_CODE2, 
-				new Intent(v.getContext(), ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
-
-		notification.setLatestEventInfo(v.getContext(), "Bus Stop Alarm", timeConverter(), contentIntent);
-		notification.flags = Notification.FLAG_INSISTENT;
-		notificationManager.notify(NOTIFICATION_ID1, notification);
-		Log.v(TAG, "Alarm is set ");
-
-		Log.v(TAG, "Alarm vibration: " + vibration);
-		Log.v(TAG, "Alarm ringtoneUri: " + ringtoneUri);
-		Log.v(TAG, "Alarm proximity: " + proximity);
-		Log.v(TAG, "Alarm proximityUnit: " + proximityUnit);
-
-		return true;
-	}
-
 
 
 	/** 
@@ -328,10 +292,10 @@ public class ConfirmationPage extends Activity {
 		final Button CancelButton = (Button)findViewById(R.id.CancelButton);
 		CancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(ConfirmationPage.this, Alarm.class);
+				Intent intent = new Intent(ConfirmationPage.this, OneTimeAlarmReceiver.class);
 				PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(getBaseContext(), 
 						PENDING_INTENT_REQUEST_CODE1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-				
+
 				alarmManager.cancel(pendingIntent_alarm);
 				notificationManager.cancel(NOTIFICATION_ID1);
 				finish();
@@ -473,25 +437,6 @@ public class ConfirmationPage extends Activity {
 
 	}
 
-
-	/**
-	 * this method converts time (remaining) into easily readable format   
-	 * 
-	 * 
-	 * @return String remaining time message
-	 */
-	public static String timeConverter() {
-		if (time < 0)
-			return ("timeConverter(): Error! time should not be negative.");
-		if (time < 60)
-			return time + " seconds left until alarm goes off";
-		if (time < 120)
-			return "1 minute  " + time%60 + " seconds left until alarm goes off";
-		if (time < 3600) 
-			return time/60 + " minutes  " + time % 60 + " seconds left until alarm goes off";
-		else
-			return time/3600 + " hour(s)  " + (time%3600)/60 + " minutes left until alarm goes off";
-	}
 
 	/**
 	 * It is invoked when vibrate is clicked. 
