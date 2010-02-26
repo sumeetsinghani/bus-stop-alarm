@@ -30,21 +30,8 @@ public class ConfirmationPageTests extends
 	}
 	
 	/**
-	 * Tests if a checkbox for vibration setting is initial empty
-	 * 
-	 * @throws Throwable
-	 */
-	public void test_Vibrate_beforeChecked() throws Throwable{
-		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final CheckBox checkBox= 
-			(CheckBox) cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
-		
-		boolean isChecked = checkBox.isChecked();
-		assertFalse("Vibrate box is not initially empty", isChecked);
-	}
-	
-	/**
-	 * Tests if a checkbox for vibration setting is filled after user selects.
+	 * Tests if a checkbox status for vibration setting is changed after user 
+	 * selects.
 	 * 
 	 * @throws Throwable
 	 */
@@ -52,15 +39,15 @@ public class ConfirmationPageTests extends
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final CheckBox checkBox= 
 			(CheckBox) cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
-		
+		boolean before = checkBox.isChecked();
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				checkBox.performClick();
 			}
 		});
 		
-		boolean isChecked = checkBox.isChecked();
-		assertTrue("can't check this vibrate box", isChecked);
+		boolean after = checkBox.isChecked();
+		assertNotSame("can't check this vibrate box", before, after);
 	}
 	
 	/**
