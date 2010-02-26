@@ -1,196 +1,289 @@
-///**
-// * Author: Pyong Byon
-// * Date: 02/23/2010
-// * 
-// * White box testing for Alarm class and related things in ConfirmationPage class
-// * 
-// */
-//
-//
-//
-//package com.busstopalarm.test;
-//
-//import android.content.Intent;
-//import android.media.RingtoneManager;
-//import android.net.Uri;
-//import android.test.ActivityInstrumentationTestCase2;
-//import android.util.Log;
-//import android.view.View;
-//
-//import com.busstopalarm.ConfirmationPage;
-//import com.busstopalarm.OneTimeAlarmReceiver;
-//import com.jayway.android.robotium.solo.Solo;
-//
-//public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage> {
-//
-//	private static final String TAG = "inAlarmTest";
-//	private ConfirmationPage cp;
-//	private Solo solo;
-//	
-//	public AlarmTest() {
-//		super("com.busstopalarm", ConfirmationPage.class);
-//		
-//	}
-//	
-//	
-//	/**
-//	 * Initializes (if any) the set up for the test
-//	 */
-//	protected void setUp() throws Exception {
-//	 cp = (ConfirmationPage) getActivity();
-//	 solo = new Solo(getInstrumentation(), getActivity());
-//	}
-//	
-//	
-//
-//
-//	/**
-//	 * Tests alarm time set and get
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeSetAndGet() throws Throwable{
-//		cp.setTime(567);
-//		assertEquals(567, cp.getTime());
-//	}
-//	
-//	
-//	/**
-//	 * Tests alarm timeConverter with negative number
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterNegative() throws Throwable{
-//		cp.setTime(-3);
-//		assertEquals("timeConverter(): Error! time should not be negative.", cp.timeConverter());
-//	}
-//	
-//	/**
-//	 *  Tests alarm timeConverter with 0 time
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterZero() throws Throwable{
-//		cp.setTime(0);
-//		assertEquals("0 seconds left until alarm goes off", cp.timeConverter());
-//	}
-//
-//	
-//	/**
-//	 *  Tests alarm timeConverter with positive number (less than one minute)
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterSmall() throws Throwable{
-//		cp.setTime(35);
-//		assertEquals("35 seconds left until alarm goes off", cp.timeConverter());
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm timeConverter with positive number (more than one minute, but less than 2 minutes)
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterLessThanTwoMinutes() throws Throwable{
-//		cp.setTime(103);
-//		assertEquals("1 minute  43 seconds left until alarm goes off", cp.timeConverter());
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm timeConverter with positive number (more than two minutes, but less than 1 hour)
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterLessThanOneHour() throws Throwable{
-//		cp.setTime(1932);
-//		assertEquals("32 minutes  12 seconds left until alarm goes off", cp.timeConverter());
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm timeConverter with positive number (more than one hour)
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmTimeConverterMoreThanOneHour() throws Throwable{
-//		cp.setTime(4043);
-//		Log.v(TAG, cp.timeConverter());
-//		assertEquals("1 hour(s)  7 minutes left until alarm goes off", cp.timeConverter());
-//	}
-//	
-//	/**
-//	 *  Tests vibrate setter and getter
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmVibrateSetAndGet() throws Throwable {
-//		cp.setVibration(true);
-//		assertEquals(true, cp.getVibration());
-//		cp.setVibration(false);
-//		assertEquals(false, cp.getVibration());
-//	}
-//	
-//	
-//	/**
-//	 *  Tests ringtone setter and getter
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmRingtoneSetAndGet() throws Throwable {
-//		Uri ringtoneUri = RingtoneManager.getDefaultUri(0);
-//		Log.v(TAG, "ringtoneUri:  "+ringtoneUri);
-//		cp.setRingtoneUri(ringtoneUri);
-//		assertEquals(ringtoneUri, cp.getRingtoneUri());
-//		cp.setRingtoneUri(null);
-//		assertEquals(null, cp.getRingtoneUri());
-//	}
-//	
-//	
-//	
-//	
-//	/**
-//	 *  Tests alarm that works basic.
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmBasicWorks() throws Throwable {
-//		assertEquals(true, cp.setAlarm(new View(cp.getBaseContext())));
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm that works with ringtone and vibrate specified
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmWorks1() throws Throwable {
-//		Uri ringtoneUri = RingtoneManager.getDefaultUri(0);
-//		cp.setRingtoneUri(ringtoneUri);
-//		cp.setVibration(true);
-//		assertEquals(true, cp.setAlarm(new View(cp.getBaseContext())));
-//		
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm class without calling the onReceive method
-//	 *  
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmClassNotWorks() throws Throwable {
-//		OneTimeAlarmReceiver alarm = new OneTimeAlarmReceiver();
-//		assertEquals(false, alarm.getIfSuccessful());
-//	}
-//	
-//	
-//	/**
-//	 *  Tests alarm class if it successfully goes through onReceive method
-//	 *  and notifies the user
-//	 * @throws Throwable
-//	 */
-//	public void testAlarmClass() throws Throwable {
-//		Uri ringtoneUri = RingtoneManager.getDefaultUri(0);
-//		Intent intent = new Intent();
-//		intent.putExtra("Ringtone", ringtoneUri);
-//		intent.putExtra("Vibration", true);
-//		OneTimeAlarmReceiver alarm = new OneTimeAlarmReceiver();
-//		alarm.onReceive(cp.getBaseContext(), intent);
-//		assertEquals(true, alarm.getIfSuccessful());
-//	}
-//	
-//	
-//	
-//	
-//	
-//} // AlarmTest class ends
+/**
+ * Author: Pyong Byon
+ * Date: 02/26/2010
+ * 
+ * White box testing for Alarm class
+ * 
+ * Test Boundary cases
+ * - time with negative number is passed in alarm object. -> it is set to 0.
+ * - proximity(distance) with negative number is passed. Again, it is set to 0.
+ * - timeConverter method with negative time as a parameter -> Returns the
+ * String that says, "timeConverter(): Error! time should not be negative."
+ * 
+ * - to check setAlarm method, it toggles a boolean value (from false to true)
+ *   to test whether it successfully goes through the method and sets an alarm.
+ * 
+ * 
+ * 
+ */
+
+
+
+package com.busstopalarm.test;
+
+import android.test.ActivityInstrumentationTestCase2;
+
+import com.busstopalarm.Alarm;
+import com.busstopalarm.ConfirmationPage;
+
+public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage>{
+
+	private static final String TAG = "inAlarmTest";
+	private Alarm alarmObject;
+	private ConfirmationPage cp;
+
+
+	// I'm using ConfirmationPage activity to simulate alarm set
+	// since alarm is first initiated in the confirmation page (when OK button is pushed)
+	public AlarmTest() {
+		super("com.busstopalarm", ConfirmationPage.class);
+	}
+
+	/**
+	 * Initializes the set up for the test
+	 */
+	@Override
+	protected void setUp() throws Exception{
+	  cp = (ConfirmationPage) getActivity();
+	}
+	
+	
+
+	// this below are what Alarm object takes as parameters
+	// public Alarm(int time, boolean vibration, Uri ringtoneUri, 
+	//		double proximity, String proximityUnit, Context ctx) {
+
+
+	/**
+	 * Tests alarm constructor with time, and getTime
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorTime() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		assertEquals(3, alarmObject.getTime());
+	}
+
+
+	/**
+	 * Tests alarm constructor with time (negative number), and getTime
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorTimeNegative() throws Throwable{
+		alarmObject = new Alarm(-3, true, null, 1, "Miles", cp.getBaseContext());
+		assertEquals("expected value is 0", 0, alarmObject.getTime());
+	}
+
+
+
+	/**
+	 * Tests alarm time set and get
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeSetAndGet() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		assertEquals(3, alarmObject.getTime());
+
+		alarmObject.setTime(547);
+		assertEquals(547, alarmObject.getTime());
+	}
+
+
+
+	/**
+	 * Tests alarm time set and get with negative number
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeSetAndGetNegative() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject.setTime(-4356);
+		assertEquals(0, alarmObject.getTime());
+		alarmObject.setTime(-0);
+		assertEquals(0, alarmObject.getTime());
+	}
+
+
+	/**
+	 * Tests alarm constructor with vibration (false) 
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorVibrationFalse() throws Throwable{
+		alarmObject = new Alarm(3, false, null, 1, "Miles", cp.getBaseContext());
+		assertEquals(false,alarmObject.getVibration());
+	}
+
+
+
+	/**
+	 * Tests alarm constructor with vibration (true) 
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorVibrationTrue() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		assertEquals(true, alarmObject.getVibration());
+	}
+
+
+	/**
+	 * Tests alarm constructor with ringtoneUri (null) 
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorRingtoneNull() throws Throwable{
+		alarmObject = new Alarm(3, false, null, 1, "Miles", cp.getBaseContext());
+		assertEquals(null ,alarmObject.getRingtoneUri());
+	}
+
+
+
+	/**
+	 * Tests alarm constructor with proximity, and getProximity
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorProximity() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1.0, "Miles", cp.getBaseContext());
+		assertEquals(1.0, alarmObject.getProximity());
+	}
+
+
+	/**
+	 * Tests alarm constructor with proximity, and getProximity
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorProximityNegative() throws Throwable{
+		alarmObject = new Alarm(3, true, null, -342, "Miles", cp.getBaseContext());
+		assertEquals(0.0, alarmObject.getProximity());
+	}
+
+
+
+
+	/**
+	 * Tests alarm proximity set and get
+	 * @throws Throwable
+	 */
+	public void testAlarmProximitySetAndGet() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+
+		alarmObject.setProximity(547);
+		assertEquals(547.0, alarmObject.getProximity());
+		alarmObject.setProximity(64);
+		assertEquals(64.0, alarmObject.getProximity());
+	}
+
+
+
+	/**
+	 * Tests alarm proximity set and get with negative number
+	 * @throws Throwable
+	 */
+	public void testAlarmProximitySetAndGetNegative() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject.setProximity(-435);
+		assertEquals(0.0, alarmObject.getProximity());
+		alarmObject.setTime(-0);
+		assertEquals(0.0, alarmObject.getProximity());
+	}
+
+
+	/**
+	 * Tests alarm proximityUnit Constructor
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorProximityUnit() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "Kilometers", cp.getBaseContext());
+		assertEquals("Kilometers",alarmObject.getProximityUnit());
+	}
+
+
+	/**
+	 * 
+	 * Tests alarm Constructor with null Context
+	 * @throws Throwable
+	 */
+	public void testAlarmConstructorContext() throws Throwable{
+		alarmObject = new Alarm(3, true, null, 1, "", cp.getBaseContext());
+		assertEquals(cp.getBaseContext(),alarmObject.getContext());
+	}
+
+
+
+	/**
+	 * Tests alarm timeConverter with negative number
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterNegative() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(-45);
+		assertEquals("timeConverter(): Error! time should not be negative.", result);
+	}
+
+	/**
+	 *  Tests alarm timeConverter with 0 time
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterZero() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(0);
+		assertEquals("0 seconds left until alarm goes off", result);
+	}
+
+
+	/**
+	 *  Tests alarm timeConverter with positive number (less than one minute)
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterSmall() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(35);
+		assertEquals("35 seconds left until alarm goes off", result);
+	}
+
+
+	/**
+	 *  Tests alarm timeConverter with positive number (more than one minute, but less than 2 minutes)
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterLessThanTwoMinutes() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(103);
+		assertEquals("1 minute  43 seconds left until alarm goes off", result);
+	}
+
+
+	/**
+	 *  Tests alarm timeConverter with positive number (more than two minutes, but less than 1 hour)
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterLessThanOneHour() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(1932);
+		assertEquals("32 minutes  12 seconds left until alarm goes off", result);
+	}
+
+
+	/**
+	 *  Tests alarm timeConverter with positive number (more than one hour)
+	 * @throws Throwable
+	 */
+	public void testAlarmTimeConverterMoreThanOneHour() throws Throwable{
+		alarmObject = new Alarm(0, false, null, 1, "", cp.getBaseContext());
+		String result = alarmObject.timeConverter(4043);
+		assertEquals("1 hour(s)  7 minutes left until alarm goes off", result);
+	}
+
+
+	/**
+	 *  Tests alarm that works
+	 * @throws Throwable
+	 */
+	public void testAlarmWorks() throws Throwable {
+		alarmObject = new Alarm(3, false, null, 3, "", cp.getBaseContext());
+		assertEquals(false, alarmObject.getAlarmSuccessful());
+		alarmObject.setAlarm();
+		assertEquals(true, alarmObject.getAlarmSuccessful());
+	}
+
+
+
+
+
+} // AlarmTest class ends
