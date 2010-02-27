@@ -18,8 +18,7 @@ public class BusStop {
 	private String locationType;	/* Corresponds to the stop location_type field 
 									   defined in the GTFS spec found at OneBusAway website*/
 	
-	public BusStop(int stopId) {
-		
+	public BusStop() {
 	}
 	
 	public String getCode() {
@@ -76,5 +75,11 @@ public class BusStop {
 
 	public void setLocationType(String locationType) {
 		this.locationType = locationType;
+	}
+	
+	
+	public boolean equals(BusStop other) {
+		// TODO: Must implement to test.
+		return this == other;
 	}
 }
