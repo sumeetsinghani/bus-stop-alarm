@@ -26,7 +26,7 @@ public class Alarm {
 	private int time;  // time in seconds
 	private boolean vibration;
 	private Uri ringtoneUri;
-	private double proximity;
+	private int proximity;
 	private String proximityUnit;
 	private Context ctx;
 	private boolean alarmSuccessful;
@@ -37,7 +37,7 @@ public class Alarm {
 	
 	
 	public Alarm(int time, boolean vibration, Uri ringtoneUri, 
-			double proximity, String proximityUnit, Context ctx) {
+			int proximity, String proximityUnit, Context ctx) {
 		
 		this.time = setUpTime(time);
 		this.vibration = vibration;
@@ -55,11 +55,11 @@ public class Alarm {
 	 * initializes proximity 
 	 * if proximity is less than 0, then it will return 0
 	 * @param proximityInput
-	 * @return double 
+	 * @return int
 	 */
-	private double setUpProximity(double proximityInput) {
-		if (proximityInput < 0.0)
-		  return 0.0;
+	private int setUpProximity(int proximityInput) {
+		if (proximityInput < 0)
+		  return 0;
 		return proximityInput;
 	}
 
@@ -108,7 +108,7 @@ public class Alarm {
 	 * setter for proximity
 	 * @param proximityInput
 	 */
-	public void setProximity(double proximityInput){
+	public void setProximity(int proximityInput){
 		proximity = setUpProximity(proximityInput);;
 	}
 	
@@ -116,7 +116,7 @@ public class Alarm {
 	 * getter for proximity
 	 * @return proximity
 	 */
-	public double getProximity(){
+	public int getProximity(){
 		return proximity;
 	}
 	
