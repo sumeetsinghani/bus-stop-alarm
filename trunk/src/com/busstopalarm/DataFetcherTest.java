@@ -48,6 +48,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesLast()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		Polyline actual = busRoute.getPolylines().get(12);
@@ -66,6 +67,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesFirst()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		List<Polyline> actual = busRoute.getPolylines();
@@ -84,6 +86,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesSize()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		int actual = busRoute.getPolylines().size();
@@ -99,6 +102,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsLast()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		BusStop actual = busRoute.getBusStops().get(108);
@@ -123,6 +127,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsFirst()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		BusStop actual = busRoute.getBusStops().get(0);
@@ -147,6 +152,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsSize()throws IOException {
 		BusRoute actual = fetcher.getBusRouteById(30, true);
 		int expected = 109;
@@ -164,6 +170,7 @@ public class DataFetcherTest {
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckRouteInfo()throws IOException {
 		BusRoute actual = fetcher.getBusRouteById(30, true);
 		
@@ -182,6 +189,7 @@ public class DataFetcherTest {
 	 * the method doesn't try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckPolylinesAndStopsNull()throws IOException {
 		BusRoute actual = fetcher.getBusRouteById(30, false);
 		
@@ -197,6 +205,7 @@ public class DataFetcherTest {
 	 * the method doesn't try to get polylines or stops.
 	 * @throws IOException
 	 */
+	@Test(timeout = TIMEOUT)
 	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckRouteInfo()throws IOException {
 		BusRoute actual = fetcher.getBusRouteById(30, false);
 		
