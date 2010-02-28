@@ -51,7 +51,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 
 	// this below are what Alarm object takes as parameters
 	// public Alarm(int time, boolean vibration, Uri ringtoneUri, 
-	//		double proximity, String proximityUnit, Context ctx) {
+	//		int proximity, String proximityUnit, Context ctx) {
 
 
 	/**
@@ -59,7 +59,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorTime() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 		assertEquals(3, alarmObject.getTime());
 	}
 
@@ -69,7 +69,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorTimeNegative() throws Throwable{
-		alarmObject = new Alarm(-3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(-3, true, null, 1, "Yards", cp.getBaseContext());
 		assertEquals("expected value is 0", 0, alarmObject.getTime());
 	}
 
@@ -80,7 +80,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmTimeSetAndGet() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 		assertEquals(3, alarmObject.getTime());
 
 		alarmObject.setTime(547);
@@ -94,7 +94,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmTimeSetAndGetNegative() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 		alarmObject.setTime(-4356);
 		assertEquals(0, alarmObject.getTime());
 		alarmObject.setTime(-0);
@@ -107,7 +107,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorVibrationFalse() throws Throwable{
-		alarmObject = new Alarm(3, false, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, false, null, 1, "Yards", cp.getBaseContext());
 		assertEquals(false,alarmObject.getVibration());
 	}
 
@@ -118,7 +118,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorVibrationTrue() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 		assertEquals(true, alarmObject.getVibration());
 	}
 
@@ -128,7 +128,7 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorRingtoneNull() throws Throwable{
-		alarmObject = new Alarm(3, false, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, false, null, 1, "Yards", cp.getBaseContext());
 		assertEquals(null ,alarmObject.getRingtoneUri());
 	}
 
@@ -139,8 +139,8 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorProximity() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1.0, "Miles", cp.getBaseContext());
-		assertEquals(1.0, alarmObject.getProximity());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
+		assertEquals(1, alarmObject.getProximity());
 	}
 
 
@@ -149,8 +149,8 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorProximityNegative() throws Throwable{
-		alarmObject = new Alarm(3, true, null, -342, "Miles", cp.getBaseContext());
-		assertEquals(0.0, alarmObject.getProximity());
+		alarmObject = new Alarm(3, true, null, -342, "Yards", cp.getBaseContext());
+		assertEquals(0, alarmObject.getProximity());
 	}
 
 
@@ -161,12 +161,12 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmProximitySetAndGet() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 
 		alarmObject.setProximity(547);
-		assertEquals(547.0, alarmObject.getProximity());
+		assertEquals(547, alarmObject.getProximity());
 		alarmObject.setProximity(64);
-		assertEquals(64.0, alarmObject.getProximity());
+		assertEquals(64, alarmObject.getProximity());
 	}
 
 
@@ -176,11 +176,11 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmProximitySetAndGetNegative() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Miles", cp.getBaseContext());
+		alarmObject = new Alarm(3, true, null, 1, "Yards", cp.getBaseContext());
 		alarmObject.setProximity(-435);
-		assertEquals(0.0, alarmObject.getProximity());
+		assertEquals(0, alarmObject.getProximity());
 		alarmObject.setTime(-0);
-		assertEquals(0.0, alarmObject.getProximity());
+		assertEquals(0, alarmObject.getProximity());
 	}
 
 
@@ -189,8 +189,8 @@ public class AlarmTest extends ActivityInstrumentationTestCase2<ConfirmationPage
 	 * @throws Throwable
 	 */
 	public void testAlarmConstructorProximityUnit() throws Throwable{
-		alarmObject = new Alarm(3, true, null, 1, "Kilometers", cp.getBaseContext());
-		assertEquals("Kilometers",alarmObject.getProximityUnit());
+		alarmObject = new Alarm(3, true, null, 1, "Meters", cp.getBaseContext());
+		assertEquals("Meters",alarmObject.getProximityUnit());
 	}
 
 
