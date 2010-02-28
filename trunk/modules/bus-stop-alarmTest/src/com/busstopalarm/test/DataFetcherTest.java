@@ -24,7 +24,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 
 	private DataFetcher fetcher;
 	
-	// This test doesn't require an activty, so
+	// This test doesn't require an activity, so
 	// tests in the main page.
 	public DataFetcherTest() {
 		super("com.busstopalarm", MainPage.class);
