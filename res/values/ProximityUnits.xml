@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="ProximityUnitList"><item>Miles</item>
-<item>Kilometers</item>
+<string-array name="ProximityUnitList"><item>Yards</item>
+<item>Meters</item>
 <item>Minutes</item>
 </string-array>
 </resources>

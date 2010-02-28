@@ -62,14 +62,14 @@ public class ConfirmationPage extends Activity {
 
 	private boolean vibration;
 	private Uri ringtoneUri;
-	private double proximity;
+	private int proximity;
 	private String proximityUnit;
 
 	/* these are not used yet
 	private BusStop destination;
 	private BusRoute currentBusRoute;
 	 */
-	
+
 	// these below are the data saved in the "favorite_settings_data" file in sdcard
 	// to be retrieved from the file to load the recent settings
 	private String dataVibrate;
@@ -81,11 +81,12 @@ public class ConfirmationPage extends Activity {
 
 	// time (in seconds) is used for Alarm, alarm goes off after time seconds
 	private int time;      
+	
 
 	private NotificationManager notificationManager;
 	private AlarmManager alarmManager;
-
 	
+
 	/**
 	 * ConfirmationPage constructor
 	 */
@@ -110,7 +111,7 @@ public class ConfirmationPage extends Activity {
 		time = 10;  // 10 seconds for testing
 	}
 
-	
+
 	/**
 	 * this is for the purpose of updating time
 	 *
@@ -119,7 +120,7 @@ public class ConfirmationPage extends Activity {
 		time = time_input;
 	}
 
-	
+
 	/**
 	 * getter for time
 	 * @return int time
@@ -128,7 +129,7 @@ public class ConfirmationPage extends Activity {
 		return time;
 	}
 
-	
+
 	/**
 	 * vibrate setter
 	 * @param boolean vibrate input
@@ -137,7 +138,7 @@ public class ConfirmationPage extends Activity {
 		vibration = vibrate_input;
 	}
 
-	
+
 	/**
 	 * getter for vibration
 	 * @return boolean vibration
@@ -146,7 +147,7 @@ public class ConfirmationPage extends Activity {
 		return vibration;
 	}
 
-	
+
 	/**
 	 * setter for ringtone uri
 	 * @param Uri ringtone uri
@@ -155,7 +156,7 @@ public class ConfirmationPage extends Activity {
 		ringtoneUri = ringtone_input;
 	}
 
-	
+
 	/**
 	 * getter for ringtone uri
 	 * @return Uri ringtone uri
@@ -169,15 +170,16 @@ public class ConfirmationPage extends Activity {
 	 * it gets the default proximity from the file
 	 * "favorite_settings_data" that holds the data saved when the user
 	 * saved settings as a favorite
-	 * not implemented yet
-	 * @return proximity value (double)
+	 * 
+	 * @return proximity value (int)
 	 */
-	private double default_proximity() {
-
-		return 3;  // hard wired value for now
+	private int default_proximity() {
+		if (dataProximity == null)
+			return 0;
+		return Integer.parseInt(dataProximity);
 	}
 
-	
+
 	/** 
 	 * it gets the default proximityUnit from the file
 	 * "favorite_settings_data" that holds the data saved when the user
@@ -188,7 +190,6 @@ public class ConfirmationPage extends Activity {
 		return dataProximityUnit;
 	}
 
-	
 
 	/** 
 	 * it gets the default vibrate from the file "favorite_settings_data" which
@@ -214,7 +215,7 @@ public class ConfirmationPage extends Activity {
 
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		notificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
+		
 		try {  // load saved settings
 			loadRecentSettings();
 		} catch (IOException e1) {  // if the file "favorite_settings_data" is not found
@@ -231,7 +232,7 @@ public class ConfirmationPage extends Activity {
 		Log.v(TAG, "dataRingtone:  " + dataRingtone);
 		Log.v(TAG, "dataProximity:  " + dataProximity);
 		Log.v(TAG, "dataProximityUnit:  " + dataProximityUnit);
-		
+
 		Log.v(TAG, "vibrate:  " + vibration);
 		Log.v(TAG, "ringtone:  " + ringtoneUri);
 		Log.v(TAG, "proximity:  " + proximity);
@@ -328,7 +329,7 @@ public class ConfirmationPage extends Activity {
 				if (ringtoneUri != null)
 					settings += ringtoneTitleToSave;
 				settings += "\t";
-				settings += Double.toString(proximity);
+				settings += Integer.toString(proximity);
 				settings += "\t";
 				settings += proximityUnit;
 
@@ -458,31 +459,39 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * proximity needs to be implemented !
+	 * this method is invoked when proximity bar is used
 	 * 
 	 * 
 	 * 
 	 */
 	public void getProximity() {
 		final SeekBar proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
+		final TextView progressText = (TextView) findViewById(R.id.ProximityNumber);
+		progressText.setText(Integer.toString(proximity));
+		proximitySeekBar.setMax(1000);
+		
+		if (dataProximity != null && !dataProximity.equalsIgnoreCase("0"))
+			proximitySeekBar.setProgress(Integer.parseInt(dataProximity));
+		
+		proximitySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-		proximitySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
-
-
-			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+			public void onProgressChanged(SeekBar seekBarOnProgress, int progress, boolean fromTouch) {
 				// TODO Auto-generated method stub
-
+				Log.v(TAG, "progress:  " + progress);
+				proximity = progress;
+				progressText.setText(Integer.toString(proximity));
+				
+			//	Log.v(TAG, "fromTouch:  " + fromTouch);
 			}
 
-			public void onStartTrackingTouch(SeekBar arg0) {
+			public void onStartTrackingTouch(SeekBar seekBarOnStart) {
 				// TODO Auto-generated method stub
-
+			
 			}
 
-			public void onStopTrackingTouch(SeekBar arg0) {
+			public void onStopTrackingTouch(SeekBar seekBarOnStop) {
 				// TODO Auto-generated method stub
-				//  arg0.get
-				// proximity = ...;
+			
 
 			}
 		});
@@ -493,7 +502,7 @@ public class ConfirmationPage extends Activity {
 
 	/**
 	 * It is invoked when the user selects the proximity unit on the spinner
-	 * It first loads all units (Miles, Kilometers, Minutes) on the spinner
+	 * It first loads all units (Yards, Meters, Minutes) on the spinner
 	 * And then, sets it to the one that the user previously has saved as a favorite 
 	 * 
 	 */
@@ -504,7 +513,7 @@ public class ConfirmationPage extends Activity {
 		proxSpinnerValues.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
 
-		if (dataProximityUnit != null && dataProximityUnit.equalsIgnoreCase("Kilometers"))
+		if (dataProximityUnit != null && dataProximityUnit.equalsIgnoreCase("Meters"))
 			proximityUnitsSpinner.setSelection(1);
 		if (dataProximityUnit != null && dataProximityUnit.equalsIgnoreCase("Minutes"))
 			proximityUnitsSpinner.setSelection(2);
@@ -541,7 +550,7 @@ public class ConfirmationPage extends Activity {
 
 		// get all types of sounds (ringtones, notifications, alarms)
 		ringtoneManager.setType(RingtoneManager.TYPE_ALL);
-		
+
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
 		int defaultRingtoneIndex = 0;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
@@ -563,7 +572,7 @@ public class ConfirmationPage extends Activity {
 				ringtoneList);
 		ringtoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		ringtoneSpinner.setAdapter(ringtoneAdapter);
-		
+
 		if (defaultRingtoneIndex != 0)
 			ringtoneSpinner.setSelection(defaultRingtoneIndex);
 
