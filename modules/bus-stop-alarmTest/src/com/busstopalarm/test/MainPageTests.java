@@ -363,28 +363,6 @@ public class MainPageTests extends ActivityInstrumentationTestCase2<MainPage> {
 	}
 	
 	/**
-	 * Tests if the route search button is clicked yet.
-	 * 
-	 * @throws Throwable
-	 */
-	public void test_RouteSearchButton_isClicked() throws Throwable{
-		MainPage mp = (MainPage) getActivity();
-		
-		final Button routeSearchButton = 
-			(Button) mp.findViewById(com.busstopalarm.R.id.RouteSearchButton);
-		
-		runTestOnUiThread(new Runnable() {
-			public void run() {
-				routeSearchButton.performClick();
-			}
-			
-		});
-		
-		assertEquals("Stay in the same page", 
-					 1,routeSearchButton.getVisibility());	
-	}
-	
-	/**
 	 * Tests if the Favorite button is clickable
 	 * 
 	 * @throws Throwable
