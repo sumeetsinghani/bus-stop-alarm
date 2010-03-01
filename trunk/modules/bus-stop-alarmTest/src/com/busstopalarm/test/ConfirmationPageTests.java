@@ -173,7 +173,7 @@ public class ConfirmationPageTests extends
 		
 		
 		String result = proxUnit.getItemAtPosition(pos).toString();
-		assertEquals("the proximity unit should be mile", "Miles", result);
+		assertEquals("the proximity unit should be mile", "Yards", result);
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class ConfirmationPageTests extends
 		
 		String result = proxUnit.getItemAtPosition(pos).toString();
 		assertEquals("the proximity unit should be Kilometers", 
-					 "Kilometers", result);
+					 "Meters", result);
 	}
 	
 	/**
