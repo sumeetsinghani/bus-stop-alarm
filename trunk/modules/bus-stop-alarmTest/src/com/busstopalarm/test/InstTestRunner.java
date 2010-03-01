@@ -1,3 +1,10 @@
+/**
+ * Author: Huy Dang
+ * Date: 02/23/2010
+ * 
+ * The Instrument test runner that includes all tests to the test suite for
+ * convenient run
+ */
 package com.busstopalarm.test;
 
 import junit.framework.TestSuite;
@@ -12,7 +19,13 @@ public class InstTestRunner extends InstrumentationTestRunner{
 	    public TestSuite getAllTests() {
 	        InstrumentationTestSuite suite = new InstrumentationTestSuite(this);
 
-	        suite.addTestSuite(RobotSampleTests.class);
+	        suite.addTestSuite(AlarmTest.class);
+	        suite.addTestSuite(BusDbAdapterTest.class);
+	        suite.addTestSuite(ConfirmationPageTests.class);
+	        suite.addTestSuite(DataFetcherTest.class);
+	        suite.addTestSuite(MainPageTests.class);
+	        suite.addTestSuite(WhiteBoxGUIConfirmationPageTests.class);
+	        suite.addTestSuite(WhiteBoxGUIMainPageTests.class);
 	        return suite;
 	    }
 
