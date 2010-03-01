@@ -1,16 +1,24 @@
-/**
- * Author: Orkhan Muradov
- * Date: 02/21/2010
- * 
- * This class creates google maps with the gps location of the user. 
- * It zooms window to the location of the user and has zooming features.
- * It also adds button for pop-up menu
- */
-
 package com.busstopalarm;
 
-
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONException;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.widget.ZoomControls;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -18,61 +26,105 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import com.busstopalarm.ItemizedOverlayHelper;
-import com.busstopalarm.R;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 public class MapPage extends MapActivity {
-
-	private MapView mapView;
-	private ItemizedOverlayHelper itemizedOverlay;
-	private MapController mapController;
-	private List<Overlay> mapOverlays;
 	
-  	/**
-   	 * Creates Google map with zooming feature, locates the use
-   	 * and displays his location.
-   	 * 
-   	 * @param 
-     * @return void
-     */
+	//private LinearLayout linearLayout;
+	private MapController mapController;
+	private MapView mapView;
+	private LocationManager lm;
+	private int routeNumber;
+	private List<Overlay> mapOverlays;
+	private ItemizedOverlayHelper currentLocOverlay;
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+	
+	@Override
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
 		setContentView(R.layout.map);
-		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.zoomview);
-		
-		//zooming feature
+		//RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mapview);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		
-		//overlays for adding drawings on the map
-		mapOverlays = mapView.getOverlays();	
-		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Drawable marker = this.getResources().getDrawable(R.drawable.position);
-		itemizedOverlay = new ItemizedOverlayHelper(marker);
-		Location loc = lm.getLastKnownLocation("gps");
-
-		//fetching users location and displaying it
-		Double Latitude = loc.getLatitude()*1E6;
-		Double Longitude = loc.getLongitude()*1E6;
-		GeoPoint point = new GeoPoint(Latitude.intValue(), Longitude.intValue());
-		mapController = mapView.getController();
-		mapController.animateTo(point);
-		OverlayItem overlayitem = new OverlayItem(point, "your position", "position");
-		itemizedOverlay.addOverlay(overlayitem);
-		mapOverlays.add(itemizedOverlay);
+		lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+								  0, new GPSUpdateHandler());
+		
+		routeNumber = getIntent().getExtras().getInt("routeNumber");
+		
+		mapOverlays = mapView.getOverlays();
+		currentLocOverlay = null;
+		
 	}
+	public void fillData() {
+		
+		setContentView(mapView);
+	}
+	
+	/**
+   	 * This method is needed in order to use GPS location of the user
+   	 * 
+   	 * @param 
+   	 * @return returns boolean false
+     */
+	@Override
+	protected boolean isLocationDisplayed() {
+		return super.isLocationDisplayed();
+	}
+	
+	
+	public class GPSUpdateHandler implements LocationListener {
+	
+		public void onLocationChanged(Location location) {
+			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
+			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(drawable);
 
+			double lat = location.getLatitude();
+			double lon = location.getLongitude();
+			GeoPoint point = new GeoPoint((int) (lat*1E6), (int) (lon*1E6));
+			mapView.getController().animateTo(point);
+			OverlayItem overlayitem = new OverlayItem(point, "Current Location", 
+					"You are currently at " + (point.getLatitudeE6()/1e6) + " lat, " + (point.getLongitudeE6()/1e6) + " long");
+			
+			itemizedoverlay.addOverlay(overlayitem);
+			if (currentLocOverlay != null) {
+				mapOverlays.remove(currentLocOverlay);
+			}
+			mapOverlays.add(itemizedoverlay);
+			currentLocOverlay = itemizedoverlay;
+			
+			/*
+			findRouteAndToast(lat, lon);
+			*/
+		}
+		/*
+		private void findRouteAndToast(double lat, double lon) {
+		
+			try {
+				String s = DataFetcher.getRouteById(routeNumber); //getRouteByLocation(lat, lon);
+				Toast.makeText(getBaseContext(), s.subSequence(0, 500), Toast.LENGTH_SHORT).show();
+				//Log.v("ROUTES RESULT", result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+		}
+*/
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+
+		public void onProviderDisabled(String provider) {
+		}
+
+		public void onProviderEnabled(String provider) {
+		}
+	}
+	
   	/**
    	 * 
    	 * This method adds button to pop-up setting menu
@@ -109,16 +161,5 @@ public class MapPage extends MapActivity {
 			break;
 		}
 		return true;
-	}
-
-  	/**
-   	 * This method is needed in order to use GPS location of the user
-   	 * 
-   	 * @param 
-   	 * @return returns boolean false
-     */
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
 	}
 }

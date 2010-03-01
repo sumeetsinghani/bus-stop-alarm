@@ -43,9 +43,11 @@ public class MainPage extends Activity {
 					// String s = DataFetcher.getRouteById(routeNumber);
 					// //DataFetcher implementation changed.
 					String s = "PlaceHolder for Route Info.";
-					startActivity(new Intent(v.getContext(), MapPage.class));
-					Toast t = Toast.makeText(v.getContext(), s.subSequence(0,
-							Math.max(s.length(), 500)), Toast.LENGTH_LONG);
+					Intent i = new Intent(v.getContext(), MapPage.class);
+					i.putExtra("routeNumber", routeNumber);
+					startActivity(i);
+					Toast t = Toast.makeText(v.getContext(), s.substring(0,
+							Math.min(s.length(), 500)), Toast.LENGTH_LONG);
 					t.show();
 				} else {
 					Toast t = Toast.makeText(v.getContext(),
