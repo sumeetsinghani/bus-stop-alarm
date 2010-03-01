@@ -8,6 +8,8 @@
 
 package com.busstopalarm;
 
+import com.google.android.maps.GeoPoint;
+
 public class BusStop {
 	private String stopId;			// The stop id
 	private String code;		// Passenger-facing stop identifier
@@ -19,6 +21,10 @@ public class BusStop {
 									   defined in the GTFS spec found at OneBusAway website*/
 	
 	public BusStop() {
+	}
+	
+	public GeoPoint getGeoPoint() {
+		return new GeoPoint((int)(latitude * 1e6), (int)(longitude * 1e6));
 	}
 	
 	public String getCode() {

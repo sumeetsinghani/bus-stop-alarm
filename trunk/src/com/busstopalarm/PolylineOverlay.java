@@ -29,10 +29,10 @@ public class PolylineOverlay extends Overlay {
 	private Paint pathPaint = null; // Paint tool that is used to draw on the map canvas.
 
 	public PolylineOverlay(Polyline polyline) {
-		super();
+		super();		
 		this.polyline = polyline;
 		this.pathPaint = new Paint(); 
-        this.pathPaint.setAntiAlias(true); 
+        this.pathPaint.setAntiAlias(true);
 	}
 	
 	/**
@@ -60,9 +60,11 @@ public class PolylineOverlay extends Overlay {
 		while (it.hasNext()) {
 			Point outPoint = null;
 			outPoint = projection.toPixels(it.next(), outPoint);
-			//if (isOnScreen(outPoint)) {
+			//if (isOnScreen(canvas, outPoint)) {
 				//Log.d("tag", outPoint.toString());
 				routePath.lineTo(outPoint.x, outPoint.y);
+			//} else {
+				routePath.moveTo(outPoint.x, outPoint.y);
 			//}
 		}
 		/*
@@ -79,7 +81,7 @@ public class PolylineOverlay extends Overlay {
 		canvas.drawPath(routePath, pathPaint);
 	}
 	
-	private boolean isOnScreen(Point p) {
-		return p.x >= 0 && p.y >= 0 && p.x < 800 && p.y < 800;
+	private boolean isOnScreen(Canvas cv, Point p) {
+		return p.x >= 0 && p.y >= 0 && p.x < cv.getWidth() && p.y < cv.getHeight();
 	}
 }

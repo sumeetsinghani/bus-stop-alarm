@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
 
 public class DataFetcher {
@@ -186,10 +188,33 @@ public class DataFetcher {
 	 * Parses json response from OneBusAway api for bus stops.
 	 * @param json is the response from OneBusAway by a "Stops for a route" query.
 	 * @return List of bus stops on the route.
+	 * @throws JSONException 
 	 */
 	private List<BusStop> getBusStopsForRouteParser(JSONObject json) {
-		// TODO: Currently a stub method.
-		return null;
+		try {
+			JSONObject data = json.getJSONObject("data");
+			JSONArray stops = data.getJSONArray("stops");
+			
+			Log.d("DataFetcher", "data: " + data.toString() + ", stops " + stops);
+			
+			List<BusStop> busStopList = new ArrayList<BusStop>();
+			
+			for (int i = 0; i < stops.length(); i++) {
+				if(!stops.isNull(i)) {
+					JSONObject stop = stops.getJSONObject(i);
+					BusStop newStop = new BusStop();
+					newStop.setLatitude(stop.getDouble("lat"));
+					newStop.setLongitude(stop.getDouble("lon"));
+					newStop.setName(stop.getString("name"));
+					busStopList.add(newStop);
+				}
+			}
+			
+			return busStopList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	

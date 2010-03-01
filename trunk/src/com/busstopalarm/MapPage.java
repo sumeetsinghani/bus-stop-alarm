@@ -52,6 +52,8 @@ public class MapPage extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(13);
 		
+		
+		
 		lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 								  0, new GPSUpdateHandler());
@@ -62,11 +64,25 @@ public class MapPage extends MapActivity {
 		DataFetcher df = new DataFetcher();
 		List<Polyline> polylines;
 		try {
+			// draw routes on map
 			polylines = df.getPolylines(routeNumber);
 			for (Polyline p : polylines) {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);
 			}
+			
+			// place stops on map
+			List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
+			
+			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
+			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(drawable);
+
+			for (BusStop bs : stops) {
+				OverlayItem oi = new OverlayItem(bs.getGeoPoint(), bs.getName(), "more stuff?");
+				itemizedoverlay.addOverlay(oi);
+			}
+			mapOverlays.add(itemizedoverlay);
+			
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
