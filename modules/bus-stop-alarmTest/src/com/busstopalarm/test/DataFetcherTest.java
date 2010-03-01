@@ -33,7 +33,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+		fetcher = new DataFetcher();
 	}
 	
 
@@ -57,7 +57,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 */
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesLast()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
-		Polyline actual = busRoute.getPolylines().get(12);
+		Polyline actual = busRoute.getPolylines().get(busRoute.getPolylines().size()-1);
 		
 		
 		assertEquals("g|_bHtpfiV?uE?mBAsBAmCiGFCBCJ@dFrGB",
@@ -94,7 +94,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesSize()throws IOException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		int actual = busRoute.getPolylines().size();
-		int expected = 13;
+		int expected = 12;
 		
 		assertEquals(expected, actual);
 	}
@@ -462,9 +462,9 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 */
 	public void testGetPolylines_FunctionalSize() throws IOException{
 		List<Polyline> actual = fetcher.getPolylines(5);
-		int expected = 13;
-		
-		assertEquals(expected, actual);
+		int expected = 11;
+		assertNotNull(actual);
+		assertEquals(expected, actual.size());
 	}	
 	
 	/**
@@ -474,7 +474,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 */
 	public void testGetPolylines_CheckAPolylineLast() throws IOException {
 		List<Polyline> polylines = fetcher.getPolylines(30);
-		Polyline actual = polylines.get(12);
+		Polyline actual = polylines.get(polylines.size()-1);
 		
 		assertEquals("g|_bHtpfiV?uE?mBAsBAmCiGFCBCJ@dFrGB",
 				actual.getEncodedPolyline());

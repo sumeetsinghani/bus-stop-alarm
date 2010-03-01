@@ -15,13 +15,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import com.google.android.maps.GeoPoint;
 
 public class DataFetcher {
 	// Location of REST API.
@@ -63,7 +62,6 @@ public class DataFetcher {
 			// HTTP GET request for the polylines in JSON format.
 			try {
 				URL url = new URL(HOST_NAME + "stops-for-route/1_" + routeId + ".json?key=" + API_KEY);
-				System.out.println(url.toString());
 				URLConnection connection = url.openConnection();
 				InputStream inStream = connection.getInputStream();
 				json = new JSONObject(convertStreamToString(inStream));
@@ -88,10 +86,29 @@ public class DataFetcher {
 	 * @return List of polylines containing the encoded polyline and the encoded level.
 	 *         List is empty if there are now line for given route id.
 	 */
-	public List<Polyline> getPolylines(int routeId) {
-		//TODO: Stub Method
-		// Query OneBusAway and all getPolylinesParser.
-		return null;
+	public List<Polyline> getPolylines(int routeId) throws IOException, IllegalArgumentException {
+		if(routeId < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		JSONObject json = null;
+		
+		// HTTP GET request for the polylines in JSON format.
+		try {
+			URL url = new URL(HOST_NAME + "stops-for-route/1_" + routeId + ".json?key=" + API_KEY);
+			URLConnection connection = url.openConnection();
+			InputStream inStream = connection.getInputStream();
+			json = new JSONObject(convertStreamToString(inStream));
+		} catch (IOException e) {
+			System.out.println("Error: Connecting to the One Bus Away API.");
+			throw e;
+		} catch(JSONException e) {
+			System.out.println("Error: Converting response into JSONObject");
+			throw new IllegalArgumentException();
+		}
+		System.out.println("getPolylines: Fetched JSON, Before Parser.");
+		
+		return getPolylinesParser(json);
 	}
 	
 	/** 
@@ -100,10 +117,28 @@ public class DataFetcher {
 	 * @param routeID
 	 * @return list of stops as JSONObject, null if no such routeID.
 	 */
-	public List<BusStop> getBusStopsForRoute(int routeId) {
-		//TODO: Stub Method
-		// Query OneBusAway and call getBusStopsForRouteParser.
-		return null;
+	public List<BusStop> getBusStopsForRoute(int routeId) throws IOException {
+		if(routeId < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		JSONObject json = null;
+		
+		// HTTP GET request for the polylines in JSON format.
+		try {
+			URL url = new URL(HOST_NAME + "stops-for-route/1_" + routeId + ".json?key=" + API_KEY);
+			URLConnection connection = url.openConnection();
+			InputStream inStream = connection.getInputStream();
+			json = new JSONObject(convertStreamToString(inStream));
+		} catch (IOException e) {
+			System.out.println("Error: Connecting to the One Bus Away API.");
+			throw e;
+		} catch(JSONException e) {
+			System.out.println("Error: Converting response into JSONObject");
+			throw new IllegalArgumentException();
+		}
+		
+		return getBusStopsForRouteParser(json);
 	}
 	
 	/**
@@ -113,6 +148,10 @@ public class DataFetcher {
 	 *         List is empty if there are now line for given route id.
 	 */
 	private List<Polyline> getPolylinesParser(JSONObject json) {
+		if(json == null) {
+			throw new IllegalArgumentException("getPolylinesParser: json parameter is null");
+		}
+		
 		ArrayList<Polyline> polylines = new ArrayList<Polyline>();
 		
 		// Retrieve the list of polylines from the JSON response.
@@ -139,6 +178,7 @@ public class DataFetcher {
 			System.out.println("Error getting polylines from json response.");
 		}
 		
+		System.out.println("getPolylines: Fetched JSON, Before Parser.");
 		return polylines;
 	}
 	
@@ -183,5 +223,39 @@ public class DataFetcher {
 		} else {
 			return "";
 		}
+	}
+	
+	public boolean apiCallTest() {
+		JSONObject json = null;
+		
+		// HTTP GET request for the polylines in JSON format.
+		try {
+			URL url = new URL(HOST_NAME + "stops-for-route/1_" + 30 + ".json?key=" + API_KEY);
+			URLConnection connection = url.openConnection();
+			InputStream inStream = connection.getInputStream();
+			json = new JSONObject(convertStreamToString(inStream));
+		} catch (IOException e) {
+			System.out.println("Error: Connecting to the One Bus Away API.");
+			throw new IllegalArgumentException("Error: Connecting to the One Bus Away API.");
+		} catch(JSONException e) {
+			System.out.println("Error: Converting response into JSONObject");
+			throw new IllegalArgumentException("Error: Converting response into JSONObject");
+		}
+		
+		return json != null;
+	}
+	
+	public boolean geoPointTest() {
+		GeoPoint point = new GeoPoint(10, 10);
+		return point != null;
+	}
+	
+	public boolean sanity() {
+		return true;
+	}
+	
+	public boolean jsonTest() {
+		JSONObject json = new JSONObject();
+		return json != null;
 	}
 }
