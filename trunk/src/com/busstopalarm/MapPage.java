@@ -49,14 +49,36 @@ public class MapPage extends MapActivity {
 		//RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mapview);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
+		mapController = mapView.getController();
+		mapController.setZoom(13);
 		
 		lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 								  0, new GPSUpdateHandler());
+
+		mapOverlays = mapView.getOverlays();
 		
 		routeNumber = getIntent().getExtras().getInt("routeNumber");
+		DataFetcher df = new DataFetcher();
+		List<Polyline> polylines;
+		try {
+			polylines = df.getPolylines(routeNumber);
+			for (Polyline p : polylines) {
+				PolylineOverlay po = new PolylineOverlay(p);
+				mapOverlays.add(po);
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
+			t.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
+			t.show();
+		}
 		
-		mapOverlays = mapView.getOverlays();
 		currentLocOverlay = null;
 		
 	}

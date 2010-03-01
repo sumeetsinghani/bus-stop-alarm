@@ -36,8 +36,8 @@ public class MainPage extends Activity {
 		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				String routeText = ((EditText) findViewById(R.id.RouteSearchBox))
-						.getText().toString();
+				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
+				// TODO: when datafetcher gets use, put a try/catch here
 				if (routeText.matches("[0-9]{1,5}")) {
 					int routeNumber = Integer.parseInt(routeText);
 					// String s = DataFetcher.getRouteById(routeNumber);
@@ -103,7 +103,7 @@ public class MainPage extends Activity {
 			recentList.addView(recentItem);
 			recent.moveToNext();
 		}
-
+		ad.close();
 	}
 
 	@Override
