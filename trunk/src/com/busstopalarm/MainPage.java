@@ -49,6 +49,7 @@ public class MainPage extends Activity {
 					Toast t = Toast.makeText(v.getContext(), s.substring(0,
 							Math.min(s.length(), 500)), Toast.LENGTH_LONG);
 					t.show();
+					finish();
 				} else {
 					Toast t = Toast.makeText(v.getContext(),
 							"Invalid Route Number", Toast.LENGTH_LONG);
@@ -64,7 +65,6 @@ public class MainPage extends Activity {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.FAVORITES);
 				startActivity(i);
-				finish();
 			}
 		});
 
@@ -75,7 +75,6 @@ public class MainPage extends Activity {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.MAJOR);
 				startActivity(i);
-				finish();
 			}
 		});
 
@@ -128,9 +127,8 @@ public class MainPage extends Activity {
 		case 2:
 			final Intent helpPage = new Intent(this, HelpPage.class);
 			startActivity(helpPage);
-			finish();
 			break;
-		case 3:
+		case 4:
 			finish();
 			break;
 		}
