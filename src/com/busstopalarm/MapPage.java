@@ -136,7 +136,7 @@ public class MapPage extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0,1, 1, "Go back");
-		menu.add(0,2, 2, "Exit");
+		menu.add(0,2, 2, "Settings");
 		return true;
 	}
 
@@ -154,9 +154,6 @@ public class MapPage extends MapActivity {
 		case 1:
 			final Intent i = new Intent(this, MainPage.class);
 			startActivity(i);
-			finish();
-			break;
-		case 2:
 			finish();
 			break;
 		}
