@@ -3,6 +3,13 @@
  * Date: 02/25/2010
  * Alarm class
  * 
+ * temporary class (probably only for the beta version)
+ * alarm object is created in confirmation page.
+ * it takes time, vibration, ringtoneUri, proximity, proximity unit, and
+ * context (from confirmation page) as parameters in the alarm constructor
+ * it triggers the alarm set in setAlarm method with the attributes given.
+ * 
+ * 
  */
 
 package com.busstopalarm;
@@ -48,7 +55,8 @@ public class Alarm {
 		alarmSuccessful = false;
 		
 		alarmManager = (AlarmManager) ctx.getSystemService(ctx.ALARM_SERVICE);
-		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager = (NotificationManager) ctx.getSystemService(
+				Context.NOTIFICATION_SERVICE);
 	}
 	
 	/**
@@ -149,10 +157,9 @@ public class Alarm {
 
 	/**
 	 * this method is called when OK Button is pushed in Confirmation page
-	 * it sets an alarm in the alarm manager with the pending intent and intent which holds
-	 * ringtone and vibrate to be sent over to OneTimeAlarmReceiver
+	 * it sets an alarm in the alarm manager with the pending intent and intent
+	 *  which holds ringtone and vibrate to be sent over to OneTimeAlarmReceiver
 	 * Then, it immediately notifies with notification up on top of the screen
-	 * 
 	 * 
 	 */
 	public void setAlarm() {
@@ -161,17 +168,22 @@ public class Alarm {
 
 		intent.putExtra("Ringtone", ringtoneUri);
 		intent.putExtra("Vibration", vibration);
-		PendingIntent pendingIntent_alarm = PendingIntent.getBroadcast(ctx, 
-				PENDING_INTENT_REQUEST_CODE1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(ctx, 
+				PENDING_INTENT_REQUEST_CODE1, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
 
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
-				(time * 1000), pendingIntent_alarm);
-		Notification notification = new Notification(R.drawable.icon, "Bus Stop Alarm is set!",
+				(time * 1000), pendingIntentAlarm);
+		Notification notification = new Notification(R.drawable.icon, 
+				"Bus Stop Alarm is set!",
 				System.currentTimeMillis());
-		PendingIntent contentIntent = PendingIntent.getActivity(ctx, PENDING_INTENT_REQUEST_CODE2, 
-				new Intent(ctx, ConfirmationPage.class), PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 
+				PENDING_INTENT_REQUEST_CODE2, 
+				new Intent(ctx, ConfirmationPage.class), 
+				PendingIntent.FLAG_CANCEL_CURRENT);
 
-		notification.setLatestEventInfo(ctx, "Bus Stop Alarm", timeConverter(getTime()),
+		notification.setLatestEventInfo(ctx, "Bus Stop Alarm", 
+				timeConverter(getTime()),
 				contentIntent);
 		notification.flags = Notification.FLAG_INSISTENT;
 		notificationManager.notify(NOTIFICATION_ID1, notification);
@@ -197,11 +209,14 @@ public class Alarm {
 		if (time_input < 60)
 			return time_input + " seconds left until alarm goes off";
 		if (time_input < 120)
-			return "1 minute  " + time_input%60 + " seconds left until alarm goes off";
+			return "1 minute  " + time_input%60 + 
+			" seconds left until alarm goes off";
 		if (time_input < 3600) 
-			return time_input/60 + " minutes  " + time_input % 60 + " seconds left until alarm goes off";
+			return time_input/60 + " minutes  " +
+			time_input % 60 + " seconds left until alarm goes off";
 		else
-			return time_input/3600 + " hour(s)  " + (time_input%3600)/60 + " minutes left until alarm goes off";
+			return time_input/3600 + " hour(s)  " + 
+			(time_input%3600)/60 + " minutes left until alarm goes off";
 	}
 
 
