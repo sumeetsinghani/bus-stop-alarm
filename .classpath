@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding=".svn/|com/busstopalarm/.svn/|org/json/.svn/|com/busstopalarm/oldMapPage.java" kind="src" path="src"/>
+	<classpathentry excluding=".svn/|com/.svn/|com/busstopalarm/.svn/|com/busstopalarm/oldMapPage.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>

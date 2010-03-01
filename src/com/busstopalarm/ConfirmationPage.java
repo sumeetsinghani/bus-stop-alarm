@@ -265,9 +265,17 @@ public class ConfirmationPage extends Activity {
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				Alarm alarmObject = new Alarm(time, vibration, ringtoneUri, proximity, proximityUnit, 
-						ConfirmationPage.this);
-				alarmObject.setAlarm();
+				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri, proximity, proximityUnit, 
+				//		ConfirmationPage.this);
+				//alarmObject.setAlarm();
+				
+
+				Intent i = new Intent(v.getContext(), AlarmService.class);
+				i.putExtra("proximty", proximity);
+				i.putExtra("units", proximityUnit);
+				i.putExtra("busstop", "BUS STOP NAME GOES HERE");
+				startService(i);
+				
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", Toast.LENGTH_LONG).show();
 
 				startActivity(new Intent(v.getContext(), MainPage.class));
@@ -312,6 +320,8 @@ public class ConfirmationPage extends Activity {
 	 *  If it exists, it will overwrite the old settings when the button is pushed
 	 *  It stays in the current page
 	 */
+	
+	// TODO: this should also save the stop in the database
 	private void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SetAsFavButton);
 		SaveButton.setOnClickListener(new View.OnClickListener(){

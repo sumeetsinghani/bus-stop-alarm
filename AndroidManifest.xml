@@ -27,6 +27,8 @@
 	
 	<receiver android:name=".OneTimeAlarmReceiver"
 	          android:process=":remote" />
+	          
+	<service android:name=".AlarmService" />
 	
 	 
 	</application>
