@@ -24,6 +24,7 @@ import android.widget.Toast;
 /**
  * Main page of the Bus Stop Alarm
  * 
+ * @author David Nufer, Orkhan Muradov
  */
 public class MainPage extends Activity {
 	/** Called when the activity is first created. */

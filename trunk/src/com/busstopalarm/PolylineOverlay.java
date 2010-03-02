@@ -72,17 +72,6 @@ public class PolylineOverlay extends Overlay {
 				routePath.moveTo(outPoint.x, outPoint.y);
 			//}
 		}
-		/*
-		for(GeoPoint inPoint : polyline) {
-			Point outPoint = null;
-			outPoint = projection.toPixels(inPoint, outPoint);
-			routePath.moveTo(outPoint.x, outPoint.y);
-			if (isOnScreen(outPoint)) {
-				//Log.d("tag", outPoint.toString());
-				routePath.lineTo(outPoint.x, outPoint.y);
-			}
-		}
-		*/
 		canvas.drawPath(routePath, pathPaint);
 	}
 	

@@ -1,5 +1,8 @@
 package com.busstopalarm;
-/*
+/**
+ * Location List Page list a bunch of stops that can be selected used to
+ * directly set an alarm without going through the map.
+ * 
  * @author David Nufer
  */
 
