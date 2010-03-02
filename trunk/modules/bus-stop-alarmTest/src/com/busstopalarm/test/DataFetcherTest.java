@@ -30,6 +30,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		super("com.busstopalarm", MainPage.class);
 	}
 	
+	// Instantiates DataFetcher for testing.
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -457,12 +458,12 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	
 	/**
 	 * Tests getPolylines() with a valid route id (30).
-	 * Asserts that there should be 13 polylines for this route.
+	 * Asserts that there should be 12 polylines for this route.
 	 * @throws IOException
 	 */
 	public void testGetPolylines_FunctionalSize() throws IOException{
-		List<Polyline> actual = fetcher.getPolylines(5);
-		int expected = 11;
+		List<Polyline> actual = fetcher.getPolylines(30);
+		int expected = 12;
 		assertNotNull(actual);
 		assertEquals(expected, actual.size());
 	}	
