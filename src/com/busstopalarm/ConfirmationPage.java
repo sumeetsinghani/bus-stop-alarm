@@ -226,16 +226,6 @@ public class ConfirmationPage extends Activity {
 		proximity = default_proximity();
 		proximityUnit = default_proximity_unit();
 
-		// Logs for debugging purpose.
-		Log.v(TAG, "dataVibrate:  " + dataVibrate);
-		Log.v(TAG, "dataRingtone:  " + dataRingtone);
-		Log.v(TAG, "dataProximity:  " + dataProximity);
-		Log.v(TAG, "dataProximityUnit:  " + dataProximityUnit);
-
-		Log.v(TAG, "vibrate:  " + vibration);
-		Log.v(TAG, "ringtone:  " + ringtoneUri);
-		Log.v(TAG, "proximity:  " + proximity);
-		Log.v(TAG, "proximityUnit:  " + proximityUnit);
 
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
@@ -250,6 +240,16 @@ public class ConfirmationPage extends Activity {
 		getProximity();
 		getProximityUnits();
 
+		// Logs for debugging purpose.
+		Log.v(TAG, "dataVibrate:  " + dataVibrate);
+		Log.v(TAG, "dataRingtone:  " + dataRingtone);
+		Log.v(TAG, "dataProximity:  " + dataProximity);
+		Log.v(TAG, "dataProximityUnit:  " + dataProximityUnit);
+
+		Log.v(TAG, "vibrate:  " + vibration);
+		Log.v(TAG, "ringtone:  " + ringtoneUri);
+		Log.v(TAG, "proximity:  " + proximity);
+		Log.v(TAG, "proximityUnit:  " + proximityUnit);
 	}  // ends onCreate method
 
 
@@ -264,13 +264,18 @@ public class ConfirmationPage extends Activity {
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
+				
 				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
 				//proximity, proximityUnit, ConfirmationPage.this);
 				//alarmObject.setAlarm();
 				BusStop b = getIntent().getParcelableExtra("busstop");
 
 				Intent i = new Intent(v.getContext(), AlarmService.class);
+				i.putExtra("proximity", proximity);
+				i.putExtra("units", proximityUnit);
 				i.putExtra("busstop", b);
+				i.putExtra("vibration", vibration);
+				i.putExtra("ringtoneUri", ringtoneUri);
 				startService(i);
 
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
@@ -607,14 +612,16 @@ public class ConfirmationPage extends Activity {
 		int defaultRingtoneIndex = 0;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
 		//	Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
+		ringtoneCursor.moveToFirst();
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
-			ringtoneCursor.moveToNext();
 			String titleOfRingtone = ringtoneCursor.getString(
 					RingtoneManager.TITLE_COLUMN_INDEX);
 			Log.v(TAG, "ringtone list:  " + titleOfRingtone);
 			ringtoneList[i] = titleOfRingtone;
 			if (dataRingtone != null && dataRingtone.equals(titleOfRingtone))
 				defaultRingtoneIndex = i;
+			Log.d("CONFPAGE", ringtoneManager.getRingtoneUri(ringtoneCursor.getPosition()).toString());
+			ringtoneCursor.moveToNext();
 		}
 
 		//String ringtoneList = ringtone.getTitle(this);	

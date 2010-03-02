@@ -14,11 +14,13 @@
 
 package com.busstopalarm;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -62,19 +64,20 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 		notification.flags = Notification.FLAG_INSISTENT;
 
 		// Logs for debugging purpose
-		Log.v(TAG, "vibrate " + intent.getBooleanExtra("Vibration", false));
-		Log.v(TAG, "ringtone " + intent.getParcelableExtra("Ringtone"));
+		Log.v(TAG, "vibrate " + intent.getBooleanExtra("vibration", false));
+		Log.v(TAG, "ringtone " + intent.getParcelableExtra("ringtoneUri"));
 
-		Uri ringtoneUri = (Uri) intent.getParcelableExtra("Ringtone");
+		Uri ringtoneUri = (Uri) intent.getParcelableExtra("ringtoneUri");
 		if (ringtoneUri != null)
 			notification.sound = ringtoneUri;
 
-		boolean vibration = intent.getBooleanExtra("Vibration", false);
+		boolean vibration = intent.getBooleanExtra("vibration", false);
 
 		if (vibration)
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
 
 		notification.defaults |= Notification.DEFAULT_LIGHTS;
+		
 		manager.notify(NOTIFICATION_ID2, notification);
 		Log.v(TAG, "Alarm is ringing now! ");
 		Toast.makeText(context, "Hey Wake up! (Alarm is ringing now!)",
