@@ -4,6 +4,8 @@ package com.busstopalarm;
  */
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +38,7 @@ public class LocationListPage extends ListActivity {
 	 */
 	private int listType;
 	
-	private ArrayList<HashMap<String, String>> locationList = new ArrayList<HashMap<String,String>>();
+	private ArrayList<HashMap<String, BusStop>> locationList = new ArrayList<HashMap<String,BusStop>>();
 	private SimpleAdapter listAdapter;
 	
     /** Called when the activity is first created. */
@@ -54,7 +56,7 @@ public class LocationListPage extends ListActivity {
 		  // this is an error.  need to do something if we get here
 	  }
 	  
-	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"name"}, new int[] {R.id.listItemName});
+	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"busstop"}, new int[] {R.id.listItemName});
 	  setListAdapter(listAdapter);
 	  
 	  ListView lv = getListView();
@@ -64,7 +66,7 @@ public class LocationListPage extends ListActivity {
 	    public void onItemClick(AdapterView<?> parent, View view,
 	        int position, long id) {
 	    	Intent i = new Intent(view.getContext(), ConfirmationPage.class);
-	    	i.putExtra("name", locationList.get(position).get("name"));
+	    	i.putExtra("busstop", locationList.get(position).get("busstop"));
 	    	startActivity(i);
 	    	finish();
 	    }
@@ -76,22 +78,6 @@ public class LocationListPage extends ListActivity {
 	  fillList(mBusDbHelper);
 	  mBusDbHelper.close();
 	}
-	
-	/** 
-	 * temporary method for ZFR.  Should be removed when real data can be put into list
-	 */
-	/*private void fillList() {
-		for (int i = 0; i < 20; i++) {
-			HashMap<String, String> item = new HashMap<String, String>();
-			if (listType == FAVORITES) {
-				item.put("name", "Favorite Location " + i);
-			} else if (listType == MAJOR) {
-				item.put("name", "Major Location " + i);
-			}
-			locationList.add(item);
-		}
-		listAdapter.notifyDataSetChanged();
-	}*/
 	
 	/**
 	 * fills the list with stops from the local database
@@ -105,14 +91,24 @@ public class LocationListPage extends ListActivity {
 		} else { // listType == MAJOR
 			c = db.getMajorDest(100);
 		}
-		int nameIndex = c.getColumnIndex("stop_desc");
-		int routeIdIndex = c.getColumnIndex("route_id");
+		DataFetcher df = new DataFetcher();
+		int stopIDIndex = c.getColumnIndex("stop_id");
+		//int routeIDIndex = c.getColumnIndex("route_id");
 		if (c != null) {
 			for (int i = 0; i < c.getCount(); i++) {
-				HashMap<String, String> item = new HashMap<String, String>();
-				item.put("name", "Route " + c.getString(routeIdIndex) +  ": " + c.getString(nameIndex));
-				c.moveToNext();
-				locationList.add(item);
+				HashMap<String, BusStop> item = new HashMap<String, BusStop>();
+				BusStop b;
+				try {
+					String[] stop = c.getString(stopIDIndex).split("_");
+					b = df.getStopById(Integer.parseInt(stop[stop.length - 1]));
+					item.put("busstop", b);
+					c.moveToNext();
+					locationList.add(item);
+				} catch (IOException e) {
+					Toast.makeText(this, "Error Loading from Database", Toast.LENGTH_LONG);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			listAdapter.notifyDataSetChanged();
 		}
@@ -140,7 +136,7 @@ public class LocationListPage extends ListActivity {
 		// sets an alarm for the selected stop
 		if (item.getItemId() == 10) {
 	    	Intent i = new Intent(getApplicationContext(), ConfirmationPage.class);
-	    	i.putExtra("name", locationList.get(id).get("name"));
+	    	i.putExtra("busstop", locationList.get(id).get("busstop"));
 	    	startActivity(i);
 	    	finish();
 	    

@@ -8,14 +8,13 @@
 
 package com.busstopalarm;
 
-import org.junit.runner.notification.StoppedByUserException;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.maps.GeoPoint;
 
 public class BusStop implements Parcelable {
+
 	private String stopId;			// The stop id
 	private String code;		// Passenger-facing stop identifier
 	private String name;		// Passenger-facing name for the stop
@@ -153,5 +152,10 @@ public class BusStop implements Parcelable {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 }

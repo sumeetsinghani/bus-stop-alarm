@@ -136,37 +136,7 @@ public class MapPage extends MapActivity {
 			double lon = location.getLongitude();
 			GeoPoint point = new GeoPoint((int) (lat*1E6), (int) (lon*1E6));
 			mapView.getController().animateTo(point);
-			/*Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
-			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(null, drawable);
-
-			OverlayItem overlayitem = new OverlayItem(point, "Current Location", 
-					"You are currently at " + (point.getLatitudeE6()/1e6) + " lat, " + (point.getLongitudeE6()/1e6) + " long");
-			
-			itemizedoverlay.addOverlay(overlayitem);
-			if (currentLocOverlay != null) {
-				mapOverlays.remove(currentLocOverlay);
-			}
-			mapOverlays.add(itemizedoverlay);
-			currentLocOverlay = itemizedoverlay;*/
-			
-			/*
-			findRouteAndToast(lat, lon);
-			*/
 		}
-		/*
-		private void findRouteAndToast(double lat, double lon) {
-		
-			try {
-				String s = DataFetcher.getRouteById(routeNumber); //getRouteByLocation(lat, lon);
-				Toast.makeText(getBaseContext(), s.subSequence(0, 500), Toast.LENGTH_SHORT).show();
-				//Log.v("ROUTES RESULT", result.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			
-		}
-*/
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
 

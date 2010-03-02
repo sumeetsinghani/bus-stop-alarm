@@ -77,9 +77,24 @@ public class MainPage extends Activity {
 			}
 		});
 
-		// TODO: add recent routes to main page
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
+		
+		//////// temporary /////////
+		ad.deleteAllDestinations();
+		try { 
+			ad.readDbFile(0);
+			ad.readDbFile(1);
+			ad.readDbFile(2);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		////////////////////////////
+		
 		Cursor recent = ad.getRecentDest(5);
 		LinearLayout recentList = (LinearLayout) findViewById(R.id.recent_routes);
 		int routeIndex = recent.getColumnIndex("route_id");
@@ -97,7 +112,7 @@ public class MainPage extends Activity {
 				}
 			});
 
-			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 8);
 			recentItem.setText("Route " + recent.getString(routeIndex) + ", "
 					+ recent.getString(routeDescIndex));
 			recentList.addView(recentItem);
