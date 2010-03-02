@@ -24,7 +24,7 @@ public class AlarmService extends Service {
 	
 	private int proximity;
 	private String units;
-	private String busStop;
+	private BusStop busStop;
 	
 	public void onCreate() {
 		super.onCreate();
@@ -39,11 +39,11 @@ public class AlarmService extends Service {
 	public void onStart(Intent intent, int startId) {
 		proximity = intent.getIntExtra("proximity", 1);
 		units = intent.getStringExtra("units");
-		busStop = intent.getStringExtra("busstop");
+		busStop = intent.getParcelableExtra("busstop");
 		PendingIntent pi = PendingIntent.getBroadcast(
 				getApplicationContext(), 0, new Intent(getApplicationContext(), AlarmService.class), 
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop, "acquiring location...", pi);
+		ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(), "acquiring location...", pi);
 		
 		mNtf.notify(NOTIFICATION_ID1, ntf);
 	}
@@ -61,14 +61,16 @@ public class AlarmService extends Service {
 	private class AlarmLocationListener implements LocationListener {
 		public void onLocationChanged(Location location) {
 			currentLoc = location;
-			
-			float dist = currentLoc.distanceTo(location); // TODO: change this to target
+			Location target = new Location(location);
+			target.setLatitude(busStop.getLatitude());
+			target.setLongitude(busStop.getLongitude());
+			float dist = currentLoc.distanceTo(target);
 			
 			PendingIntent pi = PendingIntent.getBroadcast(
 					getApplicationContext(), 0, new Intent(getApplicationContext(), AlarmService.class), 
 					PendingIntent.FLAG_UPDATE_CURRENT);
 			
-			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop, dist + " " + "Meters" + " away", pi); // TODO: convert to correct units
+			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(), dist + " " + "Meters" + " away", pi); // TODO: convert to correct units
 			ntf.when = System.currentTimeMillis();
 			mNtf.notify(NOTIFICATION_ID1, ntf);
 			Log.d("ALARMSERVICE", "location updated");

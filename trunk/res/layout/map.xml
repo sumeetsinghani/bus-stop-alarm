@@ -6,14 +6,37 @@
 	
 
 	<com.google.android.maps.MapView
-		android:id="@+id/mapview" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:clickable="true"
+		android:id="@+id/mapview" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" 
+		android:clickable="true"
 		android:apiKey="09yC5xBPNvFz9RIvmcpeircx0fvOkz1t2WH7aAw" />
 
-
-	<LinearLayout android:id="@+id/zoomview"
 	
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
+	<LinearLayout android:id="@+id/stopinfoarea" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="#BB000000" >
+	
+		<Button android:id="@+id/stopinfoarea_button" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:text="Set Alarm" 
+			android:width="85px" 
+			android:minWidth="85px"
+			android:layout_gravity="center_vertical"/>
+			
+		<TextView android:id="@+id/stopinfo"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:textSize="8pt" 
+			android:padding="5px" />
+		
+	</LinearLayout>
+	
+	<LinearLayout android:id="@+id/zoomview"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/mapview"
 		android:layout_centerHorizontal="true" />
 		

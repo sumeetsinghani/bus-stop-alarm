@@ -238,9 +238,9 @@ public class ConfirmationPage extends Activity {
 		Log.v(TAG, "proximityUnit:  " + proximityUnit);
 
 		setContentView(R.layout.confirmation);
-		String stop = getIntent().getStringExtra("name");
+		BusStop stop = getIntent().getParcelableExtra("busstop");
 		TextView stopView = (TextView) findViewById(R.id.stopname);
-		stopView.setText(stop);
+		stopView.setText(stop.getName());
 
 		okButton();
 		cancelButton();
@@ -267,11 +267,10 @@ public class ConfirmationPage extends Activity {
 				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
 				//proximity, proximityUnit, ConfirmationPage.this);
 				//alarmObject.setAlarm();
+				BusStop b = getIntent().getParcelableExtra("busstop");
 
 				Intent i = new Intent(v.getContext(), AlarmService.class);
-				i.putExtra("proximty", proximity);
-				i.putExtra("units", proximityUnit);
-				i.putExtra("busstop", "BUS STOP NAME GOES HERE");
+				i.putExtra("busstop", b);
 				startService(i);
 
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 

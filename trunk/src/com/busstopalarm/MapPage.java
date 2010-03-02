@@ -62,27 +62,26 @@ public class MapPage extends MapActivity {
 		
 		routeNumber = getIntent().getExtras().getInt("routeNumber");
 		DataFetcher df = new DataFetcher();
-		List<Polyline> polylines;
+		BusRoute busRoute;
 		try {
 			// draw routes on map
-			polylines = df.getPolylines(routeNumber);
-			for (Polyline p : polylines) {
+			busRoute = df.getBusRouteById(routeNumber, true);
+			for (Polyline p : busRoute.getPolylines()) {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);
 			}
 			
 			// place stops on map
-			List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
+			//List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
 			
 			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
-			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(drawable);
+			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
 
-			for (BusStop bs : stops) {
-				OverlayItem oi = new OverlayItem(bs.getGeoPoint(), bs.getName(), "more stuff?");
-				itemizedoverlay.addOverlay(oi);
+			for (BusStop bs : busRoute.getBusStops()) {
+				BusStopOverlayItem ov = new BusStopOverlayItem(bs);
+				itemizedoverlay.addOverlay(ov);
 			}
 			mapOverlays.add(itemizedoverlay);
-			
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +94,7 @@ public class MapPage extends MapActivity {
 			t.show();
 		}
 		
-		currentLocOverlay = null;
+		//currentLocOverlay = null;
 		
 	}
 	public void fillData() {
@@ -118,13 +117,13 @@ public class MapPage extends MapActivity {
 	public class GPSUpdateHandler implements LocationListener {
 	
 		public void onLocationChanged(Location location) {
-			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
-			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(drawable);
-
 			double lat = location.getLatitude();
 			double lon = location.getLongitude();
 			GeoPoint point = new GeoPoint((int) (lat*1E6), (int) (lon*1E6));
 			mapView.getController().animateTo(point);
+			/*Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
+			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(null, drawable);
+
 			OverlayItem overlayitem = new OverlayItem(point, "Current Location", 
 					"You are currently at " + (point.getLatitudeE6()/1e6) + " lat, " + (point.getLongitudeE6()/1e6) + " long");
 			
@@ -133,7 +132,7 @@ public class MapPage extends MapActivity {
 				mapOverlays.remove(currentLocOverlay);
 			}
 			mapOverlays.add(itemizedoverlay);
-			currentLocOverlay = itemizedoverlay;
+			currentLocOverlay = itemizedoverlay;*/
 			
 			/*
 			findRouteAndToast(lat, lon);
