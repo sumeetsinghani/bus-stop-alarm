@@ -1,6 +1,7 @@
 Final tasks to finish in the next 2 weeks.
 
 V1 - no minute conversion on proximity
+Database update - Huy
 	
 Updated Logo - Michael
 Settings page - Orkhan
