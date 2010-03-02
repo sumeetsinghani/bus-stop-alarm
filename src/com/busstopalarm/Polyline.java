@@ -19,38 +19,42 @@ public class Polyline implements Iterable<GeoPoint> {
 	private String encodedPolyline;
 	private String encodedLevels;
 	private ArrayList<GeoPoint> coordinates;
-	
+
 	/**
-	 * Polyline constructor that stores the given encodedPolyline and number of levels
-	 * that follows Google's encoding standards.
+	 * Polyline constructor that stores the given encodedPolyline and number of
+	 * levels that follows Google's encoding standards. Decodes given polyline.
+	 * 
 	 * @param encodedPolyline
 	 * @param encodedLevels
 	 */
 	public Polyline(String encodedPolyline, int length) {
 		coordinates = new ArrayList<GeoPoint>();
 		StringBuilder sb = new StringBuilder();
-		
+
 		// The encodedLevels is a string of "B" of size length.
-		for(int i = 0; i < length; i++) {
+		for (int i = 0; i < length; i++) {
 			sb.append("B");
 		}
-		
+
 		this.encodedPolyline = encodedPolyline;
 		this.encodedLevels = sb.toString();
 		this.decodeLine();
 	}
-	
+
 	/**
-	 * Polyline constructor that stores the given encodedPolyline and encodedLevels
-	 * that follows Google's encoding standards.
+	 * Polyline constructor that stores the given encodedPolyline and
+	 * encodedLevels that follows Google's encoding standards. Decodes given
+	 * polyline.
+	 * 
 	 * @param encodedPolyline
 	 * @param encodedLevels
 	 */
 	public Polyline(String encodedPolyline, String encodedLevels) {
 		this.encodedPolyline = encodedPolyline;
 		this.encodedLevels = encodedLevels;
+		this.decodeLine();
 	}
-	
+
 	/**
 	 * 
 	 * @return the encodedPolyline
@@ -58,7 +62,7 @@ public class Polyline implements Iterable<GeoPoint> {
 	public String getEncodedPolyline() {
 		return encodedPolyline;
 	}
-	
+
 	/**
 	 * 
 	 * @return the encodedLevels
@@ -66,7 +70,7 @@ public class Polyline implements Iterable<GeoPoint> {
 	public String getEncodedLevels() {
 		return encodedLevels;
 	}
-	
+
 	/**
 	 * @return an iterator for the list of GeoPoints.
 	 */
@@ -74,44 +78,46 @@ public class Polyline implements Iterable<GeoPoint> {
 		PolylineIterator p = new PolylineIterator(coordinates);
 		return p;
 	}
-	
+
 	/**
 	 * Iterator class that iterates through the list of GeoPoints.
+	 * 
 	 * @author Michael Eng
-	 *
+	 * 
 	 */
 	public class PolylineIterator implements Iterator<GeoPoint> {
 		private int index;
 		private ArrayList<GeoPoint> coordinates;
-		
+
 		/**
-		 * Constructor for PolylineIterator. Takes list of GeoPoints for
-		 * future use for iteration.
+		 * Constructor for PolylineIterator. Takes list of GeoPoints for future
+		 * use for iteration.
+		 * 
 		 * @param coordinates
 		 */
 		public PolylineIterator(ArrayList<GeoPoint> coordinates) {
 			index = 0;
 			this.coordinates = coordinates;
 		}
-		
+
 		/**
 		 * @return true if there is an available GeoPoint.
 		 */
 		public boolean hasNext() {
 			return index < coordinates.size();
 		}
-		
+
 		/**
-		 * @returns the next GeoPoint in the list.
+		 * @return the next GeoPoint in the list.
 		 */
 		public GeoPoint next() {
-			if(hasNext()) {
+			if (hasNext()) {
 				return coordinates.get(index++);
 			} else {
 				throw new NoSuchElementException();
 			}
 		}
-		
+
 		/**
 		 * This method is not supported in the implementation.
 		 */
@@ -119,42 +125,48 @@ public class Polyline implements Iterable<GeoPoint> {
 			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	/**
 	 * This function is from Google's polyline utility written in Javascript
-	 * that I rewrote in Java.
-	 * Decodes the class' encodedPolyline and stores the GeoPoints in the 
-	 * list of coordinates.
+	 * that I rewrote in Java. Decodes the class' encodedPolyline and stores the
+	 * GeoPoints in the list of coordinates.
 	 */
 	private void decodeLine() {
-	  int len = this.encodedPolyline.length();
-	  int index = 0;
-	  int lat = 0;
-	  int lng = 0;
+		// Clear all stored coordinates.
+		this.coordinates.clear();
 
-	  while (index < len) {
-	    int b;
-	    int shift = 0;
-	    int result = 0;
-	    do {
-	      b = this.encodedPolyline.charAt(index++) - 63;
-	      result |= (b & 0x1f) << shift;
-	      shift += 5;
-	    } while (b >= 0x20);
-	    int dlat = (((result & 1) != 0) ? ~(result >> 1) : (result >> 1));
-	    lat += dlat;
+		int len = this.encodedPolyline.length();
+		int index = 0;
+		int lat = 0;
+		int lng = 0;
 
-	    shift = 0;
-	    result = 0;
-	    do {
-	      b = this.encodedPolyline.charAt(index++) - 63;
-	      result |= (b & 0x1f) << shift;
-	      shift += 5;
-	    } while (b >= 0x20);
-	    int dlng = (((result & 1) != 0) ? ~(result >> 1) : (result >> 1));
-	    lng += dlng;
-	    GeoPoint nextPoint = new GeoPoint(lat * 10, lng * 10); //Convert the lat and lng to microdegrees.
-	    coordinates.add(nextPoint);
-	  }
+		// Decode polyline according to Google's polyline decoder utility.
+		while (index < len) {
+			int b;
+			int shift = 0;
+			int result = 0;
+			do {
+				b = this.encodedPolyline.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			int dlat = (((result & 1) != 0) ? ~(result >> 1) : (result >> 1));
+			lat += dlat;
+
+			shift = 0;
+			result = 0;
+			do {
+				b = this.encodedPolyline.charAt(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			int dlng = (((result & 1) != 0) ? ~(result >> 1) : (result >> 1));
+			lng += dlng;
+			
+			// Convert the lat and lng to microdegrees.
+			GeoPoint nextPoint = new GeoPoint(lat * 10, lng * 10); 
+			
+			coordinates.add(nextPoint);
+		}
 	}
 }

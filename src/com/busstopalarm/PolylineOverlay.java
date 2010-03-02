@@ -3,7 +3,7 @@
  * 
  * CAUTION: NOT YET FULLY TESTED.
  * 
- * @author Michael Eng
+ * @author Michael Eng and David Nufer.
  */
 
 package com.busstopalarm;
@@ -28,6 +28,11 @@ public class PolylineOverlay extends Overlay {
 	private Polyline polyline; // Contains set of points to be connected.
 	private Paint pathPaint = null; // Paint tool that is used to draw on the map canvas.
 
+	/**
+	 * Constructor for PolylineOverlay sets the given polyline
+	 * to be the one that is drawn in the overlay.
+	 * @param polyline
+	 */
 	public PolylineOverlay(Polyline polyline) {
 		super();		
 		this.polyline = polyline;
@@ -81,6 +86,12 @@ public class PolylineOverlay extends Overlay {
 		canvas.drawPath(routePath, pathPaint);
 	}
 	
+	/**
+	 * Checks if the point is on screen.
+	 * @param cv
+	 * @param p
+	 * @return true if point is on screen, otherwise false.
+	 */
 	private boolean isOnScreen(Canvas cv, Point p) {
 		return p.x >= 0 && p.y >= 0 && p.x < cv.getWidth() && p.y < cv.getHeight();
 	}
