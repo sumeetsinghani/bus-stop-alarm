@@ -29,7 +29,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 	
 
 	/**
-	 * 
+	 * It shows current bus route and a button to set alarm.
 	 * @param mCtx gets activity
 	 * @param defaultMarker grabs marker
 	 */
