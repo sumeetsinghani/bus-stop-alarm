@@ -83,9 +83,26 @@ public class BusStop {
 		this.locationType = locationType;
 	}
 	
-	
+	/**
+	 * Compares this BusStop with given BusStop.
+	 * Returns true if their stopId, code, direction, 
+	 * latitude(with 100000 precision) and longitude(with 100000 precision).
+	 * @param other
+	 * @return
+	 */
 	public boolean equals(BusStop other) {
-		// TODO: Must implement to test.
-		return this == other;
+		if(!this.stopId.equals(other.stopId)) {
+			return false;
+		} else if(!this.code.equals(other.code)) {
+			return false;
+		} else if(!this.direction.equals(other.direction)) {
+			return false;
+		} else if(Math.round(this.latitude * 100000) != Math.round(other.latitude * 100000)) {
+			return false;
+		} else if(Math.round(this.longitude * 100000) != Math.round(other.longitude * 100000)) {
+			return false;
+		}
+		
+		return true;
 	}
 }
