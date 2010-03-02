@@ -42,10 +42,13 @@ public final class R {
         public static final int mapview=0x7f080019;
         public static final int recent_routes=0x7f080015;
         public static final int scrollview=0x7f08000c;
+        public static final int stopinfo=0x7f08001c;
+        public static final int stopinfoarea=0x7f08001a;
+        public static final int stopinfoarea_button=0x7f08001b;
         public static final int stopname=0x7f080000;
         public static final int txtExample=0x7f08000e;
         public static final int widget30=0x7f08000d;
-        public static final int zoomview=0x7f08001a;
+        public static final int zoomview=0x7f08001d;
     }
     public static final class layout {
         public static final int confirmation=0x7f030000;

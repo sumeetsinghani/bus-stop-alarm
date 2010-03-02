@@ -10,7 +10,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" 
 		android:clickable="true"
-		android:apiKey="09yC5xBPNvFz9RIvmcpeircx0fvOkz1t2WH7aAw" />
+		android:apiKey="02tl-WX3bfxL3jfT4nggWvIm9qBmnfq-MR-tVWg" />
 
 	
 	<LinearLayout android:id="@+id/stopinfoarea" 

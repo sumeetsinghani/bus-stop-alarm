@@ -27,9 +27,16 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
+/**
+ * @author Orkhan Muradov, David Nufer
+ * 
+ * This class creates a google map which shows current user location and draws 
+ * bus route user requested.
+ * 
+ */
+
 public class MapPage extends MapActivity {
 	
-	//private LinearLayout linearLayout;
 	private MapController mapController;
 	private MapView mapView;
 	private LocationManager lm;
@@ -42,6 +49,12 @@ public class MapPage extends MapActivity {
 		return false;
 	}
 	
+	/**
+	 * Called when activity is first created in Map page
+	 * (non-Javadoc)
+	 * @see com.google.android.maps.MapActivity#onCreate(android.os.Bundle)
+	 * @param @param Bundle which holds the current state (info)
+	 */
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -52,12 +65,12 @@ public class MapPage extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(13);
 		
-		
-		
-		lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		//instantiates gps service
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 								  0, new GPSUpdateHandler());
 
+		//array of overlay items
 		mapOverlays = mapView.getOverlays();
 		
 		routeNumber = getIntent().getExtras().getInt("routeNumber");
@@ -97,8 +110,8 @@ public class MapPage extends MapActivity {
 		//currentLocOverlay = null;
 		
 	}
+	
 	public void fillData() {
-		
 		setContentView(mapView);
 	}
 	
@@ -113,7 +126,9 @@ public class MapPage extends MapActivity {
 		return super.isLocationDisplayed();
 	}
 	
-	
+	/**
+	 * Grabs user's location coordinates and displays user's location
+	 */
 	public class GPSUpdateHandler implements LocationListener {
 	
 		public void onLocationChanged(Location location) {
