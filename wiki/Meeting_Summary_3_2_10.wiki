@@ -1,0 +1,18 @@
+Final tasks to finish in the next 2 weeks.
+
+V1 - no minute conversion on proximity
+	
+Updated Logo - Michael
+Settings page - Orkhan
+
+User documentation - help menu David T
+code coverage - David N
+performance testing - Pyong
+6 automated walkthroughs (combining units tests) - orkhan
+usability- michael
+
+Project requirements spec update David T & Derek
+updated UML diagrams - 
+	use case
+	uml class
+	sequence diagram
