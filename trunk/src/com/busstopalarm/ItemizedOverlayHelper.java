@@ -14,7 +14,7 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 /**
- * @author Orkhan Muradov, David Nufer, Michael Enge
+ * @author Orkhan Muradov, David Nufer, Michael Eng
  * This class is used to draw overlay items on the map.
  * It uses an array of overlay items.
  * 
@@ -85,7 +85,10 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		return mOverlays.size();
 	}
 	
-	@Override
+	/**
+	 * Returns the bus stop information when the bus stop icon is tapped.
+	 * @return Bus Stop Text information
+	 */
 	public boolean onTap(int index) {
 		BusStopOverlayItem stop = (BusStopOverlayItem)mOverlays.get(index);
 		lastSelectedStop = stop.getStop();
