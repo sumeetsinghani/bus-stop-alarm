@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-
 public class DataFetcher {
 	// Location of REST API.
 	private static final String HOST_NAME = "http://api.onebusaway.org/api/where/";
@@ -33,9 +32,9 @@ public class DataFetcher {
 	private static final String API_KEY = "v1_2XAu/HZkwK6PBLM63rgeRp34j5g=cXVhbmdodXkuZGFuZ0BnbWFpbC5jb20=";
 	
 	// Actions for querying.
-	private static final String ACTION_GET_STOP_BY_ID = "stop";
-	private static final String ACTION_GET_ROUTE_BY_ID = "route";
-	private static final String ACTION_GET_STOPS_FOR_A_ROUTE = "stops-for-route";
+	private static final String ACTION_GET_STOP_BY_ID = "stop/";
+	private static final String ACTION_GET_ROUTE_BY_ID = "route/";
+	private static final String ACTION_GET_STOPS_FOR_A_ROUTE = "stops-for-route/";
 	
 	/**
 	 * Retrieves a single stop element corresponding to the given stop id,
@@ -192,8 +191,6 @@ public class DataFetcher {
 			JSONObject data = json.getJSONObject("data");
 			JSONArray stops = data.getJSONArray("stops");
 			
-			Log.d("DataFetcher", "data: " + data.toString() + ", stops " + stops);
-			
 			List<BusStop> busStopList = new ArrayList<BusStop>();
 			
 			for (int i = 0; i < stops.length(); i++) {
@@ -203,6 +200,7 @@ public class DataFetcher {
 					newStop.setLatitude(stop.getDouble("lat"));
 					newStop.setLongitude(stop.getDouble("lon"));
 					newStop.setName(stop.getString("name"));
+					newStop.setCode(stop.getString("code"));
 					busStopList.add(newStop);
 				}
 			}
@@ -269,6 +267,7 @@ public class DataFetcher {
 			sb.append(action);
 			sb.append(DEFAULT_AGENCY); // The default agency, (example: Seattle is 1).
 			sb.append("_"); // Add divider between agency and id.
+			sb.append(id);
 			sb.append(".json?key="); // Request a json response.
 			sb.append(API_KEY); // Needed API key.
 			

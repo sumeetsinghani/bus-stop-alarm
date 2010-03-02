@@ -74,6 +74,7 @@ public class LocationListPage extends ListActivity {
 	  
 	  // populate list items
 	  fillList(mBusDbHelper);
+	  mBusDbHelper.close();
 	}
 	
 	/** 

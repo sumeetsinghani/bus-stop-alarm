@@ -8,9 +8,14 @@
 
 package com.busstopalarm;
 
+import org.junit.runner.notification.StoppedByUserException;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.maps.GeoPoint;
 
-public class BusStop {
+public class BusStop implements Parcelable {
 	private String stopId;			// The stop id
 	private String code;		// Passenger-facing stop identifier
 	private String name;		// Passenger-facing name for the stop
@@ -83,6 +88,50 @@ public class BusStop {
 		this.locationType = locationType;
 	}
 	
+	/**
+	 * required by Parcelable but unused.
+	 */
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * Writes a BusStop to a Parcel
+	 */
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(stopId);
+		dest.writeString(code);
+		dest.writeString(name);
+		dest.writeDouble(latitude);
+		dest.writeDouble(longitude);
+		dest.writeString(direction);
+		dest.writeString(locationType);
+	}
+	
+	/**
+	 * Builds a BusStop from a Parcel
+	 */
+	public static final Parcelable.Creator<BusStop> CREATOR = new Parcelable.Creator<BusStop>() {
+
+		public BusStop createFromParcel(Parcel source) {
+			BusStop b = new BusStop();
+			b.setStopId(source.readString());
+			b.setCode(source.readString());
+			b.setName(source.readString());
+			b.setLatitude(source.readDouble());
+			b.setLongitude(source.readDouble());
+			b.setDirection(source.readString());
+			b.setLocationType(source.readString());
+			return b;
+		}
+
+		public BusStop[] newArray(int size) {
+			return new BusStop[size];
+		}
+		
+	};
+
 	/**
 	 * Compares this BusStop with given BusStop.
 	 * Returns true if their stopId, code, direction, 

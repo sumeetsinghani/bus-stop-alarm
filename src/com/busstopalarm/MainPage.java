@@ -37,11 +37,10 @@ public class MainPage extends Activity {
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
-				// TODO: when datafetcher gets use, put a try/catch here
-				if (routeText.matches("[0-9]{1,5}")) {
+				try {
+					DataFetcher df = new DataFetcher();
 					int routeNumber = Integer.parseInt(routeText);
-					// String s = DataFetcher.getRouteById(routeNumber);
-					// //DataFetcher implementation changed.
+					//BusRoute br = df.getBusRouteById(routeNumber, false);
 					String s = "PlaceHolder for Route Info.";
 					Intent i = new Intent(v.getContext(), MapPage.class);
 					i.putExtra("routeNumber", routeNumber);
@@ -50,7 +49,7 @@ public class MainPage extends Activity {
 							Math.min(s.length(), 500)), Toast.LENGTH_LONG);
 					t.show();
 					finish();
-				} else {
+				} catch (Exception e) {
 					Toast t = Toast.makeText(v.getContext(),
 							"Invalid Route Number", Toast.LENGTH_LONG);
 					t.show();
@@ -59,8 +58,8 @@ public class MainPage extends Activity {
 		});
 
 		// favorite button behavior
-		final Button FavButton = (Button) findViewById(R.id.FavButton);
-		FavButton.setOnClickListener(new View.OnClickListener() {
+		final Button favButton = (Button) findViewById(R.id.FavButton);
+		favButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.FAVORITES);
@@ -69,8 +68,8 @@ public class MainPage extends Activity {
 		});
 
 		// major button behavior
-		final Button MajorButton = (Button) findViewById(R.id.MajorButton);
-		MajorButton.setOnClickListener(new View.OnClickListener() {
+		final Button majorButton = (Button) findViewById(R.id.MajorButton);
+		majorButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.MAJOR);
@@ -88,12 +87,13 @@ public class MainPage extends Activity {
 		while (!recent.isAfterLast()) {
 			final TextView recentItem = new TextView(this);
 			recentItem.setClickable(true);
-
+			final int routeNumber = Integer.parseInt(recent.getString(routeIndex));
+			
 			recentItem.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Toast t = Toast.makeText(getApplicationContext(),
-							recentItem.getText(), Toast.LENGTH_SHORT);
-					t.show();
+					Intent i = new Intent(v.getContext(), MapPage.class);
+					i.putExtra("routeNumber", routeNumber);
+					startActivity(i);
 				}
 			});
 
