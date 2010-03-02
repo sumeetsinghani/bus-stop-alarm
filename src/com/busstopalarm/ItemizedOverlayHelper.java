@@ -13,6 +13,13 @@ import android.widget.Toast;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
+/**
+ * @author Orkhan Muradov, David Nufer, Michael Enge
+ * This class is used to draw overlay items on the map.
+ * It uses an array of overlay items.
+ * 
+ */
+
 
 public class ItemizedOverlayHelper extends ItemizedOverlay {
 
@@ -20,6 +27,12 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 	private BusStop lastSelectedStop;
 	private Activity mCtx;
 	
+
+	/**
+	 * 
+	 * @param mCtx gets activity
+	 * @param defaultMarker grabs marker
+	 */
 	public ItemizedOverlayHelper(final Activity mCtx, Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 		this.mCtx = mCtx;
@@ -43,16 +56,30 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		});
 	}
 	
+	/**
+	 * Adds overlay item to the overlay array
+	 */
 	public void addOverlay(OverlayItem overlay) {
 	    mOverlays.add(overlay);
 	    populate();
 	}
 	
+	/**
+	 * Given index returns OverLayItem in array(non-Javadoc)
+	 * @see com.google.android.maps.ItemizedOverlay#createItem(int)
+	 * @param array index
+	 * @return Overlay item in the array
+	 */
 	@Override
 	protected OverlayItem createItem(int i) {
 	  return mOverlays.get(i);
 	}
 	
+	/**
+	 * Returns size of the overlay array (non-Javadoc)
+	 * @see com.google.android.maps.ItemizedOverlay#size()
+	 * @return size of the overlay array
+	 */
 	@Override
 	public int size() {
 		return mOverlays.size();
