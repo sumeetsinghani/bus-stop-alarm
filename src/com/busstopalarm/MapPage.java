@@ -36,19 +36,19 @@ import com.google.android.maps.OverlayItem;
  */
 
 public class MapPage extends MapActivity {
-	
+
 	private MapController mapController;
 	private MapView mapView;
 	private LocationManager lm;
 	private int routeNumber;
 	private List<Overlay> mapOverlays;
 	private ItemizedOverlayHelper currentLocOverlay;
-	
+
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-	
+
 	/**
 	 * Called when activity is first created in Map page
 	 * (non-Javadoc)
@@ -64,15 +64,15 @@ public class MapPage extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapController.setZoom(13);
-		
+
 		//instantiates gps service
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-								  0, new GPSUpdateHandler());
+				0, new GPSUpdateHandler());
 
 		//array of overlay items
 		mapOverlays = mapView.getOverlays();
-		
+
 		routeNumber = getIntent().getExtras().getInt("routeNumber");
 		DataFetcher df = new DataFetcher();
 		BusRoute busRoute;
@@ -83,10 +83,10 @@ public class MapPage extends MapActivity {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);
 			}
-			
+
 			// place stops on map
 			//List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
-			
+
 			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
 			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
 
@@ -106,31 +106,31 @@ public class MapPage extends MapActivity {
 			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
 			t.show();
 		}
-		
+
 		//currentLocOverlay = null;
-		
+
 	}
-	
+
 	public void fillData() {
 		setContentView(mapView);
 	}
-	
+
 	/**
-   	 * This method is needed in order to use GPS location of the user
-   	 * 
-   	 * @param 
-   	 * @return returns boolean false
-     */
+	 * This method is needed in order to use GPS location of the user
+	 * 
+	 * @param 
+	 * @return returns boolean false
+	 */
 	@Override
 	protected boolean isLocationDisplayed() {
 		return super.isLocationDisplayed();
 	}
-	
+
 	/**
 	 * Grabs user's location coordinates and displays user's location
 	 */
 	public class GPSUpdateHandler implements LocationListener {
-	
+
 		public void onLocationChanged(Location location) {
 			double lat = location.getLatitude();
 			double lon = location.getLongitude();
@@ -146,14 +146,14 @@ public class MapPage extends MapActivity {
 		public void onProviderEnabled(String provider) {
 		}
 	}
-	
-  	/**
-   	 * 
-   	 * This method adds button to pop-up setting menu
-   	 *    	 
-   	 * @param menu that pops us when pressing menu button
-     * @return returns boolean true
-     */
+
+	/**
+	 * 
+	 * This method adds button to pop-up setting menu
+	 *    	 
+	 * @param menu that pops us when pressing menu button
+	 * @return returns boolean true
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -162,13 +162,13 @@ public class MapPage extends MapActivity {
 		return true;
 	}
 
-  	/**
-   	 * This method returns to Main page when go back is pressed.
-   	 * And exits the program when exit button is pressed
-   	 * 
-   	 * @param takes menuitem as parameter
-     * @return returns boolean true
-     */
+	/**
+	 * This method returns to Main page when go back is pressed.
+	 * And exits the program when exit button is pressed
+	 * 
+	 * @param takes menuitem as parameter
+	 * @return returns boolean true
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -178,7 +178,14 @@ public class MapPage extends MapActivity {
 			startActivity(i);
 			finish();
 			break;
+		case 2:
+			final Intent j = new Intent(this, Settings.class);
+			startActivity(j);
+			finish();
+			break;
 		}
+
+
 		return true;
 	}
 }
