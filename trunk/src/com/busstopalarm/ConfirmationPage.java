@@ -674,7 +674,7 @@ public class ConfirmationPage extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0,1,1, "Exit");
+		menu.add(0,1,1, "Go back");
 		return true;
 	}
 

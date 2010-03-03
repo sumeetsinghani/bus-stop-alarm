@@ -127,7 +127,7 @@ public class MainPage extends Activity {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, 1, 1, "Confirmation");
 		menu.add(0, 2, 2, "Help/About");
-		menu.add(0, 3, 3, "Num3");
+		menu.add(0, 3, 3, "Settings");
 		menu.add(0, 4, 4, "Exit");
 		return true;
 	}
@@ -143,6 +143,10 @@ public class MainPage extends Activity {
 		case 2:
 			final Intent helpPage = new Intent(this, HelpPage.class);
 			startActivity(helpPage);
+			break;
+		case 3:
+			final Intent Settings = new Intent(this, Settings.class);
+			startActivity(Settings);
 			break;
 		case 4:
 			finish();
