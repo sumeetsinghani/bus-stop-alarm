@@ -110,6 +110,7 @@ public class MainPage extends Activity {
 					Intent i = new Intent(v.getContext(), MapPage.class);
 					i.putExtra("routeNumber", routeNumber);
 					startActivity(i);
+					finish();
 				}
 			});
 
