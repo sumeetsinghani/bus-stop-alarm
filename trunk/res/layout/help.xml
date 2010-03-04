@@ -24,14 +24,87 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		>
 		    <!--  your widgets go here -->
 			<TextView
-			android:id="@+id/txtExample"
+			android:id="@+id/helptitle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="This is where the text goes for the Help menu\n\n\n\n\n\n\nn\nn\n\n\n\n\n after may line breaks
-			\n\n\n\n\n\nn\n\n\n\n\n\n\n more line breaks"
+			android:text="About The Bus Stop Alarm\n"
+			android:textStyle="bold"
+			android:gravity="center">
+			</TextView>
+			
+			<TextView
+			android:id="@+id/helpVersionTitle "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Bus Stop Alarm for Android"
 			>
 			</TextView>
-
+			<TextView
+			android:id="@+id/helpVersion "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Version 1.0"
+			>
+			</TextView>
+			<TextView
+			android:id="@+id/helpIntro "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Introduction and Quick Start"
+			>
+			</TextView>
+			
+			<TextView
+			android:id="@+id/helpIntroText "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Information on the application and what it is used for"
+			>
+			</TextView>
+			
+			<TextView
+			android:id="@+id/helpFeature "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="The Features are:"
+			android:textStyle="bold">
+			</TextView>
+			<TextView
+			android:id="@+id/helpFeatureText "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="List the main features here\n"
+			>
+			</TextView>
+			<TextView
+			android:id="@+id/helpTroubleshoot "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Troubleshooting and Limitations"
+			>
+			</TextView>
+			<TextView
+			android:id="@+id/helpTroubleshootText "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Maps do not load properly: check your GPS connection"
+			>
+			</TextView>
+			<TextView
+			android:id="@+id/helpCredit "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Credits"
+			>
+			</TextView>			
+			<TextView
+			android:id="@+id/helpCreditText "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="David Truong"
+			>
+			</TextView>
+			
 			<!--  end your widgets -->	
 
 		</LinearLayout>
