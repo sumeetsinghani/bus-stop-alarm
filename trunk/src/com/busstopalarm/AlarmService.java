@@ -104,7 +104,7 @@ public class AlarmService extends Service {
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		float proximityInput = (float) proximity;
 		if (proximityUnit.equals("Yards"))
-			convertYardsToMeters(proximityInput);
+			proximityInput = convertYardsToMeters(proximityInput);
 		lm.addProximityAlert(busStop.getLatitude(), busStop.getLongitude(),
 				proximityInput, -1, pendingIntentAlarm);
 	}
@@ -142,7 +142,7 @@ public class AlarmService extends Service {
 			Location target = new Location(location);
 			target.setLatitude(busStop.getLatitude());
 			target.setLongitude(busStop.getLongitude());
-			float dist = currentLoc.distanceTo(target);
+			float dist = currentLoc.distanceTo(target);  // in meters
 			if (proximityUnit.equals("Yards"))
 				dist = convertMetersToYards(dist);
 			
@@ -151,7 +151,6 @@ public class AlarmService extends Service {
 					PendingIntent.FLAG_UPDATE_CURRENT);
 			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(),
 					dist + " " + proximityUnit + " away", pi); // TODO: convert to correct units
-		
 			
 			ntf.when = System.currentTimeMillis();
 			mNtf.notify(NOTIFICATION_ID1, ntf);
