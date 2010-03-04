@@ -305,15 +305,12 @@ public class ConfirmationPage extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(ConfirmationPage.this,
 						OneTimeAlarmReceiver.class);
-				Intent intent2 = new Intent(ConfirmationPage.this,
-						MainPage.class);
 				PendingIntent pendingIntentAlarm = 
 					PendingIntent.getBroadcast(getBaseContext(), 
 						PENDING_INTENT_REQUEST_CODE1, intent,
 						PendingIntent.FLAG_CANCEL_CURRENT);
 				alarmManager.cancel(pendingIntentAlarm);
 				notificationManager.cancel(NOTIFICATION_ID1);
-				startActivity(intent2);
 				finish();
 			}
 		});
