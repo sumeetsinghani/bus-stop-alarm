@@ -50,7 +50,7 @@ public class AlarmService extends Service {
 		 */
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new AlarmLocationListener());
 		mNtf = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		ntf = new Notification(R.drawable.icon, "Alarm Set!", System.currentTimeMillis());
+		ntf = new Notification(R.drawable.busstopicon, "Alarm Set!", System.currentTimeMillis());
 	}
 	
 	/**
