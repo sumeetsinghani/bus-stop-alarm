@@ -26,6 +26,9 @@ public class AlarmService extends Service {
 	
 	private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
+	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
+	private static final int MIN_TIME_TO_UPDATE_LOCATION = 5000; // in milliseconds
+	private static final int MIN_DISTANCE_TO_UPDATE_LOCATION = 5; // in meters
 	
 	private LocationManager lm;
 	private Location currentLoc;
@@ -33,7 +36,7 @@ public class AlarmService extends Service {
 	private Notification ntf;
 	
 	private int proximity;
-	private String units;
+	private String proximityUnit;
 	private BusStop busStop;
 	
 	/**
@@ -48,39 +51,70 @@ public class AlarmService extends Service {
 		 * TODO: by setting minTime and minDistance both to 0, the battery will
 		 * drain out really fast.!!!! Set the approriate value here.
 		 */
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new AlarmLocationListener());
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_TO_UPDATE_LOCATION, 
+				MIN_DISTANCE_TO_UPDATE_LOCATION, new AlarmLocationListener());
 		mNtf = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		ntf = new Notification(R.drawable.busstopicon, "Alarm Set!", System.currentTimeMillis());
 	}
+	
+	/**
+	 * when "Cancel" button is pressed on the confirmation page, this method
+	 * will be called and cancel the current alarm set and the notification.
+	 */
+	public void onDestroy(){
+		super.onDestroy();
+		mNtf.cancel(NOTIFICATION_ID1);
+		Intent alarmIntent = new Intent(getApplicationContext(), OneTimeAlarmReceiver.class);
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(getApplicationContext(), 
+				PENDING_INTENT_REQUEST_CODE1, alarmIntent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+		pendingIntentAlarm.cancel();
+		Log.d("ALARMSERVICE", "current alarm is destroyed");
+	}
+	
 	
 	/**
 	 * When the service is started, it starts listening to the GPS.
 	 */
 	public void onStart(Intent intent, int startId) {
 		proximity = intent.getIntExtra("proximity", 1);
-		units = intent.getStringExtra("units");
+		proximityUnit = intent.getStringExtra("proximityUnit");
 		busStop = intent.getParcelableExtra("busstop");
 		Uri ringtoneUri = intent.getParcelableExtra("ringtoneUri");
 		boolean vibration = intent.getBooleanExtra("vibration", false);
 		
 		PendingIntent pi = PendingIntent.getBroadcast(
-				getApplicationContext(), 0, new Intent(getApplicationContext(), AlarmService.class), 
+				getApplicationContext(), PENDING_INTENT_REQUEST_CODE2,
+				new Intent(getApplicationContext(), AlarmService.class), 
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(), "acquiring location...", pi);
+		ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(),
+				"acquiring location...", pi);
 		
 		mNtf.notify(NOTIFICATION_ID1, ntf);
 
-		Log.d("ALARMSERVICE", "prox: " + proximity + ", units: " + units + ", stop: " + busStop + ", ringtone: " + ringtoneUri + ", vibration" + vibration);
+		Log.d("ALARMSERVICE", "prox: " + proximity + ", units: " + proximityUnit + ", stop: " + busStop +
+				", ringtone: " + ringtoneUri + ", vibration: " + vibration);
 		
-		Intent alarmintent = new Intent(getApplicationContext(), OneTimeAlarmReceiver.class);
+		Intent alarmIntent = new Intent(getApplicationContext(), OneTimeAlarmReceiver.class);
 
-		alarmintent.putExtra("ringtoneUri", ringtoneUri);
-		alarmintent.putExtra("vibration", vibration);
+		alarmIntent.putExtra("ringtoneUri", ringtoneUri);
+		alarmIntent.putExtra("vibration", vibration);
 		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(getApplicationContext(), 
-				PENDING_INTENT_REQUEST_CODE1, alarmintent,
+				PENDING_INTENT_REQUEST_CODE1, alarmIntent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
-		
-		lm.addProximityAlert(busStop.getLatitude(), busStop.getLongitude(), proximity, -1, pendingIntentAlarm);
+		float proximityInput = (float) proximity;
+		if (proximityUnit.equals("Yards"))
+			convertYardsToMeters(proximityInput);
+		lm.addProximityAlert(busStop.getLatitude(), busStop.getLongitude(),
+				proximityInput, -1, pendingIntentAlarm);
+	}
+	
+	public float convertYardsToMeters(float yards){
+		return (float) (yards * 0.9144);
+	}
+	
+	public float convertMetersToYards(float meters){
+		return (float) (meters * 1.0936133);
 	}
 	
 	/**
@@ -109,12 +143,16 @@ public class AlarmService extends Service {
 			target.setLatitude(busStop.getLatitude());
 			target.setLongitude(busStop.getLongitude());
 			float dist = currentLoc.distanceTo(target);
+			if (proximityUnit.equals("Yards"))
+				dist = convertMetersToYards(dist);
 			
 			PendingIntent pi = PendingIntent.getBroadcast(
 					getApplicationContext(), 0, new Intent(getApplicationContext(), AlarmService.class), 
 					PendingIntent.FLAG_UPDATE_CURRENT);
+			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(),
+					dist + " " + proximityUnit + " away", pi); // TODO: convert to correct units
+		
 			
-			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(), dist + " " + "Meters" + " away", pi); // TODO: convert to correct units
 			ntf.when = System.currentTimeMillis();
 			mNtf.notify(NOTIFICATION_ID1, ntf);
 			Log.d("ALARMSERVICE", "location updated");
