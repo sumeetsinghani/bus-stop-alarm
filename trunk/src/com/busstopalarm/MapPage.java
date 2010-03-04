@@ -87,7 +87,7 @@ public class MapPage extends MapActivity {
 			// place stops on map
 			//List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
 
-			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon);
+			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.busstopicon);
 			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
 
 			for (BusStop bs : busRoute.getBusStops()) {

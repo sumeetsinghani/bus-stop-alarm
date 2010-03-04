@@ -174,7 +174,7 @@ public class Alarm {
 
 		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
 				(time * 1000), pendingIntentAlarm);
-		Notification notification = new Notification(R.drawable.icon, 
+		Notification notification = new Notification(R.drawable.busstopicon, 
 				"Bus Stop Alarm is set!",
 				System.currentTimeMillis());
 		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 
