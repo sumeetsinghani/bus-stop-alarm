@@ -23,10 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -83,7 +80,6 @@ public class ConfirmationPage extends Activity {
 	private int time;      
 
 	private NotificationManager notificationManager;
-	private AlarmManager alarmManager;
 
 	/**
 	 * ConfirmationPage constructor
@@ -211,7 +207,6 @@ public class ConfirmationPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		notificationManager = (NotificationManager) 
 		getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -225,7 +220,6 @@ public class ConfirmationPage extends Activity {
 		//ringtoneUri = default_rington_uri();
 		proximity = default_proximity();
 		proximityUnit = default_proximity_unit();
-
 
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
@@ -264,19 +258,18 @@ public class ConfirmationPage extends Activity {
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				
 				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
 				//proximity, proximityUnit, ConfirmationPage.this);
 				//alarmObject.setAlarm();
 				BusStop b = getIntent().getParcelableExtra("busstop");
 
-				Intent i = new Intent(v.getContext(), AlarmService.class);
-				i.putExtra("proximity", proximity);
-				i.putExtra("units", proximityUnit);
-				i.putExtra("busstop", b);
-				i.putExtra("vibration", vibration);
-				i.putExtra("ringtoneUri", ringtoneUri);
-				startService(i);
+				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
+				intentAlarmService.putExtra("proximity", proximity);
+				intentAlarmService.putExtra("proximityUnit", proximityUnit);
+				intentAlarmService.putExtra("busstop", b);
+				intentAlarmService.putExtra("vibration", vibration);
+				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
+				startService(intentAlarmService);
 
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 						Toast.LENGTH_LONG).show();
@@ -303,14 +296,23 @@ public class ConfirmationPage extends Activity {
 		final Button CancelButton = (Button)findViewById(R.id.CancelButton);
 		CancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				Intent intentToMainPage = new Intent(ConfirmationPage.this,
+						MainPage.class);
+				/*
 				Intent intent = new Intent(ConfirmationPage.this,
 						OneTimeAlarmReceiver.class);
+
 				PendingIntent pendingIntentAlarm = 
 					PendingIntent.getBroadcast(getBaseContext(), 
 						PENDING_INTENT_REQUEST_CODE1, intent,
 						PendingIntent.FLAG_CANCEL_CURRENT);
 				alarmManager.cancel(pendingIntentAlarm);
 				notificationManager.cancel(NOTIFICATION_ID1);
+
+				*/
+				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
+				stopService(intentAlarmService);
+				startActivity(intentToMainPage);
 				finish();
 			}
 		});
