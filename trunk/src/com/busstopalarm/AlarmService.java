@@ -43,6 +43,11 @@ public class AlarmService extends Service {
 		super.onCreate();
 		
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		/*
+		 * TODO: by setting minTime and minDistance both to 0, the battery will
+		 * drain out really fast.!!!! Set the approriate value here.
+		 */
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new AlarmLocationListener());
 		mNtf = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		ntf = new Notification(R.drawable.icon, "Alarm Set!", System.currentTimeMillis());
