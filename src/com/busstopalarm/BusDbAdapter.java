@@ -34,7 +34,7 @@ public class BusDbAdapter {
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 	
-	/*
+	/*   
 	 * DESTINATION TABLE INFO
 	 */
     private static final String DATABASE_TABLE_DEST = "destination";
