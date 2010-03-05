@@ -67,8 +67,8 @@ public class MapPage extends MapActivity {
 
 		//instantiates gps service
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-				0, new GPSUpdateHandler());
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000,
+				10.0f, new GPSUpdateHandler());
 
 		//array of overlay items
 		mapOverlays = mapView.getOverlays();

@@ -22,6 +22,7 @@ public final class R {
     public static final class id {
         public static final int CancelButton=0x7f080008;
         public static final int FavButton=0x7f080020;
+        public static final int Goback=0x7f080028;
         public static final int MajorButton=0x7f080021;
         public static final int OKButton=0x7f08000a;
         public static final int ProximityBar=0x7f080006;
@@ -33,6 +34,7 @@ public final class R {
         public static final int RouteSearchBox=0x7f08001d;
         public static final int RouteSearchBoxArea=0x7f08001c;
         public static final int RouteSearchButton=0x7f08001e;
+        public static final int SaveSettings=0x7f080029;
         public static final int SetAsFavButton=0x7f080009;
         public static final int VibrateCheckbox=0x7f080001;
         public static final int btnOk=0x7f08001a;
@@ -78,10 +80,11 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f070004;
-        public static final int intro=0x7f070005;
-        public static final int proximity=0x7f070007;
-        public static final int ringtone=0x7f070006;
+        public static final int intro=0x7f070006;
+        public static final int proximity=0x7f070008;
+        public static final int ringtone=0x7f070007;
         public static final int search_label=0x7f070003;
+        public static final int settings=0x7f070005;
         public static final int testGetRouteById_KnownRoute_Expected=0x7f070001;
         public static final int testGetStopById_KnownRoute_Expected=0x7f070000;
         public static final int testGetStopsForRoute_KnownRoute_Expected=0x7f070002;
