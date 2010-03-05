@@ -261,8 +261,8 @@ public class ConfirmationPage extends Activity {
 				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
 				//proximity, proximityUnit, ConfirmationPage.this);
 				//alarmObject.setAlarm();
+				
 				BusStop b = getIntent().getParcelableExtra("busstop");
-
 				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
 				intentAlarmService.putExtra("proximity", proximity);
 				intentAlarmService.putExtra("proximityUnit", proximityUnit);
@@ -273,8 +273,10 @@ public class ConfirmationPage extends Activity {
 
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 						Toast.LENGTH_LONG).show();
-
-				startActivity(new Intent(v.getContext(), MainPage.class));
+				Intent intentToMainPage = new Intent(ConfirmationPage.this,
+						MainPage.class);
+				intentToMainPage.putExtra("busStopSaved", b);
+				startActivity(intentToMainPage);
 				finish();
 			}
 		});
@@ -296,20 +298,10 @@ public class ConfirmationPage extends Activity {
 		final Button CancelButton = (Button)findViewById(R.id.CancelButton);
 		CancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
-				/*
-				Intent intent = new Intent(ConfirmationPage.this,
-						OneTimeAlarmReceiver.class);
-
-				PendingIntent pendingIntentAlarm = 
-					PendingIntent.getBroadcast(getBaseContext(), 
-						PENDING_INTENT_REQUEST_CODE1, intent,
-						PendingIntent.FLAG_CANCEL_CURRENT);
-				alarmManager.cancel(pendingIntentAlarm);
-				notificationManager.cancel(NOTIFICATION_ID1);
-
-				*/
+				
 				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
 				stopService(intentAlarmService);
 				startActivity(intentToMainPage);

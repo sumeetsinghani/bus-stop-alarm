@@ -24,7 +24,7 @@ import android.widget.Toast;
 /**
  * Main page of the Bus Stop Alarm
  * 
- * @author David Nufer, Orkhan Muradov
+ * @author David Nufer, Orkhan Muradov, Pyong Byon
  */
 public class MainPage extends Activity {
 	/** Called when the activity is first created. */
@@ -137,9 +137,18 @@ public class MainPage extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 1:
-			final Intent q = new Intent(this, ConfirmationPage.class);
-			startActivity(q);
-			finish();
+			BusStop stop = getIntent().getParcelableExtra("busStopSaved");
+			Log.v("inMainPage", "bus stop:  " + stop);
+			if (stop != null) {
+			  Intent intentConfirmationPage = new Intent(this, ConfirmationPage.class);
+			  intentConfirmationPage.putExtra("busstop", stop);
+			  startActivity(intentConfirmationPage);
+			  finish();
+			  break;
+			}
+			// stop == null
+			Toast.makeText(this, "You have to choose Destination first!", 
+					Toast.LENGTH_LONG).show();
 			break;
 		case 2:
 			final Intent helpPage = new Intent(this, HelpPage.class);
