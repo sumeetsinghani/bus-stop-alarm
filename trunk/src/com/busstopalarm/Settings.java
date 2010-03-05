@@ -1,16 +1,12 @@
 /**
- * Author: Pyong Byon, Orkhan Muradov, David Nufer
+ * Author: Orkhan Muradov
  * Date: 02/03/2010
  * 
  * Settings Page where the user interacts with this page to 
  * set the alarm settings: vibrate, ringtone, proximity, and proximityUnit
- * and to set the alarm ("OK Button") with those settings defined in this page.
- * When OK Button is pressed, it will set alarm service running in the 
- * background to alert the user on time.
- * The user can save the settings as a favorite by pressing the "Save as Fav"
+ * The user can save the settings as a favorite by pressing the "Save Settings"
  * button.
- * The user can also cancel the current alarm and go back to the main page by
- * pressing the "Cancel" button.
+ * The user can also press Go back button to return to previous page
  */
 
 package com.busstopalarm;
@@ -82,11 +78,8 @@ public class Settings extends Activity {
 	// time (in seconds) is used for Alarm, alarm goes off after time seconds
 	private int time;      
 
-	private NotificationManager notificationManager;
-	private AlarmManager alarmManager;
-
 	/**
-	 * ConfirmationPage constructor
+	 * SettingsPage constructor
 	 */
 	public Settings() {
 		dataVibrate = null;
@@ -210,24 +203,17 @@ public class Settings extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		notificationManager = (NotificationManager) 
-		getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
 		try {  // load saved settings
 			loadRecentSettings();
 		} catch (IOException e1) { // if the file "favorite_settings_data" 
 			e1.printStackTrace();  // is not found
 		} 
-
 		vibration = default_vibrate();
 		//ringtoneUri = default_rington_uri();
 		proximity = default_proximity();
 		proximityUnit = default_proximity_unit();
 		setContentView(R.layout.settings);
-		okButton();
-		cancelButton();
+		goBackButton();
 		saveButton();
 		getVibrate();
 		getRingtones();
@@ -253,34 +239,7 @@ public class Settings extends Activity {
 	 *  after creating alarm set, it goes back to MainPage
 	 *  
 	 */
-	private void okButton() {
-		final Button OKButton = (Button)findViewById(R.id.OKButton);
-		OKButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-
-				
-				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
-				//proximity, proximityUnit, ConfirmationPage.this);
-				//alarmObject.setAlarm();
-				BusStop b = getIntent().getParcelableExtra("busstop");
-
-				Intent i = new Intent(v.getContext(), AlarmService.class);
-				i.putExtra("proximity", proximity);
-				i.putExtra("units", proximityUnit);
-				i.putExtra("busstop", b);
-				i.putExtra("vibration", vibration);
-				i.putExtra("ringtoneUri", ringtoneUri);
-				startService(i);
-
-				Toast.makeText(Settings.this, "Alarm is set", 
-						Toast.LENGTH_LONG).show();
-
-				startActivity(new Intent(v.getContext(), MainPage.class));
-				finish();
-			}
-		});
-	} // ends okButton method
-
+	
 
 	/** 
 	 *  Cancel Button cancels the current alarm set
@@ -293,18 +252,10 @@ public class Settings extends Activity {
 	 *  Note: The intent and PendingIntent have to be the same as the ones used
 	 *  to create the alarm.
 	 */
-	private void cancelButton() {
-		final Button CancelButton = (Button)findViewById(R.id.CancelButton);
-		CancelButton.setOnClickListener(new View.OnClickListener() {
+	private void goBackButton() {
+		final Button GobackButton = (Button)findViewById(R.id.Goback);
+		GobackButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(Settings.this,
-						OneTimeAlarmReceiver.class);
-				PendingIntent pendingIntentAlarm = 
-					PendingIntent.getBroadcast(getBaseContext(), 
-						PENDING_INTENT_REQUEST_CODE1, intent,
-						PendingIntent.FLAG_CANCEL_CURRENT);
-				alarmManager.cancel(pendingIntentAlarm);
-				notificationManager.cancel(NOTIFICATION_ID1);
 				finish();
 			}
 		});
@@ -326,7 +277,7 @@ public class Settings extends Activity {
 	 *   TODO: this should also save the stop in the database
 	 */
 	private void saveButton() {
-		final Button SaveButton = (Button) findViewById(R.id.SetAsFavButton);
+		final Button SaveButton = (Button) findViewById(R.id.SaveSettings);
 		SaveButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 
@@ -372,7 +323,7 @@ public class Settings extends Activity {
 					} 
 				}
 			} // ends onClick
-		}); // ends "Save as favorite" button
+		}); // ends "Save Settings" button
 	} // ends saveButton method
 
 
@@ -655,38 +606,7 @@ public class Settings extends Activity {
 	}  // ends getRingtones method
 
 
-	/** 
-	 * It is invoked when option menu is pushed
-	 * @param Menu
-	 * @return boolean
-	 * 
-	 * 
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		menu.add(0,1,1, "Go back");
-		return true;
-	}
+	
 
-
-	/** 
-	 * It is invoked when option item is selected
-	 * @param MenuItem
-	 * @return boolean
-	 * 
-	 * 
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case 1:
-			finish();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-
-
-	}
 
 } // class ends
