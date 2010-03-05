@@ -19,7 +19,7 @@ import android.util.Log;
  * Service that runs in the background and listens to the GPS.
  * When the user gets within the defined proximity, it sets an alarm.
  * 
- * @author David Nufer
+ * @author David Nufer, Pyong Byon
  *
  */
 public class AlarmService extends Service {
