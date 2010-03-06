@@ -597,7 +597,8 @@ public class ConfirmationPage extends Activity {
 		final RingtoneManager ringtoneManager = new RingtoneManager(this);
 
 		// get all types of sounds (ringtones, notifications, alarms)
-		ringtoneManager.setType(RingtoneManager.TYPE_ALL);
+		// or just get ringtones type
+		ringtoneManager.setType(RingtoneManager.TYPE_RINGTONE);
 
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
 		int defaultRingtoneIndex = 0;
