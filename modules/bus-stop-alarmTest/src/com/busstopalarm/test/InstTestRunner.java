@@ -19,7 +19,7 @@ public class InstTestRunner extends InstrumentationTestRunner{
 	    public TestSuite getAllTests() {
 	        InstrumentationTestSuite suite = new InstrumentationTestSuite(this);
 
-	        suite.addTestSuite(AlarmTest.class);
+	     //   suite.addTestSuite(AlarmTest.class);
 	        suite.addTestSuite(BusDbAdapterTest.class);
 	        suite.addTestSuite(ConfirmationPageTests.class);
 	        suite.addTestSuite(DataFetcherTest.class);
