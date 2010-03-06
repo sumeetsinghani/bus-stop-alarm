@@ -233,14 +233,6 @@ public class Settings extends Activity {
 	}  // ends onCreate method
 
 
-	/**
-	 *  OK Button confirms the alarm setting
-	 *  it calls alarm service to set alarm
-	 *  after creating alarm set, it goes back to MainPage
-	 *  
-	 */
-	
-
 	/** 
 	 *  Cancel Button cancels the current alarm set
 	 *  it erases the notification
@@ -358,58 +350,6 @@ public class Settings extends Activity {
 		dataProximityUnit = settingResult[3];
 	}
 
-
-	/**
-	 *  For distance between two points, we will use Euclidean distance.
-	 *  The Earth is not an Euclidean plane,
-	 *  but this will give a good approximation. Assuming Euclidean plane, 
-	 *  this algorithm sums a number of straight line distances.  This means the
-	 *  calculated distance will never underestimate the actual distance, which
-	 *  is good.
-	 *  To calculate the remaining distance once alarm has started, we need to 
-	 *  get the current location with the GPS.
-	 *  Then we need to find the closest busstop to the current location 
-	 *  (with caveat), then do sum of straight lines again.
-	 *  The return values will be in some unit that will need to be converted 
-	 *  to either miles or km. 
-	 *  not implemented yet!
-	 *   
-	 * @return double initial distance
-	 */ 
-	public static double calculateInitialDistance() {
-		// get starting s busstop in busroute
-		// will the starting busstop be specified by the user or does the app
-		// have to figure it out?
-		// get ending d busstop in busroute
-		// double dist = 0.0;
-		// for (int i = s; i < d; i++) {
-		//     dist += calculateDist(busroute[i],busroute[i+1];
-		// return dist;
-		return 0.0;
-	}
-
-
-	/**
-	 * not implemented yet!
-	 * 
-	 * @return double remaining distance
-	 */
-	public static double calculateRemainingDistance() {
-		return 0.0;
-	}
-
-
-	/**
-	 *  Updates the average speed based on previous average speed and current
-	 *  speed. If implemented like this, we need a average speed field?
-	 *  We could start with an initial average speed (equivalent to 30 mph?) 
-	 *  and do a something like
-	 *  avg = k*avg + (1-k)current where 0 <= k <= 1.
-	 *  
-	 */
-	public static void updateAverageSpeed() {
-
-	}
 
 
 	/**

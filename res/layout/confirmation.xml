@@ -43,10 +43,8 @@
 		<SeekBar android:id="@+id/ProximityBar" 
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content" 
-			android:minWidth="240px" android:max="1000"/>
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="8pt" android:padding="3px" android:text="1000"/>
+			android:minWidth="240px"/>
+		
 	
 </LinearLayout>
 	
