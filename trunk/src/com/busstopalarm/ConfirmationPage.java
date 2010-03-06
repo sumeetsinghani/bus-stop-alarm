@@ -75,6 +75,10 @@ public class ConfirmationPage extends Activity {
 	private String dataProximityUnit;
 
 	private String ringtoneTitleToSave;
+	
+	private SeekBar proximitySeekBar;
+	private TextView progressText;
+	private String currentUnit;
 
 	// time (in seconds) is used for Alarm, alarm goes off after time seconds
 	private int time;      
@@ -496,13 +500,14 @@ public class ConfirmationPage extends Activity {
 	 * 
 	 */
 	public void getProximity() {
-		final SeekBar proximitySeekBar = (SeekBar) 
-		findViewById(R.id.ProximityBar);
-		final TextView progressText = (TextView) 
-		findViewById(R.id.ProximityNumber);
+		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
+		progressText = (TextView) findViewById(R.id.ProximityNumber);
 		progressText.setText(Integer.toString(proximity));
 		// range from 0 to 1000  with step size 1
-		proximitySeekBar.setMax(1000);  
+		if (proximityUnit.equals("Minutes"))
+		  proximitySeekBar.setMax(10);
+		else // proximityUnit is "Yards" or "Meters" or null
+		  proximitySeekBar.setMax(1000);
 
 		if (dataProximity != null && !dataProximity.equalsIgnoreCase("0"))
 			proximitySeekBar.setProgress(Integer.parseInt(dataProximity));
@@ -551,7 +556,10 @@ public class ConfirmationPage extends Activity {
 		proxSpinnerValues.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
-
+		currentUnit = "Yards";
+		if (dataProximityUnit != null)
+		  currentUnit = dataProximityUnit;
+		
 		if (dataProximityUnit != null && 
 				dataProximityUnit.equalsIgnoreCase("Meters"))
 			proximityUnitsSpinner.setSelection(1);
@@ -567,8 +575,22 @@ public class ConfirmationPage extends Activity {
 				int indexProx = adapterView.getSelectedItemPosition();
 				CharSequence selectedUnit =
 					(CharSequence) adapterView.getSelectedItem();
-				selectedUnit.toString();
-				proximityUnit = (String) selectedUnit;
+				proximityUnit = selectedUnit.toString();
+				if (indexProx == 2)  // Minutes
+				  proximitySeekBar.setMax(10);
+				else
+				  proximitySeekBar.setMax(1000);
+				
+				if (indexProx == 2 && !(currentUnit.equals("Minutes"))){
+				  proximity = 0;
+				  progressText.setText(Integer.toString(proximity));
+				}
+				if (currentUnit.equals("Minutes") && indexProx != 2){
+					proximity = 0;
+					progressText.setText(Integer.toString(proximity));
+				}
+				proximitySeekBar.setProgress(proximity);	
+				currentUnit = proximityUnit;
 				Log.v(TAG, "under onItemSelected(proximity unit): " + 
 						indexProx);
 				Log.v(TAG, "under onItemSelected(proximity unit): " +
