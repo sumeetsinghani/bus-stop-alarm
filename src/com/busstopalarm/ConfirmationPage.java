@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -53,10 +52,6 @@ public class ConfirmationPage extends Activity {
 	// this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
 
-	private static final int NOTIFICATION_ID1 = 1001;
-	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
-	//private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
-
 	private boolean vibration;
 	private Uri ringtoneUri;
 	private int proximity;
@@ -75,7 +70,7 @@ public class ConfirmationPage extends Activity {
 	private String dataProximityUnit;
 
 	private String ringtoneTitleToSave;
-	
+
 	private SeekBar proximitySeekBar;
 	private TextView progressText;
 	private String currentUnit;
@@ -83,7 +78,7 @@ public class ConfirmationPage extends Activity {
 	// time (in seconds) is used for Alarm, alarm goes off after time seconds
 	private int time;      
 
-	private NotificationManager notificationManager;
+	//private NotificationManager notificationManager;
 
 	/**
 	 * ConfirmationPage constructor
@@ -106,7 +101,7 @@ public class ConfirmationPage extends Activity {
 		destination = null;
 		 */
 
-		time = 10;  // 10 seconds for testing
+		time = 0; 
 	}
 
 
@@ -211,9 +206,6 @@ public class ConfirmationPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		notificationManager = (NotificationManager) 
-		getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
 		try {  // load saved settings
 			loadRecentSettings();
 		} catch (IOException e1) { // if the file "favorite_settings_data" 
@@ -265,7 +257,7 @@ public class ConfirmationPage extends Activity {
 				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
 				//proximity, proximityUnit, ConfirmationPage.this);
 				//alarmObject.setAlarm();
-				
+
 				BusStop b = getIntent().getParcelableExtra("busstop");
 				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
 				intentAlarmService.putExtra("proximity", proximity);
@@ -305,7 +297,7 @@ public class ConfirmationPage extends Activity {
 
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
-				
+
 				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
 				stopService(intentAlarmService);
 				startActivity(intentToMainPage);
@@ -412,58 +404,6 @@ public class ConfirmationPage extends Activity {
 	}
 
 
-	/**
-	 *  For distance between two points, we will use Euclidean distance.
-	 *  The Earth is not an Euclidean plane,
-	 *  but this will give a good approximation. Assuming Euclidean plane, 
-	 *  this algorithm sums a number of straight line distances.  This means the
-	 *  calculated distance will never underestimate the actual distance, which
-	 *  is good.
-	 *  To calculate the remaining distance once alarm has started, we need to 
-	 *  get the current location with the GPS.
-	 *  Then we need to find the closest busstop to the current location 
-	 *  (with caveat), then do sum of straight lines again.
-	 *  The return values will be in some unit that will need to be converted 
-	 *  to either miles or km. 
-	 *  not implemented yet!
-	 *   
-	 * @return double initial distance
-	 */ 
-	public static double calculateInitialDistance() {
-		// get starting s busstop in busroute
-		// will the starting busstop be specified by the user or does the app
-		// have to figure it out?
-		// get ending d busstop in busroute
-		// double dist = 0.0;
-		// for (int i = s; i < d; i++) {
-		//     dist += calculateDist(busroute[i],busroute[i+1];
-		// return dist;
-		return 0.0;
-	}
-
-
-	/**
-	 * not implemented yet!
-	 * 
-	 * @return double remaining distance
-	 */
-	public static double calculateRemainingDistance() {
-		return 0.0;
-	}
-
-
-	/**
-	 *  Updates the average speed based on previous average speed and current
-	 *  speed. If implemented like this, we need a average speed field?
-	 *  We could start with an initial average speed (equivalent to 30 mph?) 
-	 *  and do a something like
-	 *  avg = k*avg + (1-k)current where 0 <= k <= 1.
-	 *  
-	 */
-	public static void updateAverageSpeed() {
-
-	}
-
 
 	/**
 	 * It is invoked when vibrate is clicked. 
@@ -475,9 +415,8 @@ public class ConfirmationPage extends Activity {
 	 * respectively.
 	 */
 	public void getVibrate(){
-
 		final CheckBox vib = (CheckBox) findViewById(R.id.VibrateCheckbox);
-
+		
 		if (dataVibrate != null && dataVibrate.equalsIgnoreCase("vibrate"))
 			vib.setChecked(true);
 
@@ -503,11 +442,13 @@ public class ConfirmationPage extends Activity {
 		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
 		progressText = (TextView) findViewById(R.id.ProximityNumber);
 		progressText.setText(Integer.toString(proximity));
-		// range from 0 to 1000  with step size 1
+		// range from 0 to 10 with step size 1 when the unit is Minutes
 		if (proximityUnit.equals("Minutes"))
-		  proximitySeekBar.setMax(10);
-		else // proximityUnit is "Yards" or "Meters" or null
-		  proximitySeekBar.setMax(1000);
+			proximitySeekBar.setMax(10);
+		
+		// range from 0 to 1000 with step size 1 when the unit is
+		else // "Yards" or "Meters" or null
+			proximitySeekBar.setMax(1000);
 
 		if (dataProximity != null && !dataProximity.equalsIgnoreCase("0"))
 			proximitySeekBar.setProgress(Integer.parseInt(dataProximity));
@@ -515,28 +456,23 @@ public class ConfirmationPage extends Activity {
 		proximitySeekBar.setOnSeekBarChangeListener(
 				new OnSeekBarChangeListener() {
 
-			public void onProgressChanged(SeekBar seekBarOnProgress, 
-					int progress, boolean fromTouch) {
-				// TODO Auto-generated method stub
-				Log.v(TAG, "progress:  " + progress);
-				proximity = progress;
-				progressText.setText(Integer.toString(proximity));
+					public void onProgressChanged(SeekBar seekBarOnProgress, 
+							int progress, boolean fromTouch) {
+						// TODO Auto-generated method stub
+						Log.v(TAG, "progress:  " + progress);
+						proximity = progress;
+						progressText.setText(Integer.toString(proximity));
 
-				//	Log.v(TAG, "fromTouch:  " + fromTouch);
-			}
+						//	Log.v(TAG, "fromTouch:  " + fromTouch);
+					}
 
-			public void onStartTrackingTouch(SeekBar seekBarOnStart) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void onStopTrackingTouch(SeekBar seekBarOnStop) {
-				// TODO Auto-generated method stub
-
-
-			}
-		});
-
+					public void onStartTrackingTouch(SeekBar seekBarOnStart) {
+						// TODO Auto-generated method stub
+					}
+					public void onStopTrackingTouch(SeekBar seekBarOnStop) {
+						// TODO Auto-generated method stub
+					}
+				});
 
 	} // ends getProximity method
 
@@ -552,14 +488,14 @@ public class ConfirmationPage extends Activity {
 		findViewById(R.id.ProximityUnits);
 		ArrayAdapter<CharSequence> proxSpinnerValues = 
 			ArrayAdapter.createFromResource(this, R.array.ProximityUnitList,
-				android.R.layout.simple_spinner_item);
+					android.R.layout.simple_spinner_item);
 		proxSpinnerValues.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
 		currentUnit = "Yards";
 		if (dataProximityUnit != null)
-		  currentUnit = dataProximityUnit;
-		
+			currentUnit = dataProximityUnit;
+
 		if (dataProximityUnit != null && 
 				dataProximityUnit.equalsIgnoreCase("Meters"))
 			proximityUnitsSpinner.setSelection(1);
@@ -569,39 +505,39 @@ public class ConfirmationPage extends Activity {
 
 		proximityUnitsSpinner.setOnItemSelectedListener(
 				new OnItemSelectedListener() { 
-			public void onItemSelected(AdapterView<?> adapterView, View arg1,
-					int arg2, long arg3) {
+					public void onItemSelected(AdapterView<?> adapterView, View arg1,
+							int arg2, long arg3) {
 
-				int indexProx = adapterView.getSelectedItemPosition();
-				CharSequence selectedUnit =
-					(CharSequence) adapterView.getSelectedItem();
-				proximityUnit = selectedUnit.toString();
-				if (indexProx == 2)  // Minutes
-				  proximitySeekBar.setMax(10);
-				else
-				  proximitySeekBar.setMax(1000);
-				
-				if (indexProx == 2 && !(currentUnit.equals("Minutes"))){
-				  proximity = 0;
-				  progressText.setText(Integer.toString(proximity));
-				}
-				if (currentUnit.equals("Minutes") && indexProx != 2){
-					proximity = 0;
-					progressText.setText(Integer.toString(proximity));
-				}
-				proximitySeekBar.setProgress(proximity);	
-				currentUnit = proximityUnit;
-				Log.v(TAG, "under onItemSelected(proximity unit): " + 
-						indexProx);
-				Log.v(TAG, "under onItemSelected(proximity unit): " +
-						selectedUnit);
-			}
+						int indexProx = adapterView.getSelectedItemPosition();
+						CharSequence selectedUnit =
+							(CharSequence) adapterView.getSelectedItem();
+						proximityUnit = selectedUnit.toString();
+						if (indexProx == 2)  // Minutes
+							proximitySeekBar.setMax(10);
+						else
+							proximitySeekBar.setMax(1000);
 
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+						if (indexProx == 2 && !(currentUnit.equals("Minutes"))){
+							proximity = 0;
+							progressText.setText(Integer.toString(proximity));
+						}
+						if (currentUnit.equals("Minutes") && indexProx != 2){
+							proximity = 0;
+							progressText.setText(Integer.toString(proximity));
+						}
+						proximitySeekBar.setProgress(proximity);	
+						currentUnit = proximityUnit;
+						Log.v(TAG, "under onItemSelected(proximity unit): " + 
+								indexProx);
+						Log.v(TAG, "under onItemSelected(proximity unit): " +
+								selectedUnit);
+					}
 
-			}
-		});
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
 	}  // ends getProximityUnits method
 
 
