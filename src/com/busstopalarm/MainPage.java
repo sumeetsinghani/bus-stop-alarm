@@ -32,8 +32,19 @@ public class MainPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+	
+		setupRouteSearchButton();
+		setupFavoriteButton();
+		setupMajorLocsButton();
+		displayRecentRoutes();
+		
+	}
+	
+	/**
+	 * Sets up the route search button. Called by onCreate() method.
+	 */
+	private void setupRouteSearchButton() {
 		final Button RouteSearchButton = (Button) findViewById(R.id.RouteSearchButton);
-
 		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -44,16 +55,15 @@ public class MainPage extends Activity {
 			
 			public void onClick(View v) {
 				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
-				DataFetcher df = new DataFetcher();
 				int routeNumber;
 				try {
 					// This might throw an NumberFormatException if string is empty, or too long, or
-					// somehow in invalid format.
+					// somehow in invalid format. (Extends IllegalArgumentException)
 					routeNumber = Integer.parseInt(routeText);
 					// Check to see if the route number is less than 5 digits long.
 					if (!validRoute(routeNumber))
 							throw new IllegalArgumentException();
-				} catch (Exception e) {
+				} catch (IllegalArgumentException e) {
 					Toast t = Toast.makeText(v.getContext(),
 							"Invalid Route Number", Toast.LENGTH_LONG);
 					t.show();
@@ -69,7 +79,12 @@ public class MainPage extends Activity {
 				finish();
 			}
 		});
+	}
 
+	/**
+	 * Sets up the favorite button. Called by onCreate() method.
+	 */
+	private void setupFavoriteButton() {
 		// favorite button behavior
 		final Button favButton = (Button) findViewById(R.id.FavButton);
 		favButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +94,12 @@ public class MainPage extends Activity {
 				startActivity(i);
 			}
 		});
-
+	}
+	
+	/**
+	 * Sets up the major locations button. Called by onCreate() method.
+	 */
+	private void setupMajorLocsButton() {
 		// major button behavior
 		final Button majorButton = (Button) findViewById(R.id.MajorButton);
 		majorButton.setOnClickListener(new View.OnClickListener() {
@@ -89,10 +109,21 @@ public class MainPage extends Activity {
 				startActivity(i);
 			}
 		});
-
+	}
+	
+	/**
+	 * Retrieves from the local database recent locations, and displays them
+	 * on the page.
+	 */
+	private void displayRecentRoutes() {
+		
+		// The number of most recent routes to display.
+		int numRecentRoutes = 5;
+		
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
 		
+		// TODO: get rid of this already.
 		//////// temporary /////////
 		ad.deleteAllDestinations();
 		try { 
@@ -108,15 +139,17 @@ public class MainPage extends Activity {
 		}
 		////////////////////////////
 		
-		Cursor recent = ad.getRecentDest(5);
+		// Gets the five most recent locations.
+		Cursor recent = ad.getRecentDest(numRecentRoutes);
 		LinearLayout recentList = (LinearLayout) findViewById(R.id.recent_routes);
 		int routeIndex = recent.getColumnIndex("route_id");
 		int routeDescIndex = recent.getColumnIndex("route_desc");
+		
 		while (!recent.isAfterLast()) {
-			final TextView recentItem = new TextView(this);
-			recentItem.setClickable(true);
 			final int routeNumber = Integer.parseInt(recent.getString(routeIndex));
 			
+			final TextView recentItem = new TextView(this);
+			recentItem.setClickable(true);
 			recentItem.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(v.getContext(), MapPage.class);
@@ -125,16 +158,17 @@ public class MainPage extends Activity {
 					finish();
 				}
 			});
-
 			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 8);
 			recentItem.setText("Route " + recent.getString(routeIndex) + ", "
 					+ recent.getString(routeDescIndex));
 			recentList.addView(recentItem);
+			
 			recent.moveToNext();
 		}
+		
 		ad.close();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
