@@ -160,13 +160,12 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * it gets the default proximity from the file
-	 * "favorite_settings_data" that holds the data saved when the user
-	 * saved settings as a favorite
-	 * 
+	 * Gets the default proximity from the file "favorite_settings_data" 
+	 * that holds the data saved when the user saved settings as a 
+	 * favorite.
 	 * @return proximity value (int)
 	 */
-	private int default_proximity() {
+	private int getDefaultProximity() {
 		if (dataProximity == null)
 			return 0;
 		return Integer.parseInt(dataProximity);
@@ -174,24 +173,25 @@ public class ConfirmationPage extends Activity {
 
 
 	/** 
-	 * it gets the default proximityUnit from the file
+	 * Gets the default proximity unit from the favorite settings file
 	 * "favorite_settings_data" that holds the data saved when the user
-	 * saved settings as a favorite
+	 * saved settings as a favorite.
 	 * @return String proximity unit
 	 */
-	private String default_proximity_unit() {
+	private String getDefaultProximityUnit() {
 		return dataProximityUnit;
 	}
 
 
 	/** 
-	 * it gets the default vibrate from the file "favorite_settings_data" which
-	 * holds the data saved when the user saved the settings as a favorite
+	 * Gets the default vibrate from the file "favorite_settings_data" which
+	 * holds the data saved when the user saved the settings as a favorite.
+	 * 
 	 * @return false if dataVibrate is null (settings data haven't been created)
-	 * @return false if dataVibrate is non-null and is "vibrate_false" 
+	 * or "vibrate_false" 
 	 * @return true if dataVibrate is non-null and is "vibrate"
 	 */
-	private boolean default_vibrate(){
+	private boolean getDefaultVibrate(){
 		if (dataVibrate != null && dataVibrate.equals("vibrate"))
 			return true;
 		return false;	
@@ -212,10 +212,10 @@ public class ConfirmationPage extends Activity {
 			e1.printStackTrace();  // is not found
 		} 
 
-		vibration = default_vibrate();
+		vibration = getDefaultVibrate();
 		//ringtoneUri = default_rington_uri();
-		proximity = default_proximity();
-		proximityUnit = default_proximity_unit();
+		proximity = getDefaultProximity();
+		proximityUnit = getDefaultProximityUnit();
 
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
