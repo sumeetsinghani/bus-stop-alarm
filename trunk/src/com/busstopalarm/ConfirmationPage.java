@@ -396,7 +396,7 @@ public class ConfirmationPage extends Activity {
 		String[] settingResult = line.split("\t");
 		bin.close();
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
-
+		// TODO: check array length so we don't get an uncaught exception
 		dataVibrate = settingResult[0];
 		dataRingtone = settingResult[1];
 		dataProximity = settingResult[2];
@@ -431,12 +431,11 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * this method is invoked when proximity bar is used
+	 * This method is invoked when proximity bar is used.
+	 * There are current three units:
 	 * for Yards, the range is from 0 to 1000
 	 * for Meters, the range is from 0 to 1000
-	 * for Minutes, the range is from 0 to 1000 (temporary)
-	 * 
-	 * 
+	 * for Minutes, the range is from 0 to 10
 	 */
 	public void getProximity() {
 		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
@@ -478,10 +477,9 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * It is invoked when the user selects the proximity unit on the spinner
-	 * It first loads all units (Yards, Meters, Minutes) on the spinner
-	 * then, sets it to the one that the user previously has saved as a favorite 
-	 * 
+	 * Loads all units (Yards, Meters, Minutes) on the spinner and sets it to 
+	 * the one that the user previously has saved as a favorite.
+	 * Invoked when the user selects the proximity unit on the spinner.
 	 */
 	public void getProximityUnits() {
 		Spinner proximityUnitsSpinner = (Spinner) 
@@ -505,7 +503,7 @@ public class ConfirmationPage extends Activity {
 
 		proximityUnitsSpinner.setOnItemSelectedListener(
 				new OnItemSelectedListener() { 
-					public void onItemSelected(AdapterView<?> adapterView, View arg1,
+					public void onItemSelected(AdapterView<?> adapterView, View arg1, 
 							int arg2, long arg3) {
 
 						int indexProx = adapterView.getSelectedItemPosition();
@@ -542,20 +540,17 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * It loads all types of sounds (ringtones, notifications, alarms) from the
-	 * local storage. 
-	 * ringtone cursor goes through all the sounds and get the titles and show
-	 * them on the spinner.
-	 * if the user has set the ringtone as a favorite, it will set it to that
-	 * ringtone in the first place
-	 * if not, it will set the ringtone to the first one on the list
+	 * Loads all types of sounds from the local storage (database).
+	 * If the user has set a ringtone as a favorite, it will preselect
+	 * that ringtone.
+	 * If not, it will preselect the first ringtone on the list.
 	 */
 	public void getRingtones() {
 
 		final RingtoneManager ringtoneManager = new RingtoneManager(this);
 
-		// get all types of sounds (ringtones, notifications, alarms)
-		// or just get ringtones type
+		// There are three types of sounds (ringtones, notifications, alarms)
+		// In here, we only get the ringtones.
 		ringtoneManager.setType(RingtoneManager.TYPE_RINGTONE);
 
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
@@ -607,8 +602,8 @@ public class ConfirmationPage extends Activity {
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-
 			}
+			
 		});
 
 	}  // ends getRingtones method
@@ -618,8 +613,6 @@ public class ConfirmationPage extends Activity {
 	 * It is invoked when option menu is pushed
 	 * @param Menu
 	 * @return boolean
-	 * 
-	 * 
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -633,8 +626,6 @@ public class ConfirmationPage extends Activity {
 	 * It is invoked when option item is selected
 	 * @param MenuItem
 	 * @return boolean
-	 * 
-	 * 
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
