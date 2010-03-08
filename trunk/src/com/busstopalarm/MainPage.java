@@ -36,25 +36,37 @@ public class MainPage extends Activity {
 
 		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
+			
+			// Checks to see if routeNumber is less than 5 digits long.
+			private boolean validRoute(int routeNumber) {
+				return routeNumber < 10000;
+			}
+			
 			public void onClick(View v) {
 				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
+				DataFetcher df = new DataFetcher();
+				int routeNumber;
 				try {
-					DataFetcher df = new DataFetcher();
-					int routeNumber = Integer.parseInt(routeText);
-					//BusRoute br = df.getBusRouteById(routeNumber, false);
-					String s = "PlaceHolder for Route Info.";
-					Intent i = new Intent(v.getContext(), MapPage.class);
-					i.putExtra("routeNumber", routeNumber);
-					startActivity(i);
-					Toast t = Toast.makeText(v.getContext(), s.substring(0,
-							Math.min(s.length(), 500)), Toast.LENGTH_LONG);
-					t.show();
-					finish();
+					// This might throw an NumberFormatException if string is empty, or too long, or
+					// somehow in invalid format.
+					routeNumber = Integer.parseInt(routeText);
+					// Check to see if the route number is less than 5 digits long.
+					if (!validRoute(routeNumber))
+							throw new IllegalArgumentException();
 				} catch (Exception e) {
 					Toast t = Toast.makeText(v.getContext(),
 							"Invalid Route Number", Toast.LENGTH_LONG);
 					t.show();
+					return;
 				}
+				String s = "PlaceHolder for Route Info.";
+				Intent i = new Intent(v.getContext(), MapPage.class);
+				i.putExtra("routeNumber", routeNumber);
+				startActivity(i);
+				Toast t = Toast.makeText(v.getContext(), s.substring(0,
+						Math.min(s.length(), 500)), Toast.LENGTH_LONG);
+				t.show();
+				finish();
 			}
 		});
 
