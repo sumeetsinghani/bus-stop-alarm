@@ -40,7 +40,7 @@ public class MapPage extends MapActivity {
 	private MapController mapController;
 	private MapView mapView;
 	private LocationManager lm;
-	private int routeNumber;
+	private String routeID;
 	private List<Overlay> mapOverlays;
 	private ItemizedOverlayHelper currentLocOverlay;
 
@@ -73,12 +73,12 @@ public class MapPage extends MapActivity {
 		//array of overlay items
 		mapOverlays = mapView.getOverlays();
 
-		routeNumber = getIntent().getExtras().getInt("routeNumber");
+		routeID = getIntent().getExtras().getString("routeID");
 		DataFetcher df = new DataFetcher();
 		BusRoute busRoute;
 		try {
 			// draw routes on map
-			busRoute = df.getBusRouteById(routeNumber, true);
+			busRoute = df.getBusRouteById(routeID, true);
 			for (Polyline p : busRoute.getPolylines()) {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);

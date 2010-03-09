@@ -42,8 +42,8 @@ public class DataFetcher {
 	 * @param stopId
 	 * @return the BusStop corresponding to given stop id. Otherwise null if no corresponding stop.
 	 */
-	public BusStop getStopById(int stopId) throws IOException{
-		if(stopId < 0) {
+	public BusStop getStopById(String stopId) throws IOException{
+		if(stopId == null) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -62,7 +62,7 @@ public class DataFetcher {
 	 * @return BusRoute object loaded with retrieved data
 	 * @throws IOException
 	 */
-	public BusRoute getBusRouteById(int routeId, boolean includePolylinesAndStops) throws IOException {
+	public BusRoute getBusRouteById(String routeId, boolean includePolylinesAndStops) throws IOException {
 		BusRoute busRoute = new BusRoute();
 		
 		// Query for info on the bus route.
@@ -112,8 +112,8 @@ public class DataFetcher {
 	 * @return List of polylines containing the encoded polyline and the encoded level.
 	 *         List is empty if there are now line for given route id.
 	 */
-	public List<Polyline> getPolylines(int routeId) throws IOException, IllegalArgumentException {
-		if(routeId < 0) {
+	public List<Polyline> getPolylines(String routeId) throws IOException, IllegalArgumentException {
+		if(routeId == null) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -129,8 +129,8 @@ public class DataFetcher {
 	 * @param routeID
 	 * @return list of stops as JSONObject, null if no such routeID.
 	 */
-	public List<BusStop> getBusStopsForRoute(int routeId) throws IOException {
-		if(routeId < 0) {
+	public List<BusStop> getBusStopsForRoute(String routeId) throws IOException {
+		if(routeId == null) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -258,15 +258,15 @@ public class DataFetcher {
 	 * @return JSONObject containing the RAW web response.
 	 * @throws IOException
 	 */
-	private JSONObject doQuery(String action, int id) throws IOException {
+	private JSONObject doQuery(String action, String id) throws IOException {
 		JSONObject json = null;
 		
 		try {
 			StringBuilder sb = new StringBuilder();
 			sb.append(HOST_NAME);
 			sb.append(action);
-			sb.append(DEFAULT_AGENCY); // The default agency, (example: Seattle is 1).
-			sb.append("_"); // Add divider between agency and id.
+			//sb.append(DEFAULT_AGENCY); // The default agency, (example: Seattle is 1).
+			//sb.append("_"); // Add divider between agency and id.
 			sb.append(id);
 			sb.append(".json?key="); // Request a json response.
 			sb.append(API_KEY); // Needed API key.

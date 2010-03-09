@@ -72,7 +72,7 @@ public class LocationListPage extends ListActivity {
 	    	HashMap<String, String> item = locationList.get(position);
 	    	DataFetcher df = new DataFetcher();
 			try {
-				BusStop b = df.getStopById(Integer.parseInt(item.get("stopID")));
+				BusStop b = df.getStopById(item.get("stopID"));
 		    	i.putExtra("busstop", b);
 		    	i.putExtra("busroute", Integer.parseInt(item.get("routeID")));
 		    	startActivity(i);
@@ -113,8 +113,7 @@ public class LocationListPage extends ListActivity {
 			for (int i = 0; i < c.getCount(); i++) {
 				HashMap<String, String> item = new HashMap<String, String>();
 				
-				String[] stop = c.getString(stopIDIndex).split("_");
-				String stopID = stop[stop.length - 1];
+				String stopID = c.getString(stopIDIndex);
 				String stopName = c.getString(stopDescIndex);
 				String route = c.getString(routeIDIndex);
 
@@ -153,7 +152,7 @@ public class LocationListPage extends ListActivity {
 	    	HashMap<String, String> busItem = locationList.get(id);
 	    	DataFetcher df = new DataFetcher();
 			try {
-				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID")));
+				BusStop b = df.getStopById(busItem.get("stopID"));
 		    	i.putExtra("busstop", b);
 		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeID")));
 		    	startActivity(i);
