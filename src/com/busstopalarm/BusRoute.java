@@ -9,6 +9,7 @@
 
 package com.busstopalarm;
 
+import java.util.Collections;
 import java.util.List;
 
 public class BusRoute {
@@ -19,14 +20,18 @@ public class BusRoute {
 	private String longName; // name of the route.
 	private String description; // Description of the bus route. The cross street.
 	private String type; // The type of bus route this is.
+	
 	//private double agency; // Available but not needed.
 	
-	public BusRoute() {
-		
+	/**
+	 * The empty construtor.
+	 */
+	public BusRoute() {		
 	}
 
 	/**
-	 * 
+	 * Gets the list of polylines for
+	 * this BusRoute object.
 	 * @return polylines of this bus route.
 	 */
 	public List<Polyline> getPolylines() {
@@ -34,7 +39,8 @@ public class BusRoute {
 	}
 
 	/**
-	 * Set the polylines that are used to draw a route.
+	 * Sets the polylines that are used to draw a route for
+	 * this BusRoute object.
 	 * @param polylines
 	 */
 	public void setPolylines(List<Polyline> polylines) {
@@ -42,7 +48,8 @@ public class BusRoute {
 	}
 
 	/**
-	 * 
+	 * Gets the list of bus stops for
+	 * this BusRoute object.
 	 * @return List of BusStops along this route.
 	 */
 	public List<BusStop> getBusStops() {
@@ -74,7 +81,7 @@ public class BusRoute {
 	}
 	
 	/**
-	 * 
+	 * Gets the shortName of this BusRoute object.
 	 * @return shortName of this bus route.
 	 */
 	public String getShortName() {
@@ -90,7 +97,7 @@ public class BusRoute {
 	}
 
 	/**
-	 * 
+	 * Gets the longName of this BusRoute object.
 	 * @return longName of this bus route.
 	 */
 	public String getLongName() {
@@ -98,7 +105,7 @@ public class BusRoute {
 	}
 
 	/**
-	 * Set longName of this bus route.
+	 * Sets longName of this bus route.
 	 * @param longName
 	 */
 	public void setLongName(String longName) {
@@ -106,7 +113,7 @@ public class BusRoute {
 	}
 
 	/**
-	 * 
+	 * Gets the description of this BusRoute object.
 	 * @return description of this bus route.
 	 */
 	public String getDescription() {
@@ -114,7 +121,7 @@ public class BusRoute {
 	}
 
 	/**
-	 * Set description of this bus route.
+	 * Sets the description of this bus route.
 	 * @param description
 	 */
 	public void setDescription(String description) {
@@ -122,15 +129,15 @@ public class BusRoute {
 	}
 
 	/**
-	 * 
-	 * @return type of bus route this is.
+	 * Gets the bus route type of this BusRoute object.
+	 * @return The type of bus route.
 	 */
 	public String getType() {
 		return type;
 	}
 
 	/**
-	 * Set the type of bus route this is.
+	 * Sets the type of bus route to type.
 	 * @param type
 	 */
 	public void setType(String type) {
@@ -138,9 +145,9 @@ public class BusRoute {
 	}
 	
 	/**
-	 * Returns true if both BusRoutes' ids are equal. False otherwise.
+	 * Returns true if both BusRoutes' IDs are equal. False otherwise.
 	 * @param other
-	 * @return
+	 * @return true if both BusRoutes' IDs are equal. False otherwise.
 	 */
 	public boolean equals(BusRoute other) {
 		return this.routeId.equals(other.routeId);
