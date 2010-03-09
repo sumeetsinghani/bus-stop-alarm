@@ -16,14 +16,12 @@
 package com.busstopalarm;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -53,7 +51,7 @@ public class ConfirmationPage extends Activity {
 	private static final String TAG = "inConfirmationPage";
 
 	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
-	
+
 	private boolean vibration;
 	private Uri ringtoneUri;
 	private int proximity;
@@ -66,19 +64,11 @@ public class ConfirmationPage extends Activity {
 
 	// these below are the data saved in the "favorite_settings_data" file in
 	// sdcard to be retrieved from the file to load the recent settings
-	private String dataVibrate;
 	private String dataRingtone;
-	private String dataProximity;
-	private String dataProximityUnit;
-
 	private String ringtoneTitleToSave;
 
 	private SeekBar proximitySeekBar;
-	private TextView progressText;
-	private String currentUnit;
-
-	// time (in seconds) is used for Alarm, alarm goes off after time seconds
-	private int time;      
+	private TextView progressText; 
 
 	//private NotificationManager notificationManager;
 
@@ -86,51 +76,26 @@ public class ConfirmationPage extends Activity {
 	 * ConfirmationPage constructor
 	 */
 	public ConfirmationPage() {
-		dataVibrate = null;
+
 		dataRingtone = null;
-		dataProximity = null;
-		dataProximityUnit = null;
 
 		vibration = false;
 		ringtoneUri = null;
 		proximity = 0;
+		// Default unit is yards
 		proximityUnit = null;
 
-		ringtoneTitleToSave = null;
-
-		/* these are not used yet
-		currentBusRoute = null;
-		destination = null;
-		 */
-
-		time = 0; 
+		ringtoneTitleToSave = null; 
 	}
 
-
-	/**
-	 * this is for the purpose of updating time
-	 *
-	 */
-	public void setTime(int time_input){
-		time = time_input;
-	}
-
-
-	/**
-	 * getter for time
-	 * @return int time
-	 */
-	public int getTime(){
-		return time;
-	}
 
 
 	/**
 	 * vibrate setter
 	 * @param boolean vibrate input
 	 */
-	public void setVibration(boolean vibrate_input){
-		vibration = vibrate_input;
+	public void setVibration(boolean vibrateInput){
+		vibration = vibrateInput;
 	}
 
 
@@ -147,8 +112,8 @@ public class ConfirmationPage extends Activity {
 	 * setter for ringtone uri
 	 * @param Uri ringtone uri
 	 */
-	public void setRingtoneUri(Uri ringtone_input){
-		ringtoneUri = ringtone_input;
+	public void setRingtoneUri(Uri ringtoneInput){
+		ringtoneUri = ringtoneInput;
 	}
 
 
@@ -161,45 +126,6 @@ public class ConfirmationPage extends Activity {
 	}
 
 
-	/**
-	 * Gets the default proximity from the file "favorite_settings_data" 
-	 * that holds the data saved when the user saved settings as a 
-	 * favorite.
-	 * @return proximity value (int)
-	 */
-	private int getDefaultProximity() {
-		if (dataProximity == null)
-			return 0;
-		return Integer.parseInt(dataProximity);
-	}
-
-
-	/** 
-	 * Gets the default proximity unit from the favorite settings file
-	 * "favorite_settings_data" that holds the data saved when the user
-	 * saved settings as a favorite.
-	 * @return String proximity unit
-	 */
-	private String getDefaultProximityUnit() {
-		return dataProximityUnit;
-	}
-
-
-	/** 
-	 * Gets the default vibrate from the file "favorite_settings_data" which
-	 * holds the data saved when the user saved the settings as a favorite.
-	 * 
-	 * @return false if dataVibrate is null (settings data haven't been created)
-	 * or "vibrate_false" 
-	 * @return true if dataVibrate is non-null and is "vibrate"
-	 */
-	private boolean getDefaultVibrate(){
-		if (dataVibrate != null && dataVibrate.equals("vibrate"))
-			return true;
-		return false;	
-	}
-
-
 	/** Called when the activity is first created on the confirmation page.
 	 *  @param Bundle which holds the current state (info)
 	 *  
@@ -208,16 +134,8 @@ public class ConfirmationPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		try {  // load saved settings
-			loadRecentSettings();
-		} catch (IOException e1) { // if the file "favorite_settings_data" 
-			e1.printStackTrace();  // is not found
-		} 
-
-		vibration = getDefaultVibrate();
-		//ringtoneUri = default_rington_uri();
-		proximity = getDefaultProximity();
-		proximityUnit = getDefaultProximityUnit();
+		// load saved settings
+		loadRecentSettings();
 
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
@@ -236,12 +154,6 @@ public class ConfirmationPage extends Activity {
 		getRingtones();
 		getProximity();
 		getProximityUnits();
-
-		// Logs for debugging purpose.
-		Log.v(TAG, "dataVibrate:  " + dataVibrate);
-		Log.v(TAG, "dataRingtone:  " + dataRingtone);
-		Log.v(TAG, "dataProximity:  " + dataProximity);
-		Log.v(TAG, "dataProximityUnit:  " + dataProximityUnit);
 
 		Log.v(TAG, "vibrate:  " + vibration);
 		Log.v(TAG, "ringtone:  " + ringtoneUri);
@@ -331,16 +243,16 @@ public class ConfirmationPage extends Activity {
 	private void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SetAsFavButton);
 		SaveButton.setOnClickListener(new View.OnClickListener(){
-			
+
 			/**
 			 * Generates settings to be written on the file, and
 			 * returns it.
 			 * @return The String content to be written to file.
 			 */
 			private String buildSettingsString() {
-				
+
 				StringBuilder settings = new StringBuilder();
-				
+
 				if (vibration)
 					settings.append("vibrate");
 				else
@@ -390,15 +302,24 @@ public class ConfirmationPage extends Activity {
 					} 
 				}
 			}
-			
+
 			public void onClick(View v) {			
 				String settings = buildSettingsString();
 				writeSettingsToFile(settings);
 			} // ends onClick
-			
+
 		}); // ends "Save as favorite" button
 	} // ends saveButton method
 
+
+	private void setDefaultSettingsValues() {
+
+		vibration = false;
+		ringtoneUri = null;
+		proximity = 0;
+		proximityUnit = "Yards";
+
+	}
 
 	/**
 	 * this method loads from 
@@ -408,27 +329,55 @@ public class ConfirmationPage extends Activity {
 	 * After reading from the file, it sets the data values
 	 * dataVibrate, dataRingtone, dataProximity, dataProximityUnit appropriately
 	 */
-	private void loadRecentSettings() throws IOException {
-		FileInputStream fIn = openFileInput(SETTINGS_FILE_NAME); 
-		InputStreamReader isr = new InputStreamReader(fIn);
-		BufferedReader bin = new BufferedReader(isr);
-
-		if (bin == null)
+	private void loadRecentSettings() {
+		BufferedReader bin = null;
+		String line = null;
+		try {
+			bin = new BufferedReader(new InputStreamReader(
+					openFileInput(SETTINGS_FILE_NAME)));
+		} catch (FileNotFoundException e) {
+			setDefaultSettingsValues();
 			return;
-		String line = bin.readLine();
-		if (line == null) {
-			bin.close();
+		}
+		try {
+			line = bin.readLine();
+		} catch (IOException e) {
+			setDefaultSettingsValues();
 			return;
+		} finally {
+			try {
+				bin.close();
+			} catch (IOException e) {
+				// do nothing
+			}
 		}
 
 		String[] settingResult = line.split("\t");
-		bin.close();
+
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
-		// TODO: check array length so we don't get an uncaught exception
-		dataVibrate = settingResult[0];
+		if (settingResult.length < 4) {
+			Log.v(TAG, "settingResult length less than 4 - corrupted file");
+			setDefaultSettingsValues();
+			return;
+		}
+
+		if (settingResult[0] != null && settingResult[0].equals("vibrate"))
+			vibration = true;
+
 		dataRingtone = settingResult[1];
-		dataProximity = settingResult[2];
-		dataProximityUnit = settingResult[3];
+
+		try {
+			proximity = Integer.parseInt(settingResult[2]);
+		} catch (NumberFormatException e) {
+			// default value is 0
+			proximity = 0;
+		}
+		if (proximity > 1000)
+			proximity = 1000;
+		else if (proximity < 0)
+			proximity = 0;
+
+		proximityUnit = settingResult[3];
 	}
 
 
@@ -444,9 +393,8 @@ public class ConfirmationPage extends Activity {
 	 */
 	public void getVibrate(){
 		final CheckBox vib = (CheckBox) findViewById(R.id.VibrateCheckbox);
-		
-		if (dataVibrate != null && dataVibrate.equalsIgnoreCase("vibrate"))
-			vib.setChecked(true);
+		Log.v(TAG, "under getVibrate method, vibration:  " + vibration);
+		vib.setChecked(vibration);
 
 		vib.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView,
@@ -463,23 +411,15 @@ public class ConfirmationPage extends Activity {
 	 * There are current three units:
 	 * for Yards, the range is from 0 to 1000
 	 * for Meters, the range is from 0 to 1000
-	 * for Minutes, the range is from 0 to 10
 	 */
 	public void getProximity() {
 		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
 		progressText = (TextView) findViewById(R.id.ProximityNumber);
 		progressText.setText(Integer.toString(proximity));
-		// range from 0 to 10 with step size 1 when the unit is Minutes
-		if (proximityUnit.equals("Minutes"))
-			proximitySeekBar.setMax(10);
 		
-		// range from 0 to 1000 with step size 1 when the unit is
-		else // "Yards" or "Meters" or null
-			proximitySeekBar.setMax(1000);
-
-		if (dataProximity != null && !dataProximity.equalsIgnoreCase("0"))
-			proximitySeekBar.setProgress(Integer.parseInt(dataProximity));
-
+		// range from 0 to 1000 with step size 1.
+		proximitySeekBar.setMax(1000);
+		proximitySeekBar.setProgress(proximity);
 		proximitySeekBar.setOnSeekBarChangeListener(
 				new OnSeekBarChangeListener() {
 
@@ -505,7 +445,7 @@ public class ConfirmationPage extends Activity {
 
 
 	/**
-	 * Loads all units (Yards, Meters, Minutes) on the spinner and sets it to 
+	 * Loads all units (Yards, Meters) on the spinner and sets it to 
 	 * the one that the user previously has saved as a favorite.
 	 * Invoked when the user selects the proximity unit on the spinner.
 	 */
@@ -518,43 +458,17 @@ public class ConfirmationPage extends Activity {
 		proxSpinnerValues.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
-		currentUnit = "Yards";
-		if (dataProximityUnit != null)
-			currentUnit = dataProximityUnit;
 
-		if (dataProximityUnit != null && 
-				dataProximityUnit.equalsIgnoreCase("Meters"))
+		if (proximityUnit != null && proximityUnit.equalsIgnoreCase("Meters"))
 			proximityUnitsSpinner.setSelection(1);
-		if (dataProximityUnit != null &&
-				dataProximityUnit.equalsIgnoreCase("Minutes"))
-			proximityUnitsSpinner.setSelection(2);
 
 		proximityUnitsSpinner.setOnItemSelectedListener(
 				new OnItemSelectedListener() { 
 					public void onItemSelected(AdapterView<?> adapterView, View arg1, 
 							int arg2, long arg3) {
-
-						int indexProx = adapterView.getSelectedItemPosition();
 						CharSequence selectedUnit =
 							(CharSequence) adapterView.getSelectedItem();
-						proximityUnit = selectedUnit.toString();
-						if (indexProx == 2)  // Minutes
-							proximitySeekBar.setMax(10);
-						else
-							proximitySeekBar.setMax(1000);
-
-						if (indexProx == 2 && !(currentUnit.equals("Minutes"))){
-							proximity = 0;
-							progressText.setText(Integer.toString(proximity));
-						}
-						if (currentUnit.equals("Minutes") && indexProx != 2){
-							proximity = 0;
-							progressText.setText(Integer.toString(proximity));
-						}
-						proximitySeekBar.setProgress(proximity);	
-						currentUnit = proximityUnit;
-						Log.v(TAG, "under onItemSelected(proximity unit): " + 
-								indexProx);
+						proximityUnit = selectedUnit.toString();	
 						Log.v(TAG, "under onItemSelected(proximity unit): " +
 								selectedUnit);
 					}
@@ -631,7 +545,7 @@ public class ConfirmationPage extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}
-			
+
 		});
 
 	}  // ends getRingtones method

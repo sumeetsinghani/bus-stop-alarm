@@ -1,6 +1,5 @@
 package com.busstopalarm;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -42,7 +41,7 @@ public class AlarmService extends Service {
 	private int proximity;
 	private String proximityUnit;
 	private BusStop busStop;
-	private AlarmManager alarmManager;
+
 
 	/**
 	 * Sets up GPS locations and alarms service managers.
@@ -51,7 +50,7 @@ public class AlarmService extends Service {
 		super.onCreate();
 
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
 		/*
 		 * TODO: by setting minTime and minDistance both to 0, the battery will
 		 * drain out really fast.!!!! Set the approriate value here.
@@ -108,16 +107,13 @@ public class AlarmService extends Service {
 				PENDING_INTENT_REQUEST_CODE1, alarmIntent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		float proximityInput = (float) proximity;
-		if (proximityUnit.equals("Minutes")) {
-			//	alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +
-			//			((time remaining - proximity(in minutes)) (in seconds) * 1000), pendingIntentAlarm);
-		} else { // Yards or Meters
-			if (proximityUnit.equals("Yards"))
-				proximityInput = convertYardsToMeters(proximityInput);
-	
-			lm.addProximityAlert(busStop.getLatitude(), busStop.getLongitude(),
-					proximityInput, -1, pendingIntentAlarm);
-		}
+
+		if (proximityUnit.equals("Yards"))
+			proximityInput = convertYardsToMeters(proximityInput);
+
+		lm.addProximityAlert(busStop.getLatitude(), busStop.getLongitude(),
+				proximityInput, -1, pendingIntentAlarm);
+
 	}
 
 	/** 

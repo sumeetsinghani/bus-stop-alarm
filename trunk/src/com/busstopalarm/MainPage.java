@@ -192,7 +192,7 @@ public class MainPage extends Activity {
 			  finish();
 			  break;
 			}
-			// stop == null
+			 // stop == null
 			Toast.makeText(this, "You have to choose Destination first!", 
 					Toast.LENGTH_LONG).show();
 			break;
