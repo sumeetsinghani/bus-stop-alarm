@@ -38,8 +38,9 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		this.mCtx = mCtx;
 		lastSelectedStop = null;
 		
+		final int routeNum = mCtx.getIntent().getIntExtra("routeNumber", 0);
 		TextView tv = (TextView)mCtx.findViewById(R.id.stopinfo);
-		String text = "Route " + mCtx.getIntent().getIntExtra("routeNumber", 0) + ": " + "<No Stop Selected>";
+		String text = "Route " + routeNum + ": " + "<No Stop Selected>";
 		tv.setText(text);
 		
 		Button b = (Button)mCtx.findViewById(R.id.stopinfoarea_button);
@@ -48,6 +49,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 				if (lastSelectedStop != null) {
 					Intent i = new Intent(v.getContext(), ConfirmationPage.class);
 					i.putExtra("busstop", lastSelectedStop);
+					i.putExtra("busroute", routeNum);
 					mCtx.startActivity(i);
 				} else {
 					Toast.makeText(v.getContext(), "Please Select a Route", Toast.LENGTH_LONG).show();

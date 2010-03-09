@@ -68,7 +68,7 @@ public class PolylineOverlay extends Overlay {
 			//if (isOnScreen(canvas, outPoint)) {
 				//Log.d("tag", outPoint.toString());
 				routePath.lineTo(outPoint.x, outPoint.y);
-			//} else {
+			//} else { 
 				routePath.moveTo(outPoint.x, outPoint.y);
 			//}
 		}

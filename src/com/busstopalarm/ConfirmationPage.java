@@ -219,6 +219,11 @@ public class ConfirmationPage extends Activity {
 
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
+		int routeID = getIntent().getIntExtra("busroute", 0);
+
+		// this is temporary for debugging
+		Toast.makeText(this, "Route: " + routeID, Toast.LENGTH_LONG).show();
+
 		TextView stopView = (TextView) findViewById(R.id.stopname);
 		stopView.setText(stop.getName());
 
