@@ -59,7 +59,7 @@ public class LocationListPage extends ListActivity {
 		  // this is an error.  need to do something if we get here
 	  }
 	  
-	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"stopName"}, new int[] {R.id.listItemName});
+	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"routeID", "stopName"}, new int[] {R.id.listItemRouteID, R.id.listItemName});
 	  setListAdapter(listAdapter);
 	  
 	  ListView lv = getListView();
@@ -155,7 +155,7 @@ public class LocationListPage extends ListActivity {
 			try {
 				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID")));
 		    	i.putExtra("busstop", b);
-		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeNum")));
+		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeID")));
 		    	startActivity(i);
 		    	finish();
 			} catch (NumberFormatException e) {
