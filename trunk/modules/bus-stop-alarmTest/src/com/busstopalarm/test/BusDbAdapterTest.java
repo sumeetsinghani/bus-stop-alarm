@@ -7,10 +7,16 @@
  */
 package com.busstopalarm.test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
-import com.busstopalarm.*;
+
+import com.busstopalarm.LocationListPage;
+import com.busstopalarm.R;
 
 public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationListPage>{
 
@@ -38,10 +44,12 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testAddMajorDbFromFile_1() throws IOException{
-		int testFile = 1;
+		int testFile = 1;  		
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.readDbFile(testFile);
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("Db should contains 4 destinations", 4,result);
 	}
 	
@@ -54,11 +62,44 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	@SmallTest
 	public void testAddMajorDbFromFile_2() throws IOException{
 		int testFile = 1;
+		InputStream in = 
+			activity.getBaseContext().getResources().
+			openRawResource(R.raw.majordb_sample);
+		
+		/*
+		 * Reading from file to get original route description
+		 */
+		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) {
+  			return;
+  		}
+  		String line;
+  		String[] resultArr = null;
+  		int count = 0;
+  		while (true) {
+    		line = bin.readLine();
+  			if (line == null) {
+  				break;
+  			}
+  			if (count == 0) {//read the first line only
+  				resultArr = line.split("\t");
+  				break;
+  			}
+    		count++;
+    	}
+  		bin.close();
+		
+  		
+  		String routeID = resultArr[0];
+  		String routeDesc = resultArr[1];
+  		String stopID = resultArr[2];
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.readDbFile(testFile);
-		String result = activity.mBusDbHelper.getDestRouteDesc("70", "1_20");
-		assertEquals("Destination description of route 70, stop 1_20", 
-					 "UW Seattle",result);
+		String result = activity.mBusDbHelper.getDestRouteDesc(routeID, stopID);
+		activity.mBusDbHelper.close();
+		assertEquals("Destination description of route "+routeID+",stop "+stopID
+					 , routeDesc ,result);
 	}
 	
 	/**
@@ -70,11 +111,44 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	@SmallTest
 	public void testAddMajorDbFromFile_3() throws IOException{
 		int testFile = 1;
+		InputStream in = 
+			activity.getBaseContext().getResources().
+			openRawResource(R.raw.majordb_sample);
+		
+		/*
+		 * Reading from file to get original route description
+		 */
+		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) {
+  			return;
+  		}
+  		String line;
+  		String[] resultArr = null;
+  		int count = 0;
+  		while (true) {
+    		line = bin.readLine();
+  			if (line == null) {
+  				break;
+  			}
+  			if (count == 1) { //read the second line only
+  				resultArr = line.split("\t");
+  				break;
+  			}
+    		count++;
+    	}
+  		bin.close();
+		
+  		
+  		String routeID = resultArr[0];
+  		String routeDesc = resultArr[1];
+  		String stopID = resultArr[2];
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.readDbFile(testFile);
-		String result = activity.mBusDbHelper.getDestRouteDesc("71", "1_21");
-		assertEquals("Destination description of route 71, stop 1_21", 
-					 "UW and Ave",result);
+		String result = activity.mBusDbHelper.getDestRouteDesc(routeID, stopID);
+		activity.mBusDbHelper.close();
+		assertEquals("Destination description of route "+routeID+",stop "+stopID
+					 , routeDesc ,result);
 	}
 	
 	/**
@@ -86,11 +160,44 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	@SmallTest
 	public void testAddMajorDbFromFile_4() throws IOException{
 		int testFile = 1;
+		InputStream in = 
+			activity.getBaseContext().getResources().
+			openRawResource(R.raw.majordb_sample);
+		
+		/*
+		 * Reading from file to get original route description
+		 */
+		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) {
+  			return;
+  		}
+  		String line;
+  		String[] resultArr = null;
+  		int count = 0;
+  		while (true) {
+    		line = bin.readLine();
+  			if (line == null) {
+  				break;
+  			}
+  			if (count == 2) { //read the third line only
+  				resultArr = line.split("\t");
+  				break;
+  			}
+    		count++;
+    	}
+  		bin.close();
+		
+  		
+  		String routeID = resultArr[0];
+  		String routeDesc = resultArr[1];
+  		String stopID = resultArr[2];
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.readDbFile(testFile);
-		String result = activity.mBusDbHelper.getDestRouteDesc("72", "1_22");
-		assertEquals("Destination description of route 72, stop 1_22", 
-					 "Pike Market",result);
+		String result = activity.mBusDbHelper.getDestRouteDesc(routeID, stopID);
+		activity.mBusDbHelper.close();
+		assertEquals("Destination description of route "+routeID+",stop "+stopID
+					 , routeDesc ,result);
 	}
 	
 	/**
@@ -102,11 +209,44 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	@SmallTest
 	public void testAddMajorDbFromFile_5() throws IOException{
 		int testFile = 1;
+		InputStream in = 
+			activity.getBaseContext().getResources().
+			openRawResource(R.raw.majordb_sample);
+		
+		/*
+		 * Reading from file to get original route description
+		 */
+		BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+  		if (bin == null) {
+  			return;
+  		}
+  		String line;
+  		String[] resultArr = null;
+  		int count = 0;
+  		while (true) {
+    		line = bin.readLine();
+  			if (line == null) {
+  				break;
+  			}
+  			if (count == 3) { //read the fourth line only.
+  				resultArr = line.split("\t");
+  				break;
+  			}
+    		count++;
+    	}
+  		bin.close();
+		
+  		
+  		String routeID = resultArr[0];
+  		String routeDesc = resultArr[1];
+  		String stopID = resultArr[2];
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.readDbFile(testFile);
-		String result = activity.mBusDbHelper.getDestRouteDesc("73", "1_23");
-		assertEquals("Destination description of route 73, stop 1_23", 
-					 "Downtown",result);
+		String result = activity.mBusDbHelper.getDestRouteDesc(routeID, stopID);
+		activity.mBusDbHelper.close();
+		assertEquals("Destination description of route "+routeID+",stop "+stopID
+					 , routeDesc ,result);
 	}
 	
 	/**
@@ -116,11 +256,13 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */	
 	@SmallTest
 	public void testCreateDestCheckInitialCount() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		String result = activity.mBusDbHelper.getDestCount("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to assign count to entry","1", result);
 	}
 	
@@ -131,11 +273,13 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testCreateDestCheckInitialRouteDesc() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		String result = activity.mBusDbHelper.getDestRouteDesc("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to assign description to bus entry","UW", result);
 	}
 	
@@ -146,11 +290,13 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testCreateDestCheckInitialStopDesc() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		String result = activity.mBusDbHelper.getDestStopDesc("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to assign description to bus stop",
 					 "Paul Allen", result);
 	}
@@ -162,11 +308,13 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testCreateDestCheckInitialMajorValue0() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		String result = activity.mBusDbHelper.getDestMajorVal("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to assign major flag value to bus entry",
 					 "0", result);
 	}
@@ -178,11 +326,13 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testCreateDestCheckInitialMajorValue1() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 1);
 		
 		String result = activity.mBusDbHelper.getDestMajorVal("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to assign major flag value to bus entry",
 					 "1", result);
 	}
@@ -192,12 +342,14 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testCreateExistedDest() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		long result = activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
+		activity.mBusDbHelper.close();
 		assertEquals("failed to avoid insert existed entry", -1, result);
 	}
 
@@ -206,6 +358,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_newRouteDesc() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
@@ -213,6 +366,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		activity.mBusDbHelper.updateDestDesc
 						("70", "UW-Seattle", "1_12345", "Paul Allen CSE");
 		String result = activity.mBusDbHelper.getDestRouteDesc("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to change bus route description", 
 					 "UW-Seattle", result);
 	}
@@ -222,6 +376,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_newStopDesc() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
@@ -229,6 +384,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		activity.mBusDbHelper.updateDestDesc
 						("70", "UW-Seattle", "1_12345", "Paul Allen CSE");
 		String result = activity.mBusDbHelper.getDestStopDesc("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to change stop description", 
 					 "Paul Allen CSE", result);
 	}
@@ -238,10 +394,12 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_TimeCount_newCount1(){
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
 		String result = activity.mBusDbHelper.getDestCount("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to update new count", "2", result);
 	}
 	
@@ -250,6 +408,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_TimeCount_newCount2(){
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
@@ -257,6 +416,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
 		
 		String result = activity.mBusDbHelper.getDestCount("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertEquals("failed to update new count", "4", result);
 	}
 	
@@ -265,12 +425,14 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_TimeCount_newTime1(){
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
 		String result1 = activity.mBusDbHelper.getDestTime("70", "1_12345");
 		
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
 		String result2 = activity.mBusDbHelper.getDestTime("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertTrue("failed to update new timestamp", 
 					result2.compareTo(result1) > 0);
 	}
@@ -280,6 +442,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testUpdateDestDesc_TimeCount_newTime2(){
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
 		String result1 = activity.mBusDbHelper.getDestTime("70", "1_12345");
@@ -288,6 +451,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
 		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
 		String result2 = activity.mBusDbHelper.getDestTime("70", "1_12345");
+		activity.mBusDbHelper.close();
 		assertTrue("failed to update new timestamp", 
 					result2.compareTo(result1) > 0);
 	}
@@ -297,9 +461,11 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteDest0() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.deleteDest("70", "1_12345");
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to avoid delete destination from empty DB", 
 					  0, result);
 	}
@@ -310,12 +476,14 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteDest0Left() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		
 		activity.mBusDbHelper.deleteDest("70", "1_12345");
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 0, result);
 	}
 	
@@ -325,6 +493,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteDest1Left() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
@@ -333,6 +502,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		
 		activity.mBusDbHelper.deleteDest("70", "1_12345");
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 1, result);
 	}
 	
@@ -342,6 +512,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteDest2Left() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
@@ -352,6 +523,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		
 		activity.mBusDbHelper.deleteDest("72", "3_12345");
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 2, result);
 	}
 	
@@ -360,8 +532,10 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteAllDestinations_0() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 0, result);
 	}
 	
@@ -370,10 +544,12 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteAllDestinations_1() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 1, result);
 	}
 	
@@ -382,12 +558,14 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */	
 	@SmallTest
 	public void testDeleteAllDestinations_2() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
 		activity.mBusDbHelper.createDest
 						("72", "UW", "3_12345", "Paul Allen", 0);
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 2, result);
 	}
 	
@@ -396,6 +574,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 	 */
 	@SmallTest
 	public void testDeleteAllDestinations_3() {
+		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest
 						("70", "UW", "1_12345", "Paul Allen", 0);
@@ -404,6 +583,7 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationL
 		activity.mBusDbHelper.createDest
 						("72", "UW", "3_12345", "Paul Allen", 0);
 		int result = activity.mBusDbHelper.getDestTbSize();
+		activity.mBusDbHelper.close();
 		assertEquals("failed to delete destination", 3, result);
 	}
 	
