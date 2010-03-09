@@ -52,6 +52,8 @@ public class ConfirmationPage extends Activity {
 	// this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
 
+	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
+	
 	private boolean vibration;
 	private Uri ringtoneUri;
 	private int proximity;
@@ -329,50 +331,71 @@ public class ConfirmationPage extends Activity {
 	private void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SetAsFavButton);
 		SaveButton.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View v){
-
-				// data settings to be written on the file
-				String settings = "";
+			
+			/**
+			 * Generates settings to be written on the file, and
+			 * returns it.
+			 * @return The String content to be written to file.
+			 */
+			private String buildSettingsString() {
+				
+				StringBuilder settings = new StringBuilder();
+				
 				if (vibration)
-					settings += "vibrate";
+					settings.append("vibrate");
 				else
-					settings += "vibrate_false";
+					settings.append("vibrate_false");
 
-				settings += "\t";
+				settings.append("\t");
 
 				if (ringtoneUri != null)
-					settings += ringtoneTitleToSave;
-				settings += "\t";
-				settings += Integer.toString(proximity);
-				settings += "\t";
-				settings += proximityUnit;
+					settings.append(ringtoneTitleToSave);
+				settings.append("\t");				
+				settings.append(proximity);
+				settings.append("\t");
+				settings.append(proximityUnit);
 
-				FileOutputStream fileOut = null; 
+				return new String(settings);
+			}
+
+			/**
+			 * Writes String settings to the file SETTINGS_FILE_NAME,
+			 * and reports success or failure.
+			 */
+			public void writeSettingsToFile(String settings) {
 				OutputStreamWriter writer = null; 
 
 				try {
-					fileOut = openFileOutput("favorite_settings_data",
-							MODE_PRIVATE);  
-					writer = new OutputStreamWriter(fileOut); 
-					writer.write(settings); 
+					writer = new OutputStreamWriter(
+							openFileOutput(SETTINGS_FILE_NAME,MODE_PRIVATE)); 
+					writer.write(new String(settings)); 
 					writer.flush(); 
 					Toast.makeText(ConfirmationPage.this, "Settings saved",
 							Toast.LENGTH_SHORT).show(); 
 				} 
-				catch (Exception e) {       
-					e.printStackTrace(); 
+				catch (IOException e) {       
+					e.printStackTrace();
+					Log.v(TAG, "Error saving settings to file, contents: " + 
+							settings);
 					Toast.makeText(ConfirmationPage.this, "Settings not saved",
 							Toast.LENGTH_SHORT).show(); 
 				} 
 				finally { 
-					try { 
-						writer.close(); 
-						fileOut.close(); 
+					try {
+						if (writer != null)
+							writer.close(); 
 					} catch (IOException e) { 
-						e.printStackTrace(); 
+						// Do nothing
+						Log.v(TAG, "Failed to close settings writer");
 					} 
 				}
+			}
+			
+			public void onClick(View v) {			
+				String settings = buildSettingsString();
+				writeSettingsToFile(settings);
 			} // ends onClick
+			
 		}); // ends "Save as favorite" button
 	} // ends saveButton method
 
@@ -386,7 +409,7 @@ public class ConfirmationPage extends Activity {
 	 * dataVibrate, dataRingtone, dataProximity, dataProximityUnit appropriately
 	 */
 	private void loadRecentSettings() throws IOException {
-		FileInputStream fIn = openFileInput("favorite_settings_data"); 
+		FileInputStream fIn = openFileInput(SETTINGS_FILE_NAME); 
 		InputStreamReader isr = new InputStreamReader(fIn);
 		BufferedReader bin = new BufferedReader(isr);
 
