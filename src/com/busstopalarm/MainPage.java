@@ -49,19 +49,18 @@ public class MainPage extends Activity {
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			
 			// Checks to see if routeNumber is less than 5 digits long.
-			private boolean validRoute(String routeNumber) {
-				return Integer.parseInt(routeNumber.replaceAll("[0-9]+_", "")) < 10000;
+			private boolean validRoute(int routeNumber) {
+				return routeNumber < 10000;
 			}
 			
 			public void onClick(View v) {
 				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
 				String routeID;
 				try {
-					// This might throw an NumberFormatException if string is empty, or too long, or
-					// somehow in invalid format. (Extends IllegalArgumentException)
-					routeID = "1_" + routeText;
-					// Check to see if the route number is less than 5 digits long.
-					if (!validRoute(routeID))
+					// parseInt() might throw an NumberFormatException if string is empty, or too long, 
+					// or somehow in invalid format. (which will be caught as IllegalArgumentException)
+					// Also, checks to see if the route number is less than 5 digits long.
+					if (!validRoute(Integer.parseInt(routeText)))
 							throw new IllegalArgumentException();
 				} catch (IllegalArgumentException e) {
 					Toast t = Toast.makeText(v.getContext(),
@@ -69,6 +68,7 @@ public class MainPage extends Activity {
 					t.show();
 					return;
 				}
+				routeID = "1_" + routeText;
 				String s = "PlaceHolder for Route Info.";
 				Intent i = new Intent(v.getContext(), MapPage.class);
 				i.putExtra("routeID", routeID);
