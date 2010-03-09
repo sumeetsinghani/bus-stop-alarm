@@ -30,6 +30,10 @@ public class AlarmService extends Service {
 	private static final int MIN_TIME_TO_UPDATE_LOCATION = 5000; // in milliseconds
 	private static final int MIN_DISTANCE_TO_UPDATE_LOCATION = 5; // in meters
 
+	/* Conversion factors from yards to meters, and vice versa. */
+	private static final double METERS_PER_YARD = 0.9144;
+	private static final double YARDS_PER_METER = 1.0936133;
+
 	private LocationManager lm;
 	private Location currentLoc;
 	private NotificationManager mNtf;
@@ -41,7 +45,7 @@ public class AlarmService extends Service {
 	private AlarmManager alarmManager;
 
 	/**
-	 * setup service managers.
+	 * Sets up GPS locations and alarms service managers.
 	 */
 	public void onCreate() {
 		super.onCreate();
@@ -58,65 +62,8 @@ public class AlarmService extends Service {
 		ntf = new Notification(R.drawable.busstopicon, "Alarm Set!", System.currentTimeMillis());
 	}
 
-
-
 	/**
-	 *  For distance between two points, we will use Euclidean distance.
-	 *  The Earth is not an Euclidean plane,
-	 *  but this will give a good approximation. Assuming Euclidean plane, 
-	 *  this algorithm sums a number of straight line distances.  This means the
-	 *  calculated distance will never underestimate the actual distance, which
-	 *  is good.
-	 *  To calculate the remaining distance once alarm has started, we need to 
-	 *  get the current location with the GPS.
-	 *  Then we need to find the closest busstop to the current location 
-	 *  (with caveat), then do sum of straight lines again.
-	 *  The return values will be in some unit that will need to be converted 
-	 *  to either miles or km. 
-	 *  not implemented yet!
-	 *   
-	 * @return double initial distance
-	 */ 
-	public static double calculateInitialDistance() {
-		// get starting s busstop in busroute
-		// will the starting busstop be specified by the user or does the app
-		// have to figure it out?
-		// get ending d busstop in busroute
-		// double dist = 0.0;
-		// for (int i = s; i < d; i++) {
-		//     dist += calculateDist(busroute[i],busroute[i+1];
-		// return dist;
-		return 0.0;
-	}
-
-
-	/**
-	 * not implemented yet!
-	 * 
-	 * @return double remaining distance
-	 */
-	public static double calculateRemainingDistance() {
-		return 0.0;
-	}
-
-
-	/**
-	 *  Updates the average speed based on previous average speed and current
-	 *  speed. If implemented like this, we need a average speed field?
-	 *  We could start with an initial average speed (equivalent to 30 mph?) 
-	 *  and do a something like
-	 *  avg = k*avg + (1-k)current where 0 <= k <= 1.
-	 *  not implemented yet!
-	 *  
-	 */
-	public static void updateAverageSpeed() {
-
-	}
-
-
-
-	/**
-	 * when "Cancel" button is pressed on the confirmation page, this method
+	 * When "Cancel" button is pressed on the confirmation page, this method
 	 * will be called and cancel the current alarm set and the notification.
 	 */
 	public void onDestroy(){
@@ -173,12 +120,20 @@ public class AlarmService extends Service {
 		}
 	}
 
-	public float convertYardsToMeters(float yards){
-		return (float) (yards * 0.9144);
+	/** 
+	 * Convenience method for converting yards to meters.
+	 * @return The given yards in meters. 
+	 */
+	private static float convertYardsToMeters(float yards){
+		return (float) (yards * METERS_PER_YARD);
 	}
 
-	public float convertMetersToYards(float meters){
-		return (float) (meters * 1.0936133);
+	/** 
+	 * Convenience method for converting meters to yards.
+	 * @return The given meters in yards. 
+	 */
+	private static float convertMetersToYards(float meters){
+		return (float) (meters * YARDS_PER_METER);
 	}
 
 	/**
