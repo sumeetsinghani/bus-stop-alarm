@@ -27,15 +27,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helptitle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="About The Bus Stop Alarm\n"
-			android:textStyle="bold"
-			android:gravity="center">
+			android:text="About The Bus Stop Alarm"
+			android:gravity="center" android:textStyle="bold|italic">
 			</TextView>
 			
 			<TextView
 			android:id="@+id/helpVersionTitle "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:textStyle="bold"
 			android:text="Bus Stop Alarm for Android"
 			>
 			</TextView>
@@ -50,6 +50,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpIntro "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:textStyle="bold"
 			android:text="Introduction and Quick Start"
 			>
 			</TextView>
@@ -66,21 +67,57 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpFeature "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="The Features are:"
+			android:text="\nThe Features"
 			android:textStyle="bold">
 			</TextView>
 			<TextView
 			android:id="@+id/helpFeatureText "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="List the main features here\n"
+			android:text="Major Features:
+							\n1) Searchable map to select a bus stop
+							\n2) Customizable favoite locations
+							\n3) Major Locations list
+							\n4) Setting/Confirmation page to customize alarm preferences
+							\n
+							\nMinor Features:
+							\n1) Recent bus stop selection
+							\n2) Estimate distance to arrival(ETA)
+							\n3) Running the program as a background application"
+			>
+			</TextView>
+			<TextView
+			android:id="@+id/helpHow "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="\nHow To"
+			android:textStyle="bold">
+			</TextView>
+			<TextView
+			android:id="@+id/helpHowtext "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="How to search for a bus route:
+							\n1) Input desired bus route into search box and click 'Go'.
+							\n2) Scroll and zoom on the map to the desired bus stop and click it.
+							The bus stop information should appear on the top of the screen.
+							\n3) Once the desired bus stop is selected, press 'set alarm'
+							\n
+							Using the Confirmation Page:
+							\n1) Select the settings for the vibration, ringtone, and proximity on the confirmation page.
+							\n2) Once the setting are chosen, press OK to set the alarm.
+							\n3) A textbox should appear notifying you that the alarm is set.
+							\n
+							Updating/canceling the alarm
+							\n1) The alarm can be viewed from the drop down notifications (accessed by sliding your finger from the top to the bottom of the screen)."
 			>
 			</TextView>
 			<TextView
 			android:id="@+id/helpTroubleshoot "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Troubleshooting and Limitations"
+			android:textStyle="bold"
+			android:text="\nTroubleshooting and Limitations"
 			>
 			</TextView>
 			<TextView
@@ -94,14 +131,18 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpCredit "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Credits"
+			android:textStyle="bold"
+			android:text="\nCredits"
 			>
 			</TextView>			
 			<TextView
 			android:id="@+id/helpCreditText "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="David Truong"
+			android:text="David Truong, David Nufer, 
+						\nDerek Cheng, Huy Dang, 
+						\nMichael Eng, Orkhan Muradov,
+						\nand Pyong Byon"
 			>
 			</TextView>
 			
