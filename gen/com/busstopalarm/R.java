@@ -21,9 +21,9 @@ public final class R {
     }
     public static final class id {
         public static final int CancelButton=0x7f080008;
-        public static final int FavButton=0x7f080020;
-        public static final int Goback=0x7f080028;
-        public static final int MajorButton=0x7f080021;
+        public static final int FavButton=0x7f080021;
+        public static final int Goback=0x7f080029;
+        public static final int MajorButton=0x7f080022;
         public static final int OKButton=0x7f08000a;
         public static final int ProximityBar=0x7f080006;
         public static final int ProximityBarArea=0x7f080005;
@@ -31,10 +31,10 @@ public final class R {
         public static final int ProximityTextArea=0x7f080003;
         public static final int ProximityUnits=0x7f080007;
         public static final int RingtoneSelector=0x7f080002;
-        public static final int RouteSearchBox=0x7f08001d;
-        public static final int RouteSearchBoxArea=0x7f08001c;
-        public static final int RouteSearchButton=0x7f08001e;
-        public static final int SaveSettings=0x7f080029;
+        public static final int RouteSearchBox=0x7f08001e;
+        public static final int RouteSearchBoxArea=0x7f08001d;
+        public static final int RouteSearchButton=0x7f08001f;
+        public static final int SaveSettings=0x7f08002a;
         public static final int SetAsFavButton=0x7f080009;
         public static final int VibrateCheckbox=0x7f080001;
         public static final int btnOk=0x7f08001a;
@@ -51,17 +51,18 @@ public final class R {
         public static final int helptitle=0x7f08000e;
         public static final int linlayoutBase=0x7f08000b;
         public static final int linlayoutButtons=0x7f080019;
-        public static final int listItemName=0x7f08001b;
-        public static final int mainlayout=0x7f080022;
-        public static final int mapview=0x7f080023;
-        public static final int recent_routes=0x7f08001f;
+        public static final int listItemName=0x7f08001c;
+        public static final int listItemRouteID=0x7f08001b;
+        public static final int mainlayout=0x7f080023;
+        public static final int mapview=0x7f080024;
+        public static final int recent_routes=0x7f080020;
         public static final int scrollview=0x7f08000c;
-        public static final int stopinfo=0x7f080026;
-        public static final int stopinfoarea=0x7f080024;
-        public static final int stopinfoarea_button=0x7f080025;
+        public static final int stopinfo=0x7f080027;
+        public static final int stopinfoarea=0x7f080025;
+        public static final int stopinfoarea_button=0x7f080026;
         public static final int stopname=0x7f080000;
         public static final int widget30=0x7f08000d;
-        public static final int zoomview=0x7f080027;
+        public static final int zoomview=0x7f080028;
     }
     public static final class layout {
         public static final int confirmation=0x7f030000;

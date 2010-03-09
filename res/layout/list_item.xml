@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:id="@+id/listItemName" 
-	android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:textSize="16sp"
-	android:orientation="horizontal">
-</TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+	
+	<TextView android:text="Route "
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="0dp"
+	    android:textSize="16sp" />
+	
+	<TextView android:id="@+id/listItemRouteID" 
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="0dp"
+	    android:textSize="16sp" />
+	
+	<TextView android:text=": "
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="0dp"
+	    android:textSize="16sp"/>
+	
+	<TextView android:id="@+id/listItemName" 
+		android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="10dp"
+	    android:textSize="16sp"
+		android:text="testtesttesttest" />
+
+</LinearLayout>
