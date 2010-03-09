@@ -41,7 +41,7 @@ public class LocationListPage extends ListActivity {
 	 */
 	private int listType;
 	
-	private ArrayList<HashMap<String, BusStop>> locationList = new ArrayList<HashMap<String,BusStop>>();
+	private ArrayList<HashMap<String, String>> locationList = new ArrayList<HashMap<String, String>>();
 	private SimpleAdapter listAdapter;
 	
     /** Called when the activity is first created. */
@@ -59,7 +59,7 @@ public class LocationListPage extends ListActivity {
 		  // this is an error.  need to do something if we get here
 	  }
 	  
-	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"busstop"}, new int[] {R.id.listItemName});
+	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"stopName"}, new int[] {R.id.listItemName});
 	  setListAdapter(listAdapter);
 	  
 	  ListView lv = getListView();
@@ -69,9 +69,21 @@ public class LocationListPage extends ListActivity {
 	    public void onItemClick(AdapterView<?> parent, View view,
 	        int position, long id) {
 	    	Intent i = new Intent(view.getContext(), ConfirmationPage.class);
-	    	i.putExtra("busstop", locationList.get(position).get("busstop"));
-	    	startActivity(i);
-	    	finish();
+	    	HashMap<String, String> item = locationList.get(position);
+	    	DataFetcher df = new DataFetcher();
+			try {
+				BusStop b = df.getStopById(Integer.parseInt(item.get("stopID")));
+		    	i.putExtra("busstop", b);
+		    	i.putExtra("busroute", Integer.parseInt(item.get("routeID")));
+		    	startActivity(i);
+		    	finish();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
 	  });
 	  
@@ -94,24 +106,23 @@ public class LocationListPage extends ListActivity {
 		} else { // listType == MAJOR
 			c = db.getMajorDest(100);
 		}
-		DataFetcher df = new DataFetcher();
 		int stopIDIndex = c.getColumnIndex("stop_id");
-		//int routeIDIndex = c.getColumnIndex("route_id");
+		int stopDescIndex = c.getColumnIndex("stop_desc");
+		int routeIDIndex = c.getColumnIndex("route_id");
 		if (c != null) {
 			for (int i = 0; i < c.getCount(); i++) {
-				HashMap<String, BusStop> item = new HashMap<String, BusStop>();
-				BusStop b;
-				try {
-					String[] stop = c.getString(stopIDIndex).split("_");
-					b = df.getStopById(Integer.parseInt(stop[stop.length - 1]));
-					item.put("busstop", b);
-					c.moveToNext();
-					locationList.add(item);
-				} catch (IOException e) {
-					Toast.makeText(this, "Error Loading from Database", Toast.LENGTH_LONG);
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				HashMap<String, String> item = new HashMap<String, String>();
+				
+				String[] stop = c.getString(stopIDIndex).split("_");
+				String stopID = stop[stop.length - 1];
+				String stopName = c.getString(stopDescIndex);
+				String route = c.getString(routeIDIndex);
+
+				item.put("stopID", stopID);
+				item.put("stopName", stopName);
+				item.put("routeID", route);
+				c.moveToNext();
+				locationList.add(item);
 			}
 			listAdapter.notifyDataSetChanged();
 		}
@@ -139,9 +150,21 @@ public class LocationListPage extends ListActivity {
 		// sets an alarm for the selected stop
 		if (item.getItemId() == 10) {
 	    	Intent i = new Intent(getApplicationContext(), ConfirmationPage.class);
-	    	i.putExtra("busstop", locationList.get(id).get("busstop"));
-	    	startActivity(i);
-	    	finish();
+	    	HashMap<String, String> busItem = locationList.get(id);
+	    	DataFetcher df = new DataFetcher();
+			try {
+				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID")));
+		    	i.putExtra("busstop", b);
+		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeNum")));
+		    	startActivity(i);
+		    	finish();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    
 	    // removes the selected stop from the list
 		} else if (item.getItemId() == 11) {
