@@ -1,5 +1,5 @@
 
-
+<!-- The android xml does not allow for line text wrapping, thus there are very long lines of code -->
 
 <LinearLayout
 android:id="@+id/linlayoutBase"
@@ -59,7 +59,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpIntroText "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Information on the application and what it is used for"
+			android:text="The Bus Stop Alarm is an application developed to allow a user to set an alarm which wakes the user up for their particular bus stop. Utilizing the mobile GPS, the user can set a proximity from the destination to wake them up using customizable ringtones and settings."
 			>
 			</TextView>
 			
@@ -99,16 +99,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_height="wrap_content"
 			android:text="How to search for a bus route:
 							\n1) Input desired bus route into search box and click 'Go'.
-							\n2) Scroll and zoom on the map to the desired bus stop and click it.
-							The bus stop information should appear on the top of the screen.
+							\n2) Scroll and zoom on the map to the desired bus stop and click it. The bus stop information should appear on the top of the screen.
 							\n3) Once the desired bus stop is selected, press 'set alarm'
 							\n
-							Using the Confirmation Page:
+							\nUsing the Confirmation Page:
 							\n1) Select the settings for the vibration, ringtone, and proximity on the confirmation page.
 							\n2) Once the setting are chosen, press OK to set the alarm.
 							\n3) A textbox should appear notifying you that the alarm is set.
 							\n
-							Updating/canceling the alarm
+							\nUpdating/canceling the alarm
 							\n1) The alarm can be viewed from the drop down notifications (accessed by sliding your finger from the top to the bottom of the screen)."
 			>
 			</TextView>
@@ -124,7 +123,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpTroubleshootText "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Maps do not load properly: check your GPS connection"
+			android:text="1)No routes are available:
+							\n\tCheck the wireless internet connection
+							\n2)Maps do not load properly in the correct location: 
+							\n\tCheck that your GPS is turned on"
 			>
 			</TextView>
 			<TextView
