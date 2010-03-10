@@ -27,16 +27,24 @@ import android.widget.Toast;
  * @author David Nufer, Orkhan Muradov, Pyong Byon
  */
 public class MainPage extends Activity {
+	//Add this DB for validating bus route
+	public BusNumDbAdapter mBusNumDbHelper;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-	
+		
+		mBusNumDbHelper = new BusNumDbAdapter(this);
+		mBusNumDbHelper.open();
+		
 		setupRouteSearchButton();
 		setupFavoriteButton();
 		setupMajorLocsButton();
 		displayRecentRoutes();
+		
+		mBusNumDbHelper.close();
 		
 	}
 	
