@@ -28,7 +28,7 @@ public class Polyline implements Iterable<GeoPoint> {
 	 * @param encodedLevels
 	 */
 	public Polyline(String encodedPolyline, int length) {
-		//this.coordinates = new ArrayList<GeoPoint>();
+		this.coordinates = new ArrayList<GeoPoint>();
 		
 		StringBuilder sb = new StringBuilder();
 		// The encodedLevels is a string of "B" of size length.
