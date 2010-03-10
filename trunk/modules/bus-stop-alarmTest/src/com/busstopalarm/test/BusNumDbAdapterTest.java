@@ -1,6 +1,6 @@
 /**
  * Author: Huy Dang
- * Date: 02/23/2010
+ * Date: 03/09/2010
  * 
  * The White box testing for BusDbNumAdapter which will be used to validate
  * bus number input
