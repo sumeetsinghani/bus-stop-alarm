@@ -49,7 +49,6 @@ public class ConfirmationPage extends Activity {
 
 	// this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-
 	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
 
 	private boolean vibration;
@@ -125,7 +124,16 @@ public class ConfirmationPage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		// performance testing, starting from the map page 
+		// up to this point (author: Pyong Byon)
+		//Debug.stopMethodTracing();
+		
+		// performance testing, starting from the confirmation page
+		//Debug.startMethodTracing("performance_testing_on_confirmation");
+		
+		
+		
 		// load saved settings
 		loadRecentSettings();
 
@@ -174,11 +182,16 @@ public class ConfirmationPage extends Activity {
 				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
 				startService(intentAlarmService);
 
-				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
-						Toast.LENGTH_LONG).show();
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 				intentToMainPage.putExtra("busStopSaved", b);
+				
+				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
+						Toast.LENGTH_LONG).show();
+				
+				// performance testing, starting from the onCreate 
+				// up to this point (author: Pyong Byon)
+				//Debug.stopMethodTracing();
 				startActivity(intentToMainPage);
 				finish();
 			}
@@ -215,88 +228,55 @@ public class ConfirmationPage extends Activity {
 
 
 	/** 
-	 *  This is invoked when the user pushes "Save as favorite" button
+	 *  This is invoked when the user presses "Save Destination" button
 	 *  It gets all the current settings (vibrate, ringtone, proximity, and 
 	 *  proximity unit) from this page
 	 *  and writes them on the file "favorite_settings_data", which is located 
 	 *  on data/data/com.busstopalarm/files/
 	 *  
-	 *  If the file does not exist (if "Save as favorite" button has never been 
+	 *  If the file does not exist (if "Save Destination" button has never been 
 	 *  pushed before),
 	 *  It will create the file in the designated location
 	 *  If it exists, it will overwrite the old settings when the button is 
 	 *  pushed It stays in the current page
 	 *   TODO: this should also save the stop in the database
 	 */
-	private void saveButton() {
-		final Button SaveButton = (Button) findViewById(R.id.SetAsFavButton);
+	public void saveButton() {
+		final Button SaveButton = (Button) findViewById(R.id.SaveDestination);
 		SaveButton.setOnClickListener(new View.OnClickListener(){
-
-			/**
-			 * Generates settings to be written on the file, and
-			 * returns it.
-			 * @return The String content to be written to file.
-			 */
-			private String buildSettingsString() {
-
-				StringBuilder settings = new StringBuilder();
-
-				if (vibration)
-					settings.append("vibrate");
-				else
-					settings.append("vibrate_false");
-
-				settings.append("\t");
-
-				if (ringtoneUri != null)
-					settings.append(ringtoneTitleToSave);
-				settings.append("\t");				
-				settings.append(proximity);
-				settings.append("\t");
-				settings.append(proximityUnit);
-
-				return new String(settings);
-			}
-
-			/**
-			 * Writes String settings to the file SETTINGS_FILE_NAME,
-			 * and reports success or failure.
-			 */
-			public void writeSettingsToFile(String settings) {
-				OutputStreamWriter writer = null; 
-
-				try {
-					writer = new OutputStreamWriter(
-							openFileOutput(SETTINGS_FILE_NAME,MODE_PRIVATE)); 
-					writer.write(new String(settings)); 
-					writer.flush(); 
-					Toast.makeText(ConfirmationPage.this, "Settings saved",
-							Toast.LENGTH_SHORT).show(); 
-				} 
-				catch (IOException e) {       
-					e.printStackTrace();
-					Log.v(TAG, "Error saving settings to file, contents: " + 
-							settings);
-					Toast.makeText(ConfirmationPage.this, "Settings not saved",
-							Toast.LENGTH_SHORT).show(); 
-				} 
-				finally { 
-					try {
-						if (writer != null)
-							writer.close(); 
-					} catch (IOException e) { 
-						// Do nothing
-						Log.v(TAG, "Failed to close settings writer");
-					} 
-				}
-			}
-
-			public void onClick(View v) {			
-				String settings = buildSettingsString();
-				writeSettingsToFile(settings);
+			public void onClick(View v) {	
+				
+				BusStop busStop = getIntent().getParcelableExtra("busstop");
+				String busStopID = busStop.getStopId();
+				Bundle bundle = getIntent().getExtras();
+				Log.v(TAG, "busstop is :  " + busStop);
+				Log.v(TAG, "bus id:  " +  busStopID);
+				Log.v(TAG, "Bundle :  " + bundle);
+				
+				// get busRouteID
+				int busRouteID = getIntent().getIntExtra("busroute", 0);
+				Log.v(TAG, "busRoute id:  " + busRouteID);
+				String busRouteIDString = Integer.toString(busRouteID);
+				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
+				
+				 //Try with DB
+				//mBusDbHelper = new BusDbAdapter(v.getContext());
+				//mBusDbHelper.open();
+				
+				// not working !! it crashes
+			
+				BusDbAdapter busDbAdapter = new BusDbAdapter (v.getContext());
+				busDbAdapter.open();	
+			    busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
+			
+				//mBusDbHelper.close();
+				busDbAdapter.close();
+				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
+						Toast.LENGTH_LONG).show();
+		
 			} // ends onClick
 
-		}); // ends "Save as favorite" button
+		}); // ends "Save Destination" button
 	} // ends saveButton method
 
 
@@ -317,7 +297,7 @@ public class ConfirmationPage extends Activity {
 	 * After reading from the file, it sets the data values
 	 * dataVibrate, dataRingtone, dataProximity, dataProximityUnit appropriately
 	 */
-	private void loadRecentSettings() {
+	public void loadRecentSettings() {
 		BufferedReader bin = null;
 		String line = null;
 		try {
@@ -413,7 +393,6 @@ public class ConfirmationPage extends Activity {
 
 					public void onProgressChanged(SeekBar seekBarOnProgress, 
 							int progress, boolean fromTouch) {
-						Log.v(TAG, "progress:  " + progress);
 						proximity = progress;
 						progressText.setText(Integer.toString(proximity));
 
@@ -513,9 +492,7 @@ public class ConfirmationPage extends Activity {
 		ringtoneAdapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		ringtoneSpinner.setAdapter(ringtoneAdapter);
-
-		if (defaultRingtoneIndex != 0)
-			ringtoneSpinner.setSelection(defaultRingtoneIndex);
+		ringtoneSpinner.setSelection(defaultRingtoneIndex);
 
 		ringtoneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() { 
 
