@@ -28,17 +28,17 @@ public class Polyline implements Iterable<GeoPoint> {
 	 * @param encodedLevels
 	 */
 	public Polyline(String encodedPolyline, int length) {
-		coordinates = new ArrayList<GeoPoint>();
+		//this.coordinates = new ArrayList<GeoPoint>();
+		
 		StringBuilder sb = new StringBuilder();
-
 		// The encodedLevels is a string of "B" of size length.
 		for (int i = 0; i < length; i++) {
-			sb.append("B");
+			sb.append('B');
 		}
 
-		this.encodedPolyline = encodedPolyline;
 		this.encodedLevels = sb.toString();
-		this.decodeLine();
+		this.encodedPolyline = encodedPolyline;
+		this.decodeLine();		
 	}
 
 	/**
@@ -50,6 +50,7 @@ public class Polyline implements Iterable<GeoPoint> {
 	 * @param encodedLevels
 	 */
 	public Polyline(String encodedPolyline, String encodedLevels) {
+		this.coordinates = new ArrayList<GeoPoint>();
 		this.encodedPolyline = encodedPolyline;
 		this.encodedLevels = encodedLevels;
 		this.decodeLine();
@@ -127,15 +128,16 @@ public class Polyline implements Iterable<GeoPoint> {
 	}
 
 	/**
-	 * This function is from Google's polyline utility written in Javascript
-	 * that I rewrote in Java. Decodes the class' encodedPolyline and stores the
+	 * This method is rewritten from Google's polyline utility which is written
+	 * in Javascript. Decodes the class' encodedPolyline and stores the
 	 * GeoPoints in the list of coordinates.
+	 * See: http://code.google.com/apis/maps/documentation/include/polyline.js
 	 */
 	private void decodeLine() {
 		// Clear all stored coordinates.
-		this.coordinates.clear();
+		coordinates.clear();
 
-		int len = this.encodedPolyline.length();
+		int len = encodedPolyline.length();
 		int index = 0;
 		int lat = 0;
 		int lng = 0;
@@ -146,7 +148,7 @@ public class Polyline implements Iterable<GeoPoint> {
 			int shift = 0;
 			int result = 0;
 			do {
-				b = this.encodedPolyline.charAt(index++) - 63;
+				b = encodedPolyline.charAt(index++) - 63;
 				result |= (b & 0x1f) << shift;
 				shift += 5;
 			} while (b >= 0x20);
@@ -156,7 +158,7 @@ public class Polyline implements Iterable<GeoPoint> {
 			shift = 0;
 			result = 0;
 			do {
-				b = this.encodedPolyline.charAt(index++) - 63;
+				b = encodedPolyline.charAt(index++) - 63;
 				result |= (b & 0x1f) << shift;
 				shift += 5;
 			} while (b >= 0x20);
