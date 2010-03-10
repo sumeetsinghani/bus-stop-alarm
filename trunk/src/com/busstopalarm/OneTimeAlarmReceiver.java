@@ -53,8 +53,9 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
         ifSuccessful = false;
-		NotificationManager manager = (NotificationManager)
-		context.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager manager = 
+			(NotificationManager)context.getSystemService(
+					Context.NOTIFICATION_SERVICE);
 
 		// this notification appears on top of the screen for a short time
 		// when you click on the OK Button.
