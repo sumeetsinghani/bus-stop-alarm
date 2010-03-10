@@ -4,19 +4,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	
-	<TextView android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:text="@string/intro"
-		android:textSize="12pt" />
-	<TextView android:id="@+id/stopname" 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="12pt" />
+	<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/SelectedBusArea"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Route:  " android:id="@+id/Route" android:textSize="9pt"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="9pt" android:id="@+id/RouteNumberSelected"></TextView>
+</LinearLayout>
+	
 
-	<CheckBox android:id="@+id/VibrateCheckbox" 
+	<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/BusStopArea"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stop: " android:id="@+id/StopView" android:textSize="9pt"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="7pt" android:id="@+id/BusStopSelected"></TextView>
+</LinearLayout><CheckBox android:id="@+id/VibrateCheckbox" 
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
-		android:text="Vibrate" />
+		android:text="Vibrate" android:layout_marginTop="20px"/>
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
 		android:text="@string/ringtone"
@@ -39,14 +37,14 @@
 			android:layout_height="wrap_content" 
 			android:text="0"
 			android:textSize="8pt" 
-			android:padding="3px"/>
+			android:padding="3px" android:id="@+id/MinProximityValue"/>
 		<SeekBar android:id="@+id/ProximityBar" 
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content" 
 			android:minWidth="240px"/>
 		
 	
-<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="8pt" android:text="1000" android:padding="3px"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="8pt" android:text="1000" android:padding="3px" android:id="@+id/MaxProximityValue"></TextView>
 </LinearLayout>
 	
 	<Spinner android:id="@+id/ProximityUnits" 
@@ -57,7 +55,7 @@
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" 
-		android:gravity="bottom">
+		android:gravity="bottom" android:id="@+id/ButtonsArea">
 		
 		<Button android:text="    Cancel    " 
 			android:id="@+id/CancelButton"
@@ -71,6 +69,10 @@
 			android:layout_height="wrap_content"/>
 			
 	</LinearLayout>
+
+
+
+
 
 
 </LinearLayout>

@@ -140,11 +140,9 @@ public class ConfirmationPage extends Activity {
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
 		int routeID = getIntent().getIntExtra("busroute", 0);
-
-		// this is temporary for debugging
-		Toast.makeText(this, "Route: " + routeID, Toast.LENGTH_LONG).show();
-
-		TextView stopView = (TextView) findViewById(R.id.stopname);
+		TextView routeView = (TextView) findViewById(R.id.RouteNumberSelected);
+		routeView.setText(Integer.toString(routeID));
+		TextView stopView = (TextView) findViewById(R.id.BusStopSelected);
 		stopView.setText(stop.getName());
 
 		okButton();
@@ -285,7 +283,7 @@ public class ConfirmationPage extends Activity {
 		vibration = false;
 		ringtoneUri = null;
 		proximity = 0;
-		proximityUnit = "Yards";
+		proximityUnit = null;
 
 	}
 
@@ -479,11 +477,8 @@ public class ConfirmationPage extends Activity {
 					ringtoneFound = true;
 				}
 			}
-			
-			Log.d("CONFPAGE", ringtoneManager.getRingtoneUri(
-							ringtoneCursor.getPosition()).toString());
 			ringtoneCursor.moveToNext();
-		}
+		} // for loop ends
 
 		Spinner ringtoneSpinner = (Spinner) findViewById(R.id.RingtoneSelector);
 		ArrayAdapter<String> ringtoneAdapter = new ArrayAdapter<String>(this, 
@@ -503,14 +498,8 @@ public class ConfirmationPage extends Activity {
 				ringtoneUri = ringtoneManager.getRingtoneUri(indexRingtone);
 				Ringtone rt = ringtoneManager.getRingtone(indexRingtone);
 				ringtoneTitleToSave = rt.getTitle(getBaseContext());
-
-				Log.v(TAG, "under onItemSelected(index ringtone): " +
-						indexRingtone);
-				Log.v(TAG, "under onItemSelected(ringtoneTitleToSave): " + 
-						ringtoneTitleToSave);
-				Log.v(TAG, "under onItemSelected(ringtoneUri): " + ringtoneUri);
-
 			}
+			
 			public void onNothingSelected(AdapterView<?> arg0) {
 			
 			}
@@ -528,7 +517,7 @@ public class ConfirmationPage extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0,1,1, "Go back");
+		menu.add(0,1,1, "Go Back");
 		return true;
 	}
 
