@@ -77,6 +77,7 @@ public class MainPage extends Activity {
 					return;
 				}
 				routeID = "1_" + routeText;
+			
 				String s = "PlaceHolder for Route Info.";
 				Intent i = new Intent(v.getContext(), MapPage.class);
 				i.putExtra("routeID", routeID);
@@ -209,7 +210,7 @@ public class MainPage extends Activity {
 			startActivity(helpPage);
 			break;
 		case 3:
-			final Intent Settings = new Intent(this, Settings.class);
+			final Intent Settings = new Intent(this, SettingsPage.class);
 			startActivity(Settings);
 			break;
 		case 4:

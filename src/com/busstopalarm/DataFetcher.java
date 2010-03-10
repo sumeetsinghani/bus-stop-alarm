@@ -42,7 +42,7 @@ public class DataFetcher {
 	 * @param stopId
 	 * @return the BusStop corresponding to given stop id. Otherwise null if no corresponding stop.
 	 */
-	public BusStop getStopById(String stopId) throws IOException{
+	public BusStop getStopById(String stopId) throws IOException {
 		if(stopId == null) {
 			throw new IllegalArgumentException();
 		}

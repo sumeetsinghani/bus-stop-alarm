@@ -172,7 +172,8 @@ public class ConfirmationPage extends Activity {
 			public void onClick(View v) {
 
 				BusStop b = getIntent().getParcelableExtra("busstop");
-				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
+				Intent intentAlarmService = 
+					new Intent(v.getContext(), AlarmService.class);
 				intentAlarmService.putExtra("proximity", proximity);
 				intentAlarmService.putExtra("proximityUnit", proximityUnit);
 				intentAlarmService.putExtra("busstop", b);
@@ -216,7 +217,8 @@ public class ConfirmationPage extends Activity {
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 
-				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
+				Intent intentAlarmService = 
+					new Intent(v.getContext(), AlarmService.class);
 				stopService(intentAlarmService);
 				startActivity(intentToMainPage);
 				finish();
@@ -241,9 +243,8 @@ public class ConfirmationPage extends Activity {
 	 */
 	public void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SaveDestination);
-		SaveButton.setOnClickListener(new View.OnClickListener(){
+		SaveButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	
-				
 				BusStop busStop = getIntent().getParcelableExtra("busstop");
 				String busStopID = busStop.getStopId();
 				Bundle bundle = getIntent().getExtras();
@@ -427,8 +428,8 @@ public class ConfirmationPage extends Activity {
 
 		proximityUnitsSpinner.setOnItemSelectedListener(
 				new OnItemSelectedListener() { 
-					public void onItemSelected(AdapterView<?> adapterView, View arg1, 
-							int arg2, long arg3) {
+					public void onItemSelected(AdapterView<?> adapterView, 
+							View arg1, int arg2, long arg3) {
 						CharSequence selectedUnit =
 							(CharSequence) adapterView.getSelectedItem();
 						proximityUnit = selectedUnit.toString();	
@@ -463,6 +464,7 @@ public class ConfirmationPage extends Activity {
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
 		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		ringtoneCursor.moveToFirst();
+	
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
 			String titleOfRingtone = ringtoneCursor.getString(
 					RingtoneManager.TITLE_COLUMN_INDEX);

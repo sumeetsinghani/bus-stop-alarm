@@ -53,9 +53,6 @@ public class SettingsPage extends Activity {
 	// this TAG is for debugging
 	private static final String TAG = "inSettings";
 
-	private static final int NOTIFICATION_ID1 = 1001;
-	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
-
 	// The filename in which these settings will be stored.
 	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
 	
