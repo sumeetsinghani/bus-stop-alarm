@@ -11,14 +11,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.busstopalarm.LocationListPage;
 import com.busstopalarm.R;
 
-public class BusDbAdapterTest extends ActivityInstrumentationTestCase2<LocationListPage>{
+public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
+										<LocationListPage>{
 
 	private LocationListPage activity;
 	
