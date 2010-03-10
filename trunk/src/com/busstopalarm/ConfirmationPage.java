@@ -57,11 +57,6 @@ public class ConfirmationPage extends Activity {
 	private int proximity;
 	private String proximityUnit;
 
-	/* these are not used yet
-	private BusStop destination;
-	private BusRoute currentBusRoute;
-	 */
-
 	// these below are the data saved in the "favorite_settings_data" file in
 	// sdcard to be retrieved from the file to load the recent settings
 	private String dataRingtone;
@@ -69,8 +64,6 @@ public class ConfirmationPage extends Activity {
 
 	private SeekBar proximitySeekBar;
 	private TextView progressText; 
-
-	//private NotificationManager notificationManager;
 
 	/**
 	 * ConfirmationPage constructor
@@ -82,7 +75,6 @@ public class ConfirmationPage extends Activity {
 		vibration = false;
 		ringtoneUri = null;
 		proximity = 0;
-		// Default unit is yards
 		proximityUnit = null;
 
 		ringtoneTitleToSave = null; 
@@ -172,10 +164,6 @@ public class ConfirmationPage extends Activity {
 		final Button OKButton = (Button)findViewById(R.id.OKButton);
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-
-				//Alarm alarmObject = new Alarm(time, vibration, ringtoneUri,
-				//proximity, proximityUnit, ConfirmationPage.this);
-				//alarmObject.setAlarm();
 
 				BusStop b = getIntent().getParcelableExtra("busstop");
 				Intent intentAlarmService = new Intent(v.getContext(), AlarmService.class);
@@ -416,7 +404,7 @@ public class ConfirmationPage extends Activity {
 		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
 		progressText = (TextView) findViewById(R.id.ProximityNumber);
 		progressText.setText(Integer.toString(proximity));
-		
+
 		// range from 0 to 1000 with step size 1.
 		proximitySeekBar.setMax(1000);
 		proximitySeekBar.setProgress(proximity);
@@ -425,19 +413,16 @@ public class ConfirmationPage extends Activity {
 
 					public void onProgressChanged(SeekBar seekBarOnProgress, 
 							int progress, boolean fromTouch) {
-						// TODO Auto-generated method stub
 						Log.v(TAG, "progress:  " + progress);
 						proximity = progress;
 						progressText.setText(Integer.toString(proximity));
 
-						//	Log.v(TAG, "fromTouch:  " + fromTouch);
 					}
 
 					public void onStartTrackingTouch(SeekBar seekBarOnStart) {
-						// TODO Auto-generated method stub
 					}
+					
 					public void onStopTrackingTouch(SeekBar seekBarOnStop) {
-						// TODO Auto-generated method stub
 					}
 				});
 
@@ -450,11 +435,12 @@ public class ConfirmationPage extends Activity {
 	 * Invoked when the user selects the proximity unit on the spinner.
 	 */
 	public void getProximityUnits() {
-		Spinner proximityUnitsSpinner = (Spinner) 
-		findViewById(R.id.ProximityUnits);
+		Spinner proximityUnitsSpinner = 
+			(Spinner) findViewById(R.id.ProximityUnits);
 		ArrayAdapter<CharSequence> proxSpinnerValues = 
 			ArrayAdapter.createFromResource(this, R.array.ProximityUnitList,
 					android.R.layout.simple_spinner_item);
+		
 		proxSpinnerValues.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
@@ -474,8 +460,6 @@ public class ConfirmationPage extends Activity {
 					}
 
 					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 	}  // ends getProximityUnits method
@@ -497,22 +481,30 @@ public class ConfirmationPage extends Activity {
 
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
 		int defaultRingtoneIndex = 0;
+		// Did we find the ringtone specified in the settings file?
+		boolean ringtoneFound = false;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
-		//	Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
+		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		ringtoneCursor.moveToFirst();
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
 			String titleOfRingtone = ringtoneCursor.getString(
 					RingtoneManager.TITLE_COLUMN_INDEX);
 			Log.v(TAG, "ringtone list:  " + titleOfRingtone);
 			ringtoneList[i] = titleOfRingtone;
-			if (dataRingtone != null && dataRingtone.equals(titleOfRingtone))
-				defaultRingtoneIndex = i;
-			Log.d("CONFPAGE", ringtoneManager.getRingtoneUri(ringtoneCursor.getPosition()).toString());
+			
+			// This is just a small optimization so we don't have to compare
+			// strings every time.
+			if (!ringtoneFound) {
+				if (dataRingtone != null && dataRingtone.equals(titleOfRingtone)) {
+					defaultRingtoneIndex = i;
+					ringtoneFound = true;
+				}
+			}
+			
+			Log.d("CONFPAGE", ringtoneManager.getRingtoneUri(
+							ringtoneCursor.getPosition()).toString());
 			ringtoneCursor.moveToNext();
 		}
-
-		//String ringtoneList = ringtone.getTitle(this);	
-		// = ringtoneCursor.getColumnNames();
 
 		Spinner ringtoneSpinner = (Spinner) findViewById(R.id.RingtoneSelector);
 		ArrayAdapter<String> ringtoneAdapter = new ArrayAdapter<String>(this, 
@@ -543,7 +535,7 @@ public class ConfirmationPage extends Activity {
 
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+			
 			}
 
 		});
