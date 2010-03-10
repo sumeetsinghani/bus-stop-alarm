@@ -32,6 +32,8 @@ public class LocationListPage extends ListActivity {
 	public static final int FAVORITES = 1;
 	public static final int MAJOR = 2;
 	
+	private static final int NUM_ENTRIES_TO_FETCH = 2;
+	
 	public BusDbAdapter mBusDbHelper;
 	public Cursor mCursor;
 	
@@ -102,10 +104,10 @@ public class LocationListPage extends ListActivity {
 	private void fillList(BusDbAdapter db) {
 		Cursor c;
 		if (listType == FAVORITES) {
-			c = db.getFavoriteDest(100); // TODO: 100 is arbitrary choice, maybe change later
+			c = db.getFavoriteDest(NUM_ENTRIES_TO_FETCH); 
 		} else { // listType == MAJOR
-			c = db.getMajorDest(100);
-		}
+			c = db.getMajorDest(NUM_ENTRIES_TO_FETCH);
+		}	
 		int stopIDIndex = c.getColumnIndex("stop_id");
 		int stopDescIndex = c.getColumnIndex("stop_desc");
 		int routeIDIndex = c.getColumnIndex("route_id");

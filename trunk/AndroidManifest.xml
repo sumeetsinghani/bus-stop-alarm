@@ -24,7 +24,7 @@
 	<activity android:name=".MapPage"></activity>
 	<activity android:name=".HelpPage" android:screenOrientation="portrait" android:theme = "@android:style/Theme.Dialog"></activity>
 	<activity android:name=".LocationListPage" android:screenOrientation="portrait"></activity>
-	<activity android:name=".Settings" android:screenOrientation="portrait"></activity>
+	<activity android:name=".SettingsPage" android:screenOrientation="portrait"></activity>
 	
 	<receiver android:name=".OneTimeAlarmReceiver"
 	          android:process=":remote" />

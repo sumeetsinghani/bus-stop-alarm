@@ -179,7 +179,7 @@ public class MapPage extends MapActivity {
 			finish();
 			break;
 		case 2:
-			final Intent j = new Intent(this, Settings.class);
+			final Intent j = new Intent(this, SettingsPage.class);
 			startActivity(j);
 			break;
 		}
