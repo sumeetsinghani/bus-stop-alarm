@@ -31,7 +31,7 @@ public class PolylineOverlay extends Overlay {
 	/**
 	 * Constructor for PolylineOverlay sets the given polyline
 	 * to be the one that is drawn in the overlay.
-	 * @param polyline
+	 * @param polyline The Polyline object to be overlayed.
 	 */
 	public PolylineOverlay(Polyline polyline) {
 		super();		
