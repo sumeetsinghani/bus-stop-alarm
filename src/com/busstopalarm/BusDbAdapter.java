@@ -66,6 +66,11 @@ public class BusDbAdapter {
     /**
      * Database Query Statements
      */
+	private static final String DATABASE_CREATE_BUSNUM=
+        "CREATE TABLE "
+        + " busnum  (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        + " route_id TEXT NOT NULL) ";
+	
     private static final String DATABASE_CREATE_DEST=
             "CREATE TABLE "
             + " destination (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -144,6 +149,7 @@ public class BusDbAdapter {
         @Override
         public void onCreate(SQLiteDatabase db) {
         	db.execSQL(DATABASE_CREATE_DEST);
+        	db.execSQL(DATABASE_CREATE_BUSNUM);
         }
 
         @Override
@@ -152,6 +158,7 @@ public class BusDbAdapter {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS destination");
+            db.execSQL("DROP TABLE IF EXISTS busnum");
             onCreate(db);
         }
     }
