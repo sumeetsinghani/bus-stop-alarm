@@ -26,8 +26,10 @@ public class AlarmService extends Service {
 	private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
 	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
-	private static final int MIN_TIME_TO_UPDATE_LOCATION = 5000; // in milliseconds
-	private static final int MIN_DISTANCE_TO_UPDATE_LOCATION = 5; // in meters
+	// This is given in milliseconds
+	private static final int MIN_TIME_TO_UPDATE_LOCATION = 5000; 
+	// This is given in meters
+	private static final int MIN_DISTANCE_TO_UPDATE_LOCATION = 5; 
 
 	/* Conversion factors from yards to meters, and vice versa. */
 	private static final double METERS_PER_YARD = 0.9144;
@@ -50,15 +52,17 @@ public class AlarmService extends Service {
 		super.onCreate();
 
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
 		/*
 		 * TODO: by setting minTime and minDistance both to 0, the battery will
 		 * drain out really fast.!!!! Set the approriate value here.
 		 */
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_TO_UPDATE_LOCATION, 
-				MIN_DISTANCE_TO_UPDATE_LOCATION, new AlarmLocationListener());
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+				MIN_TIME_TO_UPDATE_LOCATION, MIN_DISTANCE_TO_UPDATE_LOCATION, 
+				new AlarmLocationListener());
+
 		mNtf = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		ntf = new Notification(R.drawable.busstopicon, "Alarm Set!", System.currentTimeMillis());
+		ntf = new Notification(R.drawable.busstopicon, "Alarm Set!", 
+				System.currentTimeMillis());
 	}
 
 	/**
@@ -68,11 +72,15 @@ public class AlarmService extends Service {
 	public void onDestroy(){
 		super.onDestroy();
 		mNtf.cancel(NOTIFICATION_ID1);
-		Intent alarmIntent = new Intent(getApplicationContext(), OneTimeAlarmReceiver.class);
-		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(getApplicationContext(), 
-				PENDING_INTENT_REQUEST_CODE1, alarmIntent,
-				PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Intent alarmIntent = new Intent(getApplicationContext(), 
+				OneTimeAlarmReceiver.class);
+
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(
+				getApplicationContext(), PENDING_INTENT_REQUEST_CODE1, 
+				alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		pendingIntentAlarm.cancel();
+
 		Log.d("ALARMSERVICE", "current alarm is destroyed");
 	}
 
@@ -91,23 +99,26 @@ public class AlarmService extends Service {
 				getApplicationContext(), PENDING_INTENT_REQUEST_CODE2,
 				new Intent(getApplicationContext(), AlarmService.class), 
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(),
+		ntf.setLatestEventInfo(getApplicationContext(), 
+				"Bus Stop: " + busStop.getName(),
 				"acquiring location...", pi);
 
 		mNtf.notify(NOTIFICATION_ID1, ntf);
 
-		Log.d("ALARMSERVICE", "prox: " + proximity + ", units: " + proximityUnit + ", stop: " + busStop +
-				", ringtone: " + ringtoneUri + ", vibration: " + vibration);
+		Log.d("ALARMSERVICE", "prox: " + proximity + ", units: " + 
+				proximityUnit + ", stop: " + busStop + ", ringtone: " + 
+				ringtoneUri + ", vibration: " + vibration);
 
-		Intent alarmIntent = new Intent(getApplicationContext(), OneTimeAlarmReceiver.class);
+		Intent alarmIntent = new Intent(getApplicationContext(), 
+				OneTimeAlarmReceiver.class);
 
 		alarmIntent.putExtra("ringtoneUri", ringtoneUri);
 		alarmIntent.putExtra("vibration", vibration);
-		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(getApplicationContext(), 
-				PENDING_INTENT_REQUEST_CODE1, alarmIntent,
-				PendingIntent.FLAG_CANCEL_CURRENT);
-		float proximityInput = (float) proximity;
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(
+				getApplicationContext(), PENDING_INTENT_REQUEST_CODE1, 
+				alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
+		float proximityInput = (float) proximity;
 		if (proximityUnit.equals("Yards"))
 			proximityInput = convertYardsToMeters(proximityInput);
 
@@ -133,19 +144,19 @@ public class AlarmService extends Service {
 	}
 
 	/**
-	 * Service requires that this function must be overridden, but we don't need it.
+	 * Service requires that this function must be overridden, but we don't 
+	 * need it.
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/**
-	 * {@link AlarmLocationListener} listens to the GPS, and updates the users location
+	 * {@link AlarmLocationListener} listens to the GPS, and updates the 
+	 * user's location
 	 * 
 	 * @author David Nufer
-	 *
 	 */
 	private class AlarmLocationListener implements LocationListener {
 
@@ -162,10 +173,14 @@ public class AlarmService extends Service {
 				dist = convertMetersToYards(dist);
 
 			PendingIntent pi = PendingIntent.getBroadcast(
-					getApplicationContext(), 0, new Intent(getApplicationContext(), AlarmService.class), 
+					getApplicationContext(), 0, 
+					new Intent(getApplicationContext(), AlarmService.class), 
 					PendingIntent.FLAG_UPDATE_CURRENT);
-			ntf.setLatestEventInfo(getApplicationContext(), "Bus Stop: " + busStop.getName(),
-					dist + " " + proximityUnit + " away", pi); // TODO: convert to correct units
+
+			// TODO: convert to correct units
+			ntf.setLatestEventInfo(getApplicationContext(), 
+					"Bus Stop: " + busStop.getName(), dist + " " + 
+					proximityUnit + " away", pi); 
 
 			ntf.when = System.currentTimeMillis();
 			mNtf.notify(NOTIFICATION_ID1, ntf);
@@ -173,18 +188,13 @@ public class AlarmService extends Service {
 		}
 
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-
 		}
 
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-
 		}
 
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-
+		public void onStatusChanged(String provider, int status, 
+				Bundle extras) {
 		}
 	}
 
