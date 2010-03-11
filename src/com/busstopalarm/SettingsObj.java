@@ -14,12 +14,10 @@ package com.busstopalarm;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
-import android.net.Uri;
 import android.util.Log;
-import android.content.ContextWrapper;
 
 public class SettingsObj {
 
@@ -27,7 +25,7 @@ public class SettingsObj {
 	private static final String TAG = "SettingsObj";
 	
 	// The filename in which these settings will be stored.
-	static final String SETTINGS_FILE_NAME = "favorite_settings_data";
+	static final String SETTINGS_FILE_NAME = "/data/data/com.busstopalarm/files/favorite_settings_data";
 	// Units. There are currently two, so we don't really need to use a enum.
 	static final String YARDS = "Yards";
 	static final String METERS = "Meters";
@@ -38,7 +36,6 @@ public class SettingsObj {
 	// These are the settings in the file.
 	private boolean vibration;
 	private String ringtoneName;
-	private Uri ringtoneUri;
 	private int proximity;
 	private String proximityUnit;  
 
@@ -48,10 +45,10 @@ public class SettingsObj {
 	public SettingsObj() {
 		vibration = false;
 		ringtoneName = null;
-		ringtoneUri = null;
 		proximity = 0;
 		proximityUnit = null;		
 	}
+	
 	/**
 	 * Constructs a SettingsObj with given parameters.
 	 * @param vibration Vibration option
@@ -60,29 +57,66 @@ public class SettingsObj {
 	 * @param proximity Proximity quantity
 	 * @param proximityUnit Proximity unit
 	 */
-	public SettingsObj(boolean vibration, String ringtoneName, Uri ringtoneUri,
-			int proximity, String proximityUnit) {
+	public SettingsObj(boolean vibration, String ringtoneName, int proximity, 
+			String proximityUnit) {
 		this.vibration = vibration;
 		this.ringtoneName = ringtoneName;
-		this.ringtoneUri = ringtoneUri;
 		this.proximity = proximity;
 		this.proximityUnit = proximityUnit;
 	}
-	/*
-	public SettingsObj getSettingsFromFile() {
+	
+	/**
+	 * Gets the ringtone name.
+	 * @return Ringtone name
+	 */
+	public String getRingtoneName() {
+		return ringtoneName;
+	}
+	
+	/**
+	 * Gets the proximity.
+	 * @return Proximity
+	 */
+	public int getProximity() {
+		return proximity;
+	}
+	
+	/**
+	 * Gets the proximity unit (Meters or Yards)
+	 * @return Proximity unit
+	 */
+	public String getProximityUnit() {
+		return proximityUnit;
+	}
+	
+	/**
+	 * Gets the vibration (true or false)
+	 * @param vibration
+	 */
+	public boolean getVibration() {
+		return vibration;
+	}
+	
+	/**
+	 * Constructs a SettingsObj from reading the settings file. 
+	 * On failure to read the file, returns a SettingsObj with default values.
+	 * If one of the settings is not properly formatted, that setting will be 
+	 * set to default.
+	 * @return A SettingsObj with settings given in file.
+	 */
+	public static SettingsObj getSettingsFromFile() {
 	
 		BufferedReader bin = null;
 		String line = null;
 		try {
-			bin = new BufferedReader(new InputStreamReader(
-					openFileInput(SETTINGS_FILE_NAME)));
+			bin = new BufferedReader(new FileReader(SETTINGS_FILE_NAME));
 		} catch (FileNotFoundException e) {
-			return null;
+			return new SettingsObj();
 		}
 		try {
 			line = bin.readLine();
 		} catch (IOException e) {
-			return null;
+			return new SettingsObj();
 		} finally {
 			try {
 				bin.close();
@@ -96,12 +130,20 @@ public class SettingsObj {
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
 		if (settingResult.length < 4) {
 			Log.v(TAG, "settingResult length less than 4 - corrupted file");
-			return null;
+			return new SettingsObj();
 		}
 
-		if (settingResult[0] != null && settingResult[0].equals("vibrate"))
+		boolean vibration;
+		int proximity;
+		String ringtoneName;
+		String proximityUnit;
+		
+		if (settingResult[0] != null && settingResult[0].equals("vibrate")) {
 			vibration = true;
-
+		} else {
+			vibration = false;
+		}
+		
 		ringtoneName = settingResult[1];
 
 		try {
@@ -116,8 +158,14 @@ public class SettingsObj {
 			proximity = 0;
 
 		proximityUnit = settingResult[3];
+		if (!proximityUnit.equals(METERS) || !proximityUnit.equals(YARDS))
+			proximityUnit = null;
 		
-		return null;
+		return new SettingsObj(vibration, 
+				ringtoneName, 
+				proximity, 
+				proximityUnit);
 	}
-	*/
+
+	
 }
