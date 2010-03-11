@@ -11,17 +11,10 @@
 
 package com.busstopalarm;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,30 +36,14 @@ public class SettingsPage extends Activity {
 	// this TAG is for debugging
 	private static final String TAG = "inSettingsPage";
 	
-	// These are the settings in the file.
-	private boolean vibration;
-	// This is the ringtone data in the settings file aka the current favorite.
-	private String dataRingtone;
-	private Uri ringtoneUri;
-	private int proximity;
-	private String proximityUnit;  
-
-	// This is the ringtone title that the user selects and that will be saved
-	// into the file.
-	private String ringtoneTitleToSave;
+	// The settings displayed on the page.
+	private SettingsObj currentSettings;
 	
 	/**
-	 * SettingsPage constructor. Sets settings to default values.
+	 * SettingsPage constructor. 
 	 */
-	public SettingsPage() {
-		// The default values.
-		vibration = false;
-		dataRingtone = null;
-		ringtoneUri = null;
-		proximity = 0;
-		proximityUnit = null;
-		
-		ringtoneTitleToSave = null;
+	public SettingsPage() {		
+		currentSettings = null;
 	}
 
 
@@ -78,8 +55,7 @@ public class SettingsPage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		loadRecentSettings();
-		
+		currentSettings = SettingsObj.getSettingsFromFile();			
 		setContentView(R.layout.settings);
 		
 		goBackButton();
@@ -88,11 +64,12 @@ public class SettingsPage extends Activity {
 		getRingtones();
 		getProximity();
 		getProximityUnits();
-
-		Log.v(TAG, "vibrate:  " + vibration);
-		Log.v(TAG, "ringtone:  " + ringtoneUri);
-		Log.v(TAG, "proximity:  " + proximity);
-		Log.v(TAG, "proximityUnit:  " + proximityUnit);
+		
+		Log.v(TAG, "vibrate:  " + currentSettings.getVibration());
+		Log.v(TAG, "ringtone:  " + currentSettings.getRingtoneName());
+		Log.v(TAG, "proximity:  " + currentSettings.getProximity());
+		Log.v(TAG, "proximityUnit:  " + currentSettings.getProximityUnit());
+		
 	}  // ends onCreate method
 
 
@@ -124,147 +101,21 @@ public class SettingsPage extends Activity {
 	 */
 	private void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SaveSettings);
-		SaveButton.setOnClickListener(new View.OnClickListener(){
-			/**
-			 * Generates settings to be written on the file, and
-			 * returns it.
-			 * @return The String content to be written to file.
-			 */
-			private String buildSettingsString() {
+		SaveButton.setOnClickListener(new View.OnClickListener() {
 
-				StringBuilder settings = new StringBuilder();
-
-				if (vibration)
-					settings.append("vibrate");
-				else
-					settings.append("vibrate_false");
-
-				settings.append("\t");
-
-				if (ringtoneUri != null)
-					settings.append(ringtoneTitleToSave);
-				settings.append("\t");				
-				settings.append(proximity);
-				settings.append("\t");
-				settings.append(proximityUnit);
-
-				return new String(settings);
-			}
-
-			/**
-			 * Writes String settings to the file SETTINGS_FILE_NAME,
-			 * and reports success or failure.
-			 */
-			public void writeSettingsToFile(String settings) {
-				OutputStreamWriter writer = null; 
-
-				try {
-					writer = new OutputStreamWriter(
-							openFileOutput(SettingsObj.SETTINGS_FILE_NAME,
-									MODE_PRIVATE)); 
-					writer.write(new String(settings)); 
-					writer.flush(); 
+			public void onClick(View v) {			
+				if (SettingsObj.writeSettingsToFile(currentSettings)) {
 					Toast.makeText(SettingsPage.this, "Settings saved",
 							Toast.LENGTH_SHORT).show(); 
-				} catch (IOException e) {       
-					e.printStackTrace();
+				} else {
 					Toast.makeText(SettingsPage.this, 
 							"Settings not saved. Make sure you have " +
 							"permissions to write to the settings file.",
 							Toast.LENGTH_SHORT).show(); 
-				} finally { 
-					try {
-						if (writer != null)
-							writer.close(); 
-					} catch (IOException e) { 
-						// Do nothing
-						Log.v(TAG, "Failed to close settings writer");
-					} 
 				}
 			}
-
-			public void onClick(View v) {			
-				String settings = buildSettingsString();
-				writeSettingsToFile(settings);
-			}
-
 		}); // ends "Save as favorite" button
 	} // ends saveButton method
-
-
-	/**
-	 * Sets the settings values to default. This is invoked when either the
-	 * settings file does not exist, or is corrupted, or cannot be read form.
-	 */
-	private void setDefaultSettingsValues() {
-		vibration = false;
-		ringtoneUri = null;
-		proximity = 0;
-		proximityUnit = null;
-	}
-	
-	/**
-	 * This method loads from 
-	 * data/data/com.busstopalarm/files/favorite_settings_data
-	 * to read the user's recent settings saved.
-	 * The file contains the values with tabs to separate them.
-	 * After reading from the file, it sets the data values
-	 * vibration, ringtone, proximity and units into the settings object.
-	 */
-	private void loadRecentSettings() {
-		BufferedReader bin = null;
-		String line = null;
-		try {
-			bin = new BufferedReader(new InputStreamReader(
-					openFileInput(SettingsObj.SETTINGS_FILE_NAME)));
-		} catch (FileNotFoundException e) {
-			setDefaultSettingsValues();
-			return;
-		}
-		try {
-			line = bin.readLine();
-		} catch (IOException e) {
-			setDefaultSettingsValues();
-			return;
-		} finally {
-			try {
-				bin.close();
-			} catch (IOException e) {
-				// do nothing
-			}
-		}
-
-		if (line == null) {
-			setDefaultSettingsValues();
-			return;
-		}
-		String[] settingResult = line.split("\t");
-
-		Log.v(TAG, "settingResult length:  " + settingResult.length);
-		if (settingResult.length < 4) {
-			Log.v(TAG, "settingResult length less than 4 - corrupted file");
-			setDefaultSettingsValues();
-			return;
-		}
-
-		if (settingResult[0] != null && settingResult[0].equals("vibrate"))
-			vibration = true;
-
-		dataRingtone = settingResult[1];
-
-		try {
-			proximity = Integer.parseInt(settingResult[2]);
-		} catch (NumberFormatException e) {
-			// default value is 0
-			proximity = 0;
-		}
-		if (proximity > SettingsObj.MAX_PROXIMITY)
-			proximity = SettingsObj.MAX_PROXIMITY;
-		else if (proximity < 0)
-			proximity = 0;
-
-		proximityUnit = settingResult[3];
-	}
 
 	/**
 	 * It is invoked when vibrate is clicked. 
@@ -279,13 +130,13 @@ public class SettingsPage extends Activity {
 
 		final CheckBox vib = (CheckBox) findViewById(R.id.VibrateCheckbox);
 
-		vib.setChecked(vibration);
+		vib.setChecked(currentSettings.getVibration());
 
 		vib.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {	
-				vibration = isChecked;
-				Log.v(TAG, "under onCheckedChanged: " + vibration);
+				currentSettings.setVibration(isChecked);
+				Log.v(TAG, "under onCheckedChanged: " + isChecked);
 			}
 		});
 	}  // ends getVibrate method
@@ -300,10 +151,10 @@ public class SettingsPage extends Activity {
 			(SeekBar)findViewById(R.id.ProximityBar);
 		final TextView progressText = 
 			(TextView)findViewById(R.id.ProximityNumber);
-		progressText.setText(Integer.toString(proximity));
-
+		progressText.setText(Integer.toString(currentSettings.getProximity()));
+		
 		proximitySeekBar.setMax(SettingsObj.MAX_PROXIMITY);  
-		proximitySeekBar.setProgress(proximity);
+		proximitySeekBar.setProgress(currentSettings.getProximity());
 
 		proximitySeekBar.setOnSeekBarChangeListener(
 				new OnSeekBarChangeListener() {
@@ -311,8 +162,8 @@ public class SettingsPage extends Activity {
 			public void onProgressChanged(SeekBar seekBarOnProgress, 
 					int progress, boolean fromTouch) {
 				Log.v(TAG, "progress:  " + progress);
-				proximity = progress;
-				progressText.setText(Integer.toString(proximity));
+				currentSettings.setProximity(progress);
+				progressText.setText(Integer.toString(progress));
 			}
 
 			public void onStartTrackingTouch(SeekBar seekBarOnStart) {
@@ -343,8 +194,9 @@ public class SettingsPage extends Activity {
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
 
-		if (proximityUnit != null && 
-				proximityUnit.equalsIgnoreCase(SettingsObj.METERS)) {
+		String settingsUnit = currentSettings.getProximityUnit();
+		if (settingsUnit != null && 
+				settingsUnit.equalsIgnoreCase(SettingsObj.METERS)) {
 			proximityUnitsSpinner.setSelection(1);
 		}
 		
@@ -356,12 +208,13 @@ public class SettingsPage extends Activity {
 						int indexProx = adapterView.getSelectedItemPosition();
 						CharSequence selectedUnit =
 							(CharSequence) adapterView.getSelectedItem();
-						selectedUnit.toString();
-						proximityUnit = (String) selectedUnit;
+
 						Log.v(TAG, "under onItemSelected(proximity unit): " + 
 								indexProx);
 						Log.v(TAG, "under onItemSelected(proximity unit): " +
 								selectedUnit);
+						
+						currentSettings.setProximityUnit(selectedUnit.toString());						
 					}
 
 					public void onNothingSelected(AdapterView<?> arg0) {
@@ -387,6 +240,7 @@ public class SettingsPage extends Activity {
 		ringtoneManager.setType(RingtoneManager.TYPE_ALL);
 
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
+		String settingsRtName = currentSettings.getRingtoneName();
 		// Have we found the ringtone?
 		boolean ringtoneFound = false;
 		int defaultRingtoneIndex = 0;
@@ -400,7 +254,7 @@ public class SettingsPage extends Activity {
 			ringtoneList[i] = titleOfRingtone;
 			
 			if (!ringtoneFound) {
-				if (dataRingtone != null && dataRingtone.equals(titleOfRingtone)) {
+				if (settingsRtName != null && settingsRtName.equals(titleOfRingtone)) {
 					ringtoneFound = true;
 					defaultRingtoneIndex = i;
 				}
@@ -427,15 +281,14 @@ public class SettingsPage extends Activity {
 					int arg2, long arg3) {
 
 				int indexRingtone = adapterView.getSelectedItemPosition();
-				ringtoneUri = ringtoneManager.getRingtoneUri(indexRingtone);
 				Ringtone rt = ringtoneManager.getRingtone(indexRingtone);
-				ringtoneTitleToSave = rt.getTitle(getBaseContext());
-
+				String ringtoneTitleToSave = rt.getTitle(getBaseContext());
+				currentSettings.setRingtoneName(ringtoneTitleToSave);
+				
 				Log.v(TAG, "under onItemSelected(index ringtone): " +
 						indexRingtone);
 				Log.v(TAG, "under onItemSelected(ringtoneTitleToSave): " + 
 						ringtoneTitleToSave);
-				Log.v(TAG, "under onItemSelected(ringtoneUri): " + ringtoneUri);
 
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {

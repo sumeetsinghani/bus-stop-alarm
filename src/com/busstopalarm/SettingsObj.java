@@ -111,6 +111,49 @@ public class SettingsObj {
 	}
 	
 	/**
+	 * Sets the vibration to true or false.
+	 * @param vibration True if alarm vibrates, false otherwise.
+	 */
+	public void setVibration(boolean vibration) {
+		this.vibration = vibration;
+	}
+
+	/**
+	 * Sets the name of ringtone to be played.
+	 * @param ringtoneName Name of ringtone
+	 */
+	public void setRingtoneName(String ringtoneName) {
+		this.ringtoneName = ringtoneName;
+	}
+
+	/**
+	 * Sets proximity. Argument must be between 0 and MAX_PROXIMITY.
+	 * @param proximity Proximity quantity.
+	 * @throws IllegalArgumentException if argument is out of range.
+	 */
+	public void setProximity(int proximity) {
+		if (proximity < 0 || proximity > MAX_PROXIMITY) {
+			throw new IllegalArgumentException();
+		}
+		this.proximity = proximity;
+	}
+
+	/**
+	 * Sets the proximity unit. Must be either "Meters" or "Yards".
+	 * @param proximityUnit "Meters" or "Yards"
+	 * @throws IllegalArgumentException if argument is not "Meters" or "Yards"
+	 */
+	public void setProximityUnit(String proximityUnit) {
+		if (proximityUnit != null) {
+			if (!proximityUnit.equalsIgnoreCase(METERS) && 
+					!proximityUnit.equalsIgnoreCase(YARDS)) {
+				throw new IllegalArgumentException();
+			}
+		}
+		this.proximityUnit = proximityUnit;
+	}
+	
+	/**
 	 * Constructs a SettingsObj from reading the settings file. 
 	 * On failure to read the file, returns a SettingsObj with default values.
 	 * If one of the settings is not properly formatted, that setting will be 
@@ -155,7 +198,8 @@ public class SettingsObj {
 		String ringtoneName;
 		String proximityUnit;
 		
-		if (settingResult[0] != null && settingResult[0].equals("vibrate")) {
+		if (settingResult[0] != null && 
+				settingResult[0].equalsIgnoreCase("vibrate")) {
 			vibration = true;
 		} else {
 			vibration = false;
@@ -175,7 +219,8 @@ public class SettingsObj {
 			proximity = 0;
 
 		proximityUnit = settingResult[3];
-		if (!proximityUnit.equals(METERS) || !proximityUnit.equals(YARDS))
+		if (!proximityUnit.equalsIgnoreCase(METERS) && 
+				!proximityUnit.equalsIgnoreCase(YARDS))
 			proximityUnit = null;
 		
 		return new SettingsObj(vibration, 
@@ -245,4 +290,5 @@ public class SettingsObj {
 		}
 		return true;
 	}
+
 }
