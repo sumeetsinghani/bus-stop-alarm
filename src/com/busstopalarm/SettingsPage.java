@@ -52,9 +52,6 @@ public class SettingsPage extends Activity {
 
 	// this TAG is for debugging
 	private static final String TAG = "inSettings";
-
-	// The filename in which these settings will be stored.
-	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
 	
 	// These are the settings in the file.
 	private boolean vibration;
@@ -68,13 +65,10 @@ public class SettingsPage extends Activity {
 	// into the file.
 	private String ringtoneTitleToSave;
 	
-	private SeekBar proximitySeekBar;
-	private TextView progressText; 
-	
 	/**
 	 * SettingsPage constructor. Sets settings to default values.
 	 */
-	private SettingsPage() {
+	public SettingsPage() {
 		// The default values.
 		vibration = false;
 		dataRingtone = null;
@@ -85,45 +79,11 @@ public class SettingsPage extends Activity {
 		ringtoneTitleToSave = null;
 	}
 
-	/**
-	 * vibrate setter
-	 * @param boolean vibrate input
+
+	/** 
+	 * Called when the activity is first created on the confirmation page.
+	 * @param Bundle which holds the current state (info)
 	 */
-	public void setVibration(boolean vibrateInput){
-		vibration = vibrateInput;
-	}
-
-
-	/**
-	 * getter for vibration
-	 * @return boolean vibration
-	 */
-	public boolean getVibration(){
-		return vibration;
-	}
-
-
-	/**
-	 * setter for ringtone uri
-	 * @param Uri ringtone uri
-	 */
-	public void setRingtoneUri(Uri ringtoneInput){
-		ringtoneUri = ringtoneInput;
-	}
-
-
-	/**
-	 * getter for ringtone uri
-	 * @return Uri ringtone uri
-	 */
-	public Uri getRingtoneUri(){
-		return ringtoneUri;
-	}
-
-	/** Called when the activity is first created on the confirmation page.
-	 *  @param Bundle which holds the current state (info)
-	 *  
-	 *  */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -147,15 +107,7 @@ public class SettingsPage extends Activity {
 
 
 	/** 
-	 *  Cancel Button cancels the current alarm set
-	 *  it erases the notification
-	 *  then, it goes back to MainPage
-	 *  
-	 *  To show how alarms are canceled we will create a new Intent and a new 
-	 *  PendingIntent with the same requestCode as the PendingIntent alarm we
-	 *  want to cancel. In this case, it is PENDING_INTENT_REQUEST_CODE1.
-	 *  Note: The intent and PendingIntent have to be the same as the ones used
-	 *  to create the alarm.
+	 *  Sets up the Go Back button.
 	 */
 	private void goBackButton() {
 		final Button GobackButton = (Button)findViewById(R.id.Goback);
@@ -178,12 +130,11 @@ public class SettingsPage extends Activity {
 	 *  pushed before),
 	 *  It will create the file in the designated location
 	 *  If it exists, it will overwrite the old settings when the button is 
-	 *  pushed.
+	 *  pushed It stays in the current page
 	 */
 	private void saveButton() {
-		final Button SaveButton = (Button) findViewById(R.id.SaveDestination);
+		final Button SaveButton = (Button) findViewById(R.id.SaveSettings);
 		SaveButton.setOnClickListener(new View.OnClickListener(){
-
 			/**
 			 * Generates settings to be written on the file, and
 			 * returns it.
@@ -219,15 +170,14 @@ public class SettingsPage extends Activity {
 
 				try {
 					writer = new OutputStreamWriter(
-							openFileOutput(SETTINGS_FILE_NAME,MODE_PRIVATE)); 
+							openFileOutput(SettingsObj.SETTINGS_FILE_NAME,
+									MODE_PRIVATE)); 
 					writer.write(new String(settings)); 
 					writer.flush(); 
 					Toast.makeText(SettingsPage.this, "Settings saved",
 							Toast.LENGTH_SHORT).show(); 
 				} catch (IOException e) {       
 					e.printStackTrace();
-					Log.v(TAG, "Error saving settings to file, contents: " + 
-							settings);
 					Toast.makeText(SettingsPage.this, 
 							"Settings not saved. Make sure you have " +
 							"permissions to write to the settings file.",
@@ -246,7 +196,7 @@ public class SettingsPage extends Activity {
 			public void onClick(View v) {			
 				String settings = buildSettingsString();
 				writeSettingsToFile(settings);
-			} // ends onClick
+			}
 
 		}); // ends "Save as favorite" button
 	} // ends saveButton method
@@ -260,7 +210,7 @@ public class SettingsPage extends Activity {
 		vibration = false;
 		ringtoneUri = null;
 		proximity = 0;
-		proximityUnit = "Yards";
+		proximityUnit = null;
 	}
 	
 	/**
@@ -276,7 +226,7 @@ public class SettingsPage extends Activity {
 		String line = null;
 		try {
 			bin = new BufferedReader(new InputStreamReader(
-					openFileInput(SETTINGS_FILE_NAME)));
+					openFileInput(SettingsObj.SETTINGS_FILE_NAME)));
 		} catch (FileNotFoundException e) {
 			setDefaultSettingsValues();
 			return;
@@ -294,6 +244,10 @@ public class SettingsPage extends Activity {
 			}
 		}
 
+		if (line == null) {
+			setDefaultSettingsValues();
+			return;
+		}
 		String[] settingResult = line.split("\t");
 
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
@@ -314,15 +268,13 @@ public class SettingsPage extends Activity {
 			// default value is 0
 			proximity = 0;
 		}
-		if (proximity > 1000)
-			proximity = 1000;
+		if (proximity > SettingsObj.MAX_PROXIMITY)
+			proximity = SettingsObj.MAX_PROXIMITY;
 		else if (proximity < 0)
 			proximity = 0;
 
 		proximityUnit = settingResult[3];
 	}
-
-
 
 	/**
 	 * It is invoked when vibrate is clicked. 
@@ -350,66 +302,74 @@ public class SettingsPage extends Activity {
 
 
 	/**
-	 * This method is invoked when proximity bar is used.
-	 * There are currently two units:
-	 * for Yards, the range is from 0 to 1000
-	 * for Meters, the range is from 0 to 1000
+	 * this method is invoked when proximity bar is used
+	 * for both Yards and Meters, the range is 0 to SettingsObj.MAX_PROXIMITY.
 	 */
 	public void getProximity() {
-		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
-		progressText = (TextView) findViewById(R.id.ProximityNumber);
+		final SeekBar proximitySeekBar = 
+			(SeekBar)findViewById(R.id.ProximityBar);
+		final TextView progressText = 
+			(TextView)findViewById(R.id.ProximityNumber);
 		progressText.setText(Integer.toString(proximity));
 
-		// range from 0 to 1000 with step size 1.
-		proximitySeekBar.setMax(1000);
+		proximitySeekBar.setMax(SettingsObj.MAX_PROXIMITY);  
 		proximitySeekBar.setProgress(proximity);
+
 		proximitySeekBar.setOnSeekBarChangeListener(
 				new OnSeekBarChangeListener() {
 
-					public void onProgressChanged(SeekBar seekBarOnProgress, 
-							int progress, boolean fromTouch) {
-						Log.v(TAG, "progress:  " + progress);
-						proximity = progress;
-						progressText.setText(Integer.toString(proximity));
+			public void onProgressChanged(SeekBar seekBarOnProgress, 
+					int progress, boolean fromTouch) {
+				Log.v(TAG, "progress:  " + progress);
+				proximity = progress;
+				progressText.setText(Integer.toString(proximity));
+			}
 
-					}
+			public void onStartTrackingTouch(SeekBar seekBarOnStart) {
 
-					public void onStartTrackingTouch(SeekBar seekBarOnStart) {
-					}
-					
-					public void onStopTrackingTouch(SeekBar seekBarOnStop) {
-					}
-				});
+			}
+
+			public void onStopTrackingTouch(SeekBar seekBarOnStop) {
+			}
+		});
+
 
 	} // ends getProximity method
 
 
 	/**
-	 * Loads all units (Yards, Meters) on the spinner and sets it to 
-	 * the one that the user previously has saved as a favorite.
-	 * Invoked when the user selects the proximity unit on the spinner.
+	 * It is invoked when the user selects the proximity unit on the spinner
+	 * It first loads all units (Yards, Meters, Minutes) on the spinner
+	 * then, sets it to the one that the user previously has saved as a favorite 
+	 * 
 	 */
 	public void getProximityUnits() {
-		Spinner proximityUnitsSpinner = 
-			(Spinner) findViewById(R.id.ProximityUnits);
+		Spinner proximityUnitsSpinner = (Spinner) 
+		findViewById(R.id.ProximityUnits);
 		ArrayAdapter<CharSequence> proxSpinnerValues = 
 			ArrayAdapter.createFromResource(this, R.array.ProximityUnitList,
-					android.R.layout.simple_spinner_item);
-		
+				android.R.layout.simple_spinner_item);
 		proxSpinnerValues.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
 
-		if (proximityUnit != null && proximityUnit.equalsIgnoreCase("Meters"))
+		if (proximityUnit != null && 
+				proximityUnit.equalsIgnoreCase(SettingsObj.METERS)) {
 			proximityUnitsSpinner.setSelection(1);
-
-		proximityUnitsSpinner.setOnItemSelectedListener(
+		}
+		
+		proximityUnitsSpinner.setOnItemSelectedListener( 
 				new OnItemSelectedListener() { 
-					public void onItemSelected(AdapterView<?> adapterView, 
-							View arg1, int arg2, long arg3) {
+					public void onItemSelected(AdapterView<?> adapterView, View arg1,
+							int arg2, long arg3) {
+
+						int indexProx = adapterView.getSelectedItemPosition();
 						CharSequence selectedUnit =
 							(CharSequence) adapterView.getSelectedItem();
-						proximityUnit = selectedUnit.toString();	
+						selectedUnit.toString();
+						proximityUnit = (String) selectedUnit;
+						Log.v(TAG, "under onItemSelected(proximity unit): " + 
+								indexProx);
 						Log.v(TAG, "under onItemSelected(proximity unit): " +
 								selectedUnit);
 					}
@@ -421,44 +381,42 @@ public class SettingsPage extends Activity {
 
 
 	/**
-	 * Loads all types of sounds from the local storage (database).
-	 * If the user has set a ringtone as a favorite, it will preselect
-	 * that ringtone.
-	 * If not, it will preselect the first ringtone on the list.
+	 * It loads all types of sounds (ringtones, notifications, alarms) from the
+	 * local storage. 
+	 * ringtone cursor goes through all the sounds and get the titles and show
+	 * them on the spinner.
+	 * if the user has set the ringtone as a favorite, it will set it to that
+	 * ringtone in the first place
+	 * if not, it will set the ringtone to the first one on the list
 	 */
 	public void getRingtones() {
 
 		final RingtoneManager ringtoneManager = new RingtoneManager(this);
 
-		// There are three types of sounds (ringtones, notifications, alarms)
-		// In here, we only get the ringtones.
-		ringtoneManager.setType(RingtoneManager.TYPE_RINGTONE);
+		// get all types of sounds (ringtones, notifications, alarms)
+		ringtoneManager.setType(RingtoneManager.TYPE_ALL);
 
 		Cursor ringtoneCursor = ringtoneManager.getCursor();
-		int defaultRingtoneIndex = 0;
-		// Did we find the ringtone specified in the settings file?
+		// Have we found the ringtone?
 		boolean ringtoneFound = false;
+		int defaultRingtoneIndex = 0;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
-		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
+		//	Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		ringtoneCursor.moveToFirst();
-	
 		for (int i = 0; i < ringtoneCursor.getCount(); i++) {
 			String titleOfRingtone = ringtoneCursor.getString(
 					RingtoneManager.TITLE_COLUMN_INDEX);
 			Log.v(TAG, "ringtone list:  " + titleOfRingtone);
 			ringtoneList[i] = titleOfRingtone;
 			
-			// This is just a small optimization so we don't have to compare
-			// strings every time.
 			if (!ringtoneFound) {
 				if (dataRingtone != null && dataRingtone.equals(titleOfRingtone)) {
-					defaultRingtoneIndex = i;
 					ringtoneFound = true;
+					defaultRingtoneIndex = i;
 				}
 			}
-			
 			Log.d("CONFPAGE", ringtoneManager.getRingtoneUri(
-							ringtoneCursor.getPosition()).toString());
+					ringtoneCursor.getPosition()).toString());
 			ringtoneCursor.moveToNext();
 		}
 
@@ -491,11 +449,8 @@ public class SettingsPage extends Activity {
 
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
-			
 			}
-
 		});
-
 	}  // ends getRingtones method
-
+	
 } // class ends
