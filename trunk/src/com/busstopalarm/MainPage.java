@@ -193,10 +193,14 @@ public class MainPage extends Activity {
 		switch (item.getItemId()) {
 		case 1:
 			BusStop stop = getIntent().getParcelableExtra("busStopSaved");
+			// TODO added
+			int routeID = getIntent().getIntExtra("busroute", -1);
 			Log.v("inMainPage", "bus stop:  " + stop);
 			if (stop != null) {
 			  Intent intentConfirmationPage = new Intent(this, ConfirmationPage.class);
 			  intentConfirmationPage.putExtra("busstop", stop);
+			  // TODO added
+			  intentConfirmationPage.putExtra("busroute", routeID);
 			  startActivity(intentConfirmationPage);
 			  finish();
 			  break;

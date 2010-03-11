@@ -7,6 +7,14 @@
  * text file with a specific format. A settings object can also be written
  * into a text file for reading later.
  * 
+ * A valid settings file have the following format:
+ * vibration[tab]ringtoneName[tab]proximity[tab]proximityUnit
+ * where:
+ * vibration - is either "vibrate" or "vibrate_false"
+ * ringtoneName - is a name of a ringtone
+ * proximity - is an integer from 0 to 1000
+ * proximityUnit - is either "Meters" or "Yards"
+ * 
  * @author Derek Cheng
  */
 
@@ -14,8 +22,10 @@ package com.busstopalarm;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import android.util.Log;
 
@@ -24,8 +34,11 @@ public class SettingsObj {
 	// Tag for logging purposes.
 	private static final String TAG = "SettingsObj";
 	
-	// The filename in which these settings will be stored.
-	static final String SETTINGS_FILE_NAME = "/data/data/com.busstopalarm/files/favorite_settings_data";
+	// The filename of settings file.
+	static final String SETTINGS_FILE_NAME = "favorite_settings_data";
+	// The full path of the settings file.
+	static final String SETTINGS_FILE_PATH = "/data/data/com.busstopalarm/files/" + SETTINGS_FILE_NAME;
+
 	// Units. There are currently two, so we don't really need to use a enum.
 	static final String YARDS = "Yards";
 	static final String METERS = "Meters";
@@ -109,7 +122,7 @@ public class SettingsObj {
 		BufferedReader bin = null;
 		String line = null;
 		try {
-			bin = new BufferedReader(new FileReader(SETTINGS_FILE_NAME));
+			bin = new BufferedReader(new FileReader(SETTINGS_FILE_PATH));
 		} catch (FileNotFoundException e) {
 			return new SettingsObj();
 		}
@@ -125,6 +138,10 @@ public class SettingsObj {
 			}
 		}
 
+		// If the file is empty...
+		if (line == null) {
+			return new SettingsObj();
+		}
 		String[] settingResult = line.split("\t");
 
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
@@ -166,6 +183,66 @@ public class SettingsObj {
 				proximity, 
 				proximityUnit);
 	}
-
 	
+	/**
+	 * Generates settings to be written on the file, and
+	 * returns it.
+	 * @return The String content to be written to file.
+	 */
+	private String buildSettingsString() {
+
+		StringBuilder settings = new StringBuilder();
+
+		if (vibration)
+			settings.append("vibrate");
+		else
+			settings.append("vibrate_false");
+		settings.append('\t');
+
+		settings.append(ringtoneName);
+		settings.append('\t');	
+		
+		settings.append(proximity);
+		settings.append('\t');
+		
+		settings.append(proximityUnit);
+
+		return new String(settings);
+	}
+	
+	/**
+	 * Writes the SettingsObj to the settings file in said format above.
+	 * This methods overwrites the old settings. If the file did not exist
+	 * before, this method will attempt to create it.
+	 * @param so The SettingsObj to write into the file
+	 * @return true if the file was written successfully 
+	 */
+	public static boolean writeSettingsToFile(SettingsObj so) {
+	
+		OutputStreamWriter writer = null; 
+		try {
+			writer = new OutputStreamWriter(
+					new FileOutputStream(SETTINGS_FILE_PATH)); 
+			writer.write(so.buildSettingsString()); 
+			writer.flush();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Log.v(TAG, "Settings file cannot be opened!");
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.v(TAG, "I/O error occurred while writing to file!");
+			return false;
+		} finally {
+			try {
+				if (writer != null) {
+					writer.close();
+				} 
+			} catch (IOException e) {
+				// do nothing, but log it anyways
+				Log.v(TAG, "Failed to close writer!");
+			}
+		}
+		return true;
+	}
 }

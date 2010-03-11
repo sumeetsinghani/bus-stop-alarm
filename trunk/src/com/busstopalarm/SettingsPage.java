@@ -41,7 +41,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class SettingsPage extends Activity {
 
 	// this TAG is for debugging
-	private static final String TAG = "inSettings";
+	private static final String TAG = "inSettingsPage";
 	
 	// These are the settings in the file.
 	private boolean vibration;
