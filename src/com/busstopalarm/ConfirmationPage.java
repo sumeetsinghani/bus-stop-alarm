@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -129,14 +129,13 @@ public class ConfirmationPage extends Activity {
 		// up to this point (author: Pyong Byon)
 		//Debug.stopMethodTracing();
 		
-		// performance testing, starting from the confirmation page
+		// performance testing, starting from the confirmation page (onCreate)
 		//Debug.startMethodTracing("performance_testing_on_confirmation");
-		
 		
 		
 		// load saved settings
 		loadRecentSettings();
-
+	
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
 		int routeID = getIntent().getIntExtra("busroute", 0);
@@ -166,7 +165,7 @@ public class ConfirmationPage extends Activity {
 	 *  after creating alarm set, it goes back to MainPage
 	 *  
 	 */
-	private void okButton() {
+	public void okButton() {
 		final Button OKButton = (Button)findViewById(R.id.OKButton);
 		OKButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -209,7 +208,7 @@ public class ConfirmationPage extends Activity {
 	 *  Note: The intent and PendingIntent have to be the same as the ones used
 	 *  to create the alarm.
 	 */
-	private void cancelButton() {
+	public void cancelButton() {
 		final Button CancelButton = (Button)findViewById(R.id.CancelButton);
 		CancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -239,7 +238,7 @@ public class ConfirmationPage extends Activity {
 	 *  It will create the file in the designated location
 	 *  If it exists, it will overwrite the old settings when the button is 
 	 *  pushed It stays in the current page
-	 *   TODO: this should also save the stop in the database
+	 * 
 	 */
 	public void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SaveDestination);
@@ -254,32 +253,24 @@ public class ConfirmationPage extends Activity {
 				
 				// get busRouteID
 				int busRouteID = getIntent().getIntExtra("busroute", 0);
-				Log.v(TAG, "busRoute id:  " + busRouteID);
 				String busRouteIDString = Integer.toString(busRouteID);
 				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
 				
-				 //Try with DB
-				//mBusDbHelper = new BusDbAdapter(v.getContext());
-				//mBusDbHelper.open();
-				
-				// not working !! it crashes
-			
 				BusDbAdapter busDbAdapter = new BusDbAdapter (v.getContext());
 				busDbAdapter.open();	
 			    busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
-			
-				//mBusDbHelper.close();
 				busDbAdapter.close();
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
 						Toast.LENGTH_LONG).show();
 		
+				//Debug.stopMethodTracing();
 			} // ends onClick
 
 		}); // ends "Save Destination" button
 	} // ends saveButton method
 
 
-	private void setDefaultSettingsValues() {
+	public void setDefaultSettingsValues() {
 
 		vibration = false;
 		ringtoneUri = null;
@@ -295,6 +286,7 @@ public class ConfirmationPage extends Activity {
 	 * the file contains the values with tabs to separate them.
 	 * After reading from the file, it sets the data values
 	 * dataVibrate, dataRingtone, dataProximity, dataProximityUnit appropriately
+	 * @throws IOException 
 	 */
 	public void loadRecentSettings() {
 		BufferedReader bin = null;
@@ -318,7 +310,7 @@ public class ConfirmationPage extends Activity {
 				// do nothing
 			}
 		}
-
+		
 		String[] settingResult = line.split("\t");
 
 		Log.v(TAG, "settingResult length:  " + settingResult.length);
@@ -328,6 +320,7 @@ public class ConfirmationPage extends Activity {
 			return;
 		}
 
+		Log.v(TAG, "here1?");
 		if (settingResult[0] != null && settingResult[0].equals("vibrate"))
 			vibration = true;
 
@@ -489,7 +482,9 @@ public class ConfirmationPage extends Activity {
 		ringtoneAdapter.setDropDownViewResource(
 				android.R.layout.simple_spinner_dropdown_item);
 		ringtoneSpinner.setAdapter(ringtoneAdapter);
-		ringtoneSpinner.setSelection(defaultRingtoneIndex);
+		
+		if (defaultRingtoneIndex != 0)
+		 ringtoneSpinner.setSelection(defaultRingtoneIndex);
 
 		ringtoneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() { 
 
