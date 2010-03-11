@@ -284,6 +284,25 @@ public class BusNumDbAdapterTest extends ActivityInstrumentationTestCase2
 	}
 	
 	/**
+	 * Check if the bus entry exist with null value input
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	@SmallTest
+	public void testIfBusEntryExists_0() 
+								throws FileNotFoundException, IOException {
+		int num = (int) Math.random()*KingCounty_busArr.length;
+		
+		activity.mBusNumDbHelper.open();
+		activity.mBusNumDbHelper.deleteAllBusEntries();
+		boolean result = activity.mBusNumDbHelper.
+						 checkIfBusEntryExist(null);
+		activity.mBusNumDbHelper.close();
+		assertFalse("Result should be false for null value of route number" 
+				   , result);	
+	}
+	
+	/**
 	 * Check if the bus entry exist in KingCounty file
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
