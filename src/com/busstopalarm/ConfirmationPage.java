@@ -138,7 +138,9 @@ public class ConfirmationPage extends Activity {
 	
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
+		// TODO need to make it so that routeID can be obtained from main page once alarm is set?
 		int routeID = getIntent().getIntExtra("busroute", 0);
+		
 		TextView routeView = (TextView) findViewById(R.id.RouteNumberSelected);
 		routeView.setText(Integer.toString(routeID));
 		TextView stopView = (TextView) findViewById(R.id.BusStopSelected);
@@ -182,7 +184,9 @@ public class ConfirmationPage extends Activity {
 
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
-				intentToMainPage.putExtra("busStopSaved", b);
+				intentToMainPage.putExtra("busStopSaved", b);				
+				// TODO does this work?
+				intentToMainPage.putExtra("busroute", getIntent().getIntExtra("busroute", 0));
 				
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 						Toast.LENGTH_LONG).show();
@@ -280,12 +284,12 @@ public class ConfirmationPage extends Activity {
 	}
 
 	/**
-	 * this method loads from 
+	 * This method loads from 
 	 * data/data/com.busstopalarm/files/favorite_settings_data
 	 * to read the user's recent settings saved.
 	 * the file contains the values with tabs to separate them.
-	 * After reading from the file, it sets the data values
-	 * dataVibrate, dataRingtone, dataProximity, dataProximityUnit appropriately
+	 * After reading from the file, it sets the data values for 
+	 * vibrate, ringtone, proximity and units appropriately.
 	 * @throws IOException 
 	 */
 	public void loadRecentSettings() {
@@ -483,8 +487,9 @@ public class ConfirmationPage extends Activity {
 				android.R.layout.simple_spinner_dropdown_item);
 		ringtoneSpinner.setAdapter(ringtoneAdapter);
 		
-		if (defaultRingtoneIndex != 0)
-		 ringtoneSpinner.setSelection(defaultRingtoneIndex);
+		if (defaultRingtoneIndex != 0) {
+			ringtoneSpinner.setSelection(defaultRingtoneIndex);
+		}
 
 		ringtoneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() { 
 

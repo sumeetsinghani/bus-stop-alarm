@@ -73,7 +73,7 @@ public class MapPage extends MapActivity {
 		//array of overlay items
 		mapOverlays = mapView.getOverlays();
 
-		routeID = getIntent().getExtras().getString("routeID");
+		routeID = getIntent().getStringExtra("routeID");
 		DataFetcher df = new DataFetcher();
 		BusRoute busRoute;
 		try {
