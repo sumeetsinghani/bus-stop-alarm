@@ -188,6 +188,10 @@ public class BusNumDbAdapter {
     * @return true if the entry is already in the table. false otherwise.
     */
    	public boolean checkIfBusEntryExist(String route_id) {
+   		if (route_id == null) { 
+   			return false;
+   		}
+   		
    		Cursor mCursor = null;
    		mCursor = mDb.rawQuery(DATABASE_RETRIEVE_BY_ROUTEID, 
    							   new String[]{route_id});
@@ -207,6 +211,7 @@ public class BusNumDbAdapter {
    	 * @return the Cursor of the list of returned entries
    	 */
    	public Cursor getListBusNum(int limit) {
+   		
    		Cursor mCursor = mDb.rawQuery(DATABASE_FETCH_ALL_BUS_LIMIT, 
    							          new String[]{Integer.toString(limit)});
    		
