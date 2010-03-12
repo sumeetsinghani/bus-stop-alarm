@@ -126,7 +126,9 @@ public class MainPage extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.v(TAG, "onActivityResult" + requestCode + " " + resultCode);
 		if (requestCode == MAIN_CONFIRM_TRANSITION) {
+			if (resultCode == RESULT_OK) {
 				finish();
+			}
 		}
 	}
 	
@@ -241,11 +243,13 @@ public class MainPage extends Activity {
 			Log.v(TAG, "bus stop:  " + stop);
 			
 			if (stop != null) {
+				/*
 			  Intent intentConfirmationPage = new Intent(this, ConfirmationPage.class);
 			  intentConfirmationPage.putExtra("busstop", stop);
 			  intentConfirmationPage.putExtra("busroute", routeID);
 			  
 			  startActivity(intentConfirmationPage);
+			  */
 			  finish();
 			  break;
 			}
@@ -262,7 +266,7 @@ public class MainPage extends Activity {
 			startActivity(Settings);
 			break;
 		case 4:
-			finish();
+			System.exit(0);
 			break;
 		}
 		return false;
