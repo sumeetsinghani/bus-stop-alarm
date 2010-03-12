@@ -51,8 +51,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 					Intent i = new Intent(v.getContext(), ConfirmationPage.class);
 					i.putExtra("busstop", lastSelectedStop);
 					i.putExtra("busroute", routeNum);
-					mCtx.startActivity(i);
-					mCtx.finish();
+					mCtx.startActivityForResult(i,MapPage.MAP_CONFIRM_TRANSITION);
 				} else {
 					Toast.makeText(v.getContext(), "Please Select a Route", Toast.LENGTH_LONG).show();
 				}

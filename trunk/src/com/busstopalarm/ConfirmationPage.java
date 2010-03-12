@@ -139,6 +139,10 @@ public class ConfirmationPage extends Activity {
 				// performance testing, starting from the onCreate 
 				// up to this point (author: Pyong Byon)
 				//Debug.stopMethodTracing();
+				
+				// We give signal that we can finish Map Page here.
+				setResult(RESULT_OK);
+				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
 				startActivity(intentToMainPage);
 				finish();
 			}
