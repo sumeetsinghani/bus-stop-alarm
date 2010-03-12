@@ -101,7 +101,7 @@ public class SettingsPage extends Activity {
 	 */
 	private void saveButton() {
 		final Button SaveButton = (Button) findViewById(R.id.SaveSettings);
-		SaveButton.setOnClickListener(new View.OnClickListener() {
+		SaveButton.setOnClickListener(new View.OnClickListener(){
 
 			public void onClick(View v) {			
 				if (SettingsObj.writeSettingsToFile(currentSettings)) {

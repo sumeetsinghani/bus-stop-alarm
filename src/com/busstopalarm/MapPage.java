@@ -85,7 +85,7 @@ public class MapPage extends MapActivity {
 		BusRoute busRoute;
 		try {
 			// draw routes on map
-			busRoute = df.getBusRouteById(routeID, true);
+			busRoute = df.getBusRouteById(Integer.parseInt(routeID.split("_")[1]), true);
 			for (Polyline p : busRoute.getPolylines()) {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);

@@ -74,9 +74,9 @@ public class LocationListPage extends ListActivity {
 	    	HashMap<String, String> item = locationList.get(position);
 	    	DataFetcher df = new DataFetcher();
 			try {
-				BusStop b = df.getStopById(item.get("stopID"));
+				BusStop b = df.getStopById(Integer.parseInt(item.get("stopID").split("_")[1]));
 		    	i.putExtra("busstop", b);
-		    	i.putExtra("busroute", Integer.parseInt(item.get("routeID")));
+		    	i.putExtra("busroute", item.get("routeID"));
 		    	startActivity(i);
 		    	finish();
 			} catch (NumberFormatException e) {
@@ -154,7 +154,7 @@ public class LocationListPage extends ListActivity {
 	    	HashMap<String, String> busItem = locationList.get(id);
 	    	DataFetcher df = new DataFetcher();
 			try {
-				BusStop b = df.getStopById(busItem.get("stopID"));
+				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID").split("_")[1]));
 		    	i.putExtra("busstop", b);
 		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeID")));
 		    	startActivity(i);

@@ -15,13 +15,16 @@ import java.io.InputStreamReader;
 import android.database.Cursor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
+
+import com.busstopalarm.BusNumDbAdapter;
 import com.busstopalarm.MainPage;
 import com.busstopalarm.R;
 
 public class BusNumDbAdapterTest extends ActivityInstrumentationTestCase2
 										<MainPage>{
 
-	private static MainPage activity;
+	private MainPage activity;
 	private static int KingCounty_flag = 0;
 	private static int KingCounty_lineNumber = 0;
 	private static String[] KingCounty_busArr;
@@ -45,6 +48,7 @@ public class BusNumDbAdapterTest extends ActivityInstrumentationTestCase2
 	protected void setUp() throws Exception{
 		super.setUp();
 		activity = getActivity();
+		activity.mBusNumDbHelper = new BusNumDbAdapter(activity);
 		
 		KingCounty_lineNumber = countLine(KingCounty_flag);
 		KingCounty_busArr = new String[KingCounty_lineNumber];
@@ -63,7 +67,7 @@ public class BusNumDbAdapterTest extends ActivityInstrumentationTestCase2
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	private static int countLine(int testFlag) throws IOException, 
+	private int countLine(int testFlag) throws IOException, 
    												   FileNotFoundException {
    		
    		InputStream in=null;
@@ -102,7 +106,7 @@ public class BusNumDbAdapterTest extends ActivityInstrumentationTestCase2
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	private static void readFile(int testFlag, String[] stringArr) 
+	private void readFile(int testFlag, String[] stringArr) 
 						throws IOException, FileNotFoundException {
    		
    		InputStream in=null;

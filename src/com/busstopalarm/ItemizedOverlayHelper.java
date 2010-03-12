@@ -26,7 +26,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private BusStop lastSelectedStop;
 	private Activity mCtx;
-	private int routeNum;
+	private String routeNum;
 
 	/**
 	 * It shows current bus route and a button to set alarm.
@@ -38,8 +38,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		this.mCtx = mCtx;
 		lastSelectedStop = null;
 		// TODO try-catch block
-		routeNum = Integer.parseInt(
-				mCtx.getIntent().getStringExtra("routeID").split("_")[1]);
+		routeNum = mCtx.getIntent().getStringExtra("routeID").split("_")[1];
 		TextView tv = (TextView)mCtx.findViewById(R.id.stopinfo);
 		String text = "Route " + routeNum + ": " + "<No Stop Selected>";
 		tv.setText(text);
@@ -97,9 +96,8 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		lastSelectedStop = stop.getStop();
 		
 		TextView tv = (TextView)mCtx.findViewById(R.id.stopinfo);
-		String text = "Route " + routeNum + ": " + lastSelectedStop.getName();
+		String text = "Route " + mCtx.getIntent().getStringExtra("routeID").split("_")[1] + ": " + lastSelectedStop.getName();
 		tv.setText(text);
-		
 		return super.onTap(index);
 	}
 

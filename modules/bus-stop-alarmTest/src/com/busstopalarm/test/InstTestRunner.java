@@ -22,7 +22,7 @@ public class InstTestRunner extends InstrumentationTestRunner{
 	     //   suite.addTestSuite(AlarmTest.class);
 	        suite.addTestSuite(BusDbAdapterTest.class);
 	        suite.addTestSuite(ConfirmationPageTests.class);
-	        suite.addTestSuite(DataFetcherTest.class);
+	        //suite.addTestSuite(DataFetcherTest.class);
 	        suite.addTestSuite(MainPageTests.class);
 	        suite.addTestSuite(WhiteBoxGUIConfirmationPageTests.class);
 	        suite.addTestSuite(WhiteBoxGUIMainPageTests.class);
