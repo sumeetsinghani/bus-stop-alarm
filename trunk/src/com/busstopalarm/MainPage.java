@@ -3,6 +3,8 @@ package com.busstopalarm;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import com.busstopalarm.R;
 
@@ -27,8 +29,13 @@ import android.widget.Toast;
  * @author David Nufer, Orkhan Muradov, Pyong Byon
  */
 public class MainPage extends Activity {
+	
+	private static final String TAG = "inMainPage";
+	
 	//Add this DB for validating bus route
 	public BusNumDbAdapter mBusNumDbHelper;
+	private List<Integer> validBusRoutes = null;
+	
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -43,9 +50,27 @@ public class MainPage extends Activity {
 		setupFavoriteButton();
 		setupMajorLocsButton();
 		displayRecentRoutes();
+		initValidBusRoutes();
 		
 		mBusNumDbHelper.close();
 		
+	}
+	
+	/**
+	 * Initializes validBusRoutes, the list of valid bus routes.
+	 */
+	private void initValidBusRoutes() {
+		try {
+			mBusNumDbHelper.readDbFile(0);
+			mBusNumDbHelper.readDbFile(1);
+			Log.v(TAG, "Successful read Num DB for valid bus routes!");
+		} catch (IOException e) {
+			// Do nothing, getBusRoutesList will just return an empty list.
+			Log.v(TAG, "Failed to read Num DB for valid bus routes!");
+		}
+		// Read from BusNumDb to get the list of valid bus routes.
+		validBusRoutes = mBusNumDbHelper.getBusRoutesList();
+		Log.v(TAG, validBusRoutes.toString());
 	}
 	
 	/**
@@ -56,20 +81,17 @@ public class MainPage extends Activity {
 		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			
-			// Checks to see if routeNumber is less than 5 digits long.
-			private boolean validRoute(int routeNumber) {
-				return routeNumber < 10000;
-			}
-			
 			public void onClick(View v) {
-				String routeText = ((EditText) findViewById(R.id.RouteSearchBox)).getText().toString();
+				String routeText = 
+					((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
 				String routeID;
 				try {
-					// parseInt() might throw an NumberFormatException if string is empty, or too long, 
-					// or somehow in invalid format. (which will be caught as IllegalArgumentException)
-					// Also, checks to see if the route number is less than 5 digits long.
-					if (!validRoute(Integer.parseInt(routeText)))
-							throw new IllegalArgumentException();
+					// If the route number input is in any way invalid, we
+					// throw an exception.
+					int routeNumInput = Integer.parseInt(routeText);
+					if (Collections.binarySearch(validBusRoutes, routeNumInput) < 0) {
+						throw new IllegalArgumentException();
+					}
 				} catch (IllegalArgumentException e) {
 					Toast t = Toast.makeText(v.getContext(),
 							"Invalid Route Number", Toast.LENGTH_LONG);
@@ -140,10 +162,8 @@ public class MainPage extends Activity {
 			ad.readDbFile(1);
 			ad.readDbFile(2);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		////////////////////////////
@@ -193,14 +213,15 @@ public class MainPage extends Activity {
 		switch (item.getItemId()) {
 		case 1:
 			BusStop stop = getIntent().getParcelableExtra("busStopSaved");
-			// TODO added
 			int routeID = getIntent().getIntExtra("busroute", -1);
-			Log.v("inMainPage", "bus stop:  " + stop);
+			
+			Log.v(TAG, "bus stop:  " + stop);
+			
 			if (stop != null) {
 			  Intent intentConfirmationPage = new Intent(this, ConfirmationPage.class);
 			  intentConfirmationPage.putExtra("busstop", stop);
-			  // TODO added
 			  intentConfirmationPage.putExtra("busroute", routeID);
+			  
 			  startActivity(intentConfirmationPage);
 			  finish();
 			  break;

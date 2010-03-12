@@ -13,6 +13,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -164,6 +168,48 @@ public class BusNumDbAdapter {
      */
     public Cursor fetchAllBusEntries() {
     	return mDb.rawQuery(DATABASE_FETCH_ALL_BUS, new String[]{});
+    }
+    
+    /**
+     * Returns a list of bus routes in the database as a list of integers, 
+     * instead of a Cursor. The list is read-only.
+     * 
+     * @return A sorted, immutable list of integers of available bus routes.
+     * 
+     * @author Derek Cheng
+     */
+    public List<Integer> getBusRoutesList() {
+    	
+    	// Get the cursor, and read all of its entries.
+    	Cursor c = fetchAllBusEntries();
+    	Log.v(TAG, "Total entries in result:" + c.getCount() + "");
+    	List<Integer> list = new ArrayList<Integer>();
+    	c.moveToFirst();
+    	
+    	// Which column is route_id?
+    	int column = c.getColumnIndex("route_id");
+    	// Cannot find the column corresponding to "route_id", so return 
+    	// an empty list.
+    	if (column < 0) {
+    		return Collections.unmodifiableList(list);
+    	}
+    	
+    	for (int i = 0; i < c.getCount(); i++) {
+    		String routeS = null;
+    		try {
+    			routeS = c.getString(column);
+    			int route = Integer.parseInt(routeS);
+    			Log.v(TAG, "got route number: " + route+"");
+    			list.add(route);
+    		} catch (NumberFormatException e) {
+    			Log.v(TAG, "got route number FAIL " + routeS);
+    			// do nothing with improperly formatted entries.
+    		}
+    		c.moveToNext();
+    	}
+    	
+    	Collections.sort(list);
+    	return Collections.unmodifiableList(list);
     }
     
     /**
