@@ -201,6 +201,7 @@ public class DataFetcher {
 					newStop.setLongitude(stop.getDouble("lon"));
 					newStop.setName(stop.getString("name"));
 					newStop.setCode(stop.getString("code"));
+					newStop.setStopId(stop.getString("id"));
 					busStopList.add(newStop);
 				}
 			}
