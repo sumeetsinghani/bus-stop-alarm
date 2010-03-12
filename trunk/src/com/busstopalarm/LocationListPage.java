@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 
 public class LocationListPage extends ListActivity {
+	
+	private static final String TAG = "inLocationListPage";
 	/**
 	 * static constants for determining if the list is for favorites
 	 * or major locations.
@@ -58,7 +60,9 @@ public class LocationListPage extends ListActivity {
 	  
 	  listType = getIntent().getIntExtra("listType", 0);
 	  if (listType == 0) {
-		  // this is an error.  need to do something if we get here
+		  Toast.makeText(this, "Internal error", Toast.LENGTH_LONG);
+		  Log.v(TAG, "Unable to get listType");
+		  finish();
 	  }
 	  
 	  listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"routeID", "stopName"}, new int[] {R.id.listItemRouteID, R.id.listItemName});
@@ -79,11 +83,12 @@ public class LocationListPage extends ListActivity {
 		    	i.putExtra("busroute", item.get("routeID"));
 		    	startActivity(i);
 		    	finish();
+		    	// if an exception occurs, nothing happens (for now).
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				Log.v(TAG, "Error parsing stop id!");
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				Log.v(TAG, "Error fetching info!");
 				e.printStackTrace();
 			}
 	    }
@@ -159,11 +164,12 @@ public class LocationListPage extends ListActivity {
 		    	i.putExtra("busroute", Integer.parseInt(busItem.get("routeID")));
 		    	startActivity(i);
 		    	finish();
+		    	// if an exception occurs, nothing happens (for now).
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				Log.v(TAG, "Error parsing stop id!");
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				Log.v(TAG, "Error fetching info!");
 				e.printStackTrace();
 			}
 	    
