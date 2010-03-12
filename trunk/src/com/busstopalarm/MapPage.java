@@ -101,9 +101,6 @@ public class MapPage extends MapActivity {
 			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
 			t.show();
 		}
-
-		//currentLocOverlay = null;
-
 	}
 
 	public void fillData() {
