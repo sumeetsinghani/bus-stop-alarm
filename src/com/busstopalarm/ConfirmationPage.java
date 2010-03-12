@@ -49,73 +49,19 @@ public class ConfirmationPage extends Activity {
 
 	// this TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-	private static final String SETTINGS_FILE_NAME = "favorite_settings_data";
 
-	private boolean vibration;
 	private Uri ringtoneUri;
-	private int proximity;
-	private String proximityUnit;
 
-	// these below are the data saved in the "favorite_settings_data" file in
-	// sdcard to be retrieved from the file to load the recent settings
-	private String dataRingtone;
-	private String ringtoneTitleToSave;
-
-	private SeekBar proximitySeekBar;
-	private TextView progressText; 
-
+	// The settings object to be pre-loaded into the page.
+	private SettingsObj settings;
+	
 	/**
 	 * ConfirmationPage constructor
 	 */
 	public ConfirmationPage() {
-
-		dataRingtone = null;
-
-		vibration = false;
-		ringtoneUri = null;
-		proximity = 0;
-		proximityUnit = null;
-
-		ringtoneTitleToSave = null; 
+		ringtoneUri = null;	
+		settings = null;
 	}
-
-
-
-	/**
-	 * vibrate setter
-	 * @param boolean vibrate input
-	 */
-	public void setVibration(boolean vibrateInput){
-		vibration = vibrateInput;
-	}
-
-
-	/**
-	 * getter for vibration
-	 * @return boolean vibration
-	 */
-	public boolean getVibration(){
-		return vibration;
-	}
-
-
-	/**
-	 * setter for ringtone uri
-	 * @param Uri ringtone uri
-	 */
-	public void setRingtoneUri(Uri ringtoneInput){
-		ringtoneUri = ringtoneInput;
-	}
-
-
-	/**
-	 * getter for ringtone uri
-	 * @return Uri ringtone uri
-	 */
-	public Uri getRingtoneUri(){
-		return ringtoneUri;
-	}
-
 
 	/** Called when the activity is first created on the confirmation page.
 	 *  @param Bundle which holds the current state (info)
@@ -132,13 +78,12 @@ public class ConfirmationPage extends Activity {
 		// performance testing, starting from the confirmation page (onCreate)
 		//Debug.startMethodTracing("performance_testing_on_confirmation");
 		
-		
 		// load saved settings
-		loadRecentSettings();
-	
+		settings = SettingsObj.getSettingsFromFile();
+		
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
-		// TODO need to make it so that routeID can be obtained from main page once alarm is set?
+	
 		int routeID = getIntent().getIntExtra("busroute", 0);
 		
 		TextView routeView = (TextView) findViewById(R.id.RouteNumberSelected);
@@ -154,10 +99,8 @@ public class ConfirmationPage extends Activity {
 		getProximity();
 		getProximityUnits();
 
-		Log.v(TAG, "vibrate:  " + vibration);
 		Log.v(TAG, "ringtone:  " + ringtoneUri);
-		Log.v(TAG, "proximity:  " + proximity);
-		Log.v(TAG, "proximityUnit:  " + proximityUnit);
+
 	}  // ends onCreate method
 
 
@@ -175,18 +118,20 @@ public class ConfirmationPage extends Activity {
 				BusStop b = getIntent().getParcelableExtra("busstop");
 				Intent intentAlarmService = 
 					new Intent(v.getContext(), AlarmService.class);
-				intentAlarmService.putExtra("proximity", proximity);
-				intentAlarmService.putExtra("proximityUnit", proximityUnit);
+				
 				intentAlarmService.putExtra("busstop", b);
-				intentAlarmService.putExtra("vibration", vibration);
+				intentAlarmService.putExtra("proximity", settings.getProximity());
+				intentAlarmService.putExtra("proximityUnit", 
+						settings.getProximityUnit());
+				intentAlarmService.putExtra("vibration", settings.getVibration());
 				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
 				startService(intentAlarmService);
 
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 				intentToMainPage.putExtra("busStopSaved", b);				
-				// TODO does this work?
-				intentToMainPage.putExtra("busroute", getIntent().getIntExtra("busroute", 0));
+				intentToMainPage.putExtra("busroute", 
+						getIntent().getIntExtra("busroute", 0));
 				
 				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 						Toast.LENGTH_LONG).show();
@@ -273,79 +218,6 @@ public class ConfirmationPage extends Activity {
 		}); // ends "Save Destination" button
 	} // ends saveButton method
 
-
-	public void setDefaultSettingsValues() {
-
-		vibration = false;
-		ringtoneUri = null;
-		proximity = 0;
-		proximityUnit = null;
-
-	}
-
-	/**
-	 * This method loads from 
-	 * data/data/com.busstopalarm/files/favorite_settings_data
-	 * to read the user's recent settings saved.
-	 * the file contains the values with tabs to separate them.
-	 * After reading from the file, it sets the data values for 
-	 * vibrate, ringtone, proximity and units appropriately.
-	 * @throws IOException 
-	 */
-	public void loadRecentSettings() {
-		BufferedReader bin = null;
-		String line = null;
-		try {
-			bin = new BufferedReader(new InputStreamReader(
-					openFileInput(SETTINGS_FILE_NAME)));
-		} catch (FileNotFoundException e) {
-			setDefaultSettingsValues();
-			return;
-		}
-		try {
-			line = bin.readLine();
-		} catch (IOException e) {
-			setDefaultSettingsValues();
-			return;
-		} finally {
-			try {
-				bin.close();
-			} catch (IOException e) {
-				// do nothing
-			}
-		}
-		
-		String[] settingResult = line.split("\t");
-
-		Log.v(TAG, "settingResult length:  " + settingResult.length);
-		if (settingResult.length < 4) {
-			Log.v(TAG, "settingResult length less than 4 - corrupted file");
-			setDefaultSettingsValues();
-			return;
-		}
-
-		Log.v(TAG, "here1?");
-		if (settingResult[0] != null && settingResult[0].equals("vibrate"))
-			vibration = true;
-
-		dataRingtone = settingResult[1];
-
-		try {
-			proximity = Integer.parseInt(settingResult[2]);
-		} catch (NumberFormatException e) {
-			// default value is 0
-			proximity = 0;
-		}
-		if (proximity > 1000)
-			proximity = 1000;
-		else if (proximity < 0)
-			proximity = 0;
-
-		proximityUnit = settingResult[3];
-	}
-
-
-
 	/**
 	 * It is invoked when vibrate is clicked. 
 	 * when loading vibrate is not checked if dataVibrate is null or
@@ -357,14 +229,15 @@ public class ConfirmationPage extends Activity {
 	 */
 	public void getVibrate(){
 		final CheckBox vib = (CheckBox) findViewById(R.id.VibrateCheckbox);
-		Log.v(TAG, "under getVibrate method, vibration:  " + vibration);
-		vib.setChecked(vibration);
+		Log.v(TAG, "under getVibrate method, vibration:  " + 
+				settings.getVibration());
+		vib.setChecked(settings.getVibration());
 
 		vib.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {	
-				vibration = isChecked;
-				Log.v(TAG, "under onCheckedChanged: " + vibration);
+				settings.setVibration(isChecked);
+				Log.v(TAG, "under onCheckedChanged: " + isChecked);
 			}
 		});
 	}  // ends getVibrate method
@@ -377,21 +250,21 @@ public class ConfirmationPage extends Activity {
 	 * for Meters, the range is from 0 to 1000
 	 */
 	public void getProximity() {
-		proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
-		progressText = (TextView) findViewById(R.id.ProximityNumber);
-		progressText.setText(Integer.toString(proximity));
+		final SeekBar proximitySeekBar = (SeekBar) findViewById(R.id.ProximityBar);
+		final TextView progressText = (TextView) findViewById(R.id.ProximityNumber);
+		progressText.setText(Integer.toString(settings.getProximity()));
 
 		// range from 0 to 1000 with step size 1.
 		proximitySeekBar.setMax(1000);
-		proximitySeekBar.setProgress(proximity);
+		proximitySeekBar.setProgress(settings.getProximity());
+		
 		proximitySeekBar.setOnSeekBarChangeListener(
 				new OnSeekBarChangeListener() {
 
 					public void onProgressChanged(SeekBar seekBarOnProgress, 
 							int progress, boolean fromTouch) {
-						proximity = progress;
-						progressText.setText(Integer.toString(proximity));
-
+						settings.setProximity(progress);
+						progressText.setText(Integer.toString(progress));
 					}
 
 					public void onStartTrackingTouch(SeekBar seekBarOnStart) {
@@ -420,7 +293,8 @@ public class ConfirmationPage extends Activity {
 				android.R.layout.simple_spinner_dropdown_item);
 		proximityUnitsSpinner.setAdapter(proxSpinnerValues);
 
-		if (proximityUnit != null && proximityUnit.equalsIgnoreCase("Meters"))
+		String settingsUnit = settings.getProximityUnit();
+		if (settingsUnit != null && settingsUnit.equalsIgnoreCase("Meters"))
 			proximityUnitsSpinner.setSelection(1);
 
 		proximityUnitsSpinner.setOnItemSelectedListener(
@@ -429,7 +303,7 @@ public class ConfirmationPage extends Activity {
 							View arg1, int arg2, long arg3) {
 						CharSequence selectedUnit =
 							(CharSequence) adapterView.getSelectedItem();
-						proximityUnit = selectedUnit.toString();	
+						settings.setProximityUnit(selectedUnit.toString());
 						Log.v(TAG, "under onItemSelected(proximity unit): " +
 								selectedUnit);
 					}
@@ -459,6 +333,8 @@ public class ConfirmationPage extends Activity {
 		// Did we find the ringtone specified in the settings file?
 		boolean ringtoneFound = false;
 		String[] ringtoneList = new String[ringtoneCursor.getCount()];
+		String settingsRingtoneName = settings.getRingtoneName();
+		
 		Log.v(TAG, "ringtones row count: " + ringtoneCursor.getCount());
 		ringtoneCursor.moveToFirst();
 	
@@ -471,7 +347,8 @@ public class ConfirmationPage extends Activity {
 			// This is just a small optimization so we don't have to compare
 			// strings every time.
 			if (!ringtoneFound) {
-				if (dataRingtone != null && dataRingtone.equals(titleOfRingtone)) {
+				if (settingsRingtoneName != null && 
+						settingsRingtoneName.equals(titleOfRingtone)) {
 					defaultRingtoneIndex = i;
 					ringtoneFound = true;
 				}
@@ -489,21 +366,20 @@ public class ConfirmationPage extends Activity {
 		
 		if (defaultRingtoneIndex != 0) {
 			ringtoneSpinner.setSelection(defaultRingtoneIndex);
+			ringtoneUri = ringtoneManager.getRingtoneUri(defaultRingtoneIndex);
 		}
 
 		ringtoneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() { 
 
 			public void onItemSelected(AdapterView<?> adapterView, View arg1,
 					int arg2, long arg3) {
-
 				int indexRingtone = adapterView.getSelectedItemPosition();
 				ringtoneUri = ringtoneManager.getRingtoneUri(indexRingtone);
 				Ringtone rt = ringtoneManager.getRingtone(indexRingtone);
-				ringtoneTitleToSave = rt.getTitle(getBaseContext());
+				settings.setRingtoneName(rt.getTitle(getBaseContext()));
 			}
 			
 			public void onNothingSelected(AdapterView<?> arg0) {
-			
 			}
 
 		});

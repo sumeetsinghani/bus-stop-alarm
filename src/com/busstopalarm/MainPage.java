@@ -34,7 +34,7 @@ public class MainPage extends Activity {
 	
 	//Add this DB for validating bus route
 	public BusNumDbAdapter mBusNumDbHelper;
-	private List<Integer> validBusRoutes = null;
+	private static List<Integer> validBusRoutes = null;
 	
 	
 	/** Called when the activity is first created. */
@@ -50,7 +50,10 @@ public class MainPage extends Activity {
 		setupFavoriteButton();
 		setupMajorLocsButton();
 		displayRecentRoutes();
-		initValidBusRoutes();
+		// We only need read in this file once.
+		if (validBusRoutes == null) {
+			initValidBusRoutes();
+		}
 		
 		mBusNumDbHelper.close();
 		
