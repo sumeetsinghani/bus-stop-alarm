@@ -52,7 +52,7 @@ public class ConfirmationPage extends Activity {
 	// This keeps the state of whether a notification has been set. This way 
 	// of keeping track state is better than checking for the existence of 
 	// the relevant service in the ActivityManager.
-	//private static boolean isAlarmSet = false;
+	private static boolean isAlarmSet = false;
 	
 	private Uri ringtoneUri;
 
@@ -136,8 +136,14 @@ public class ConfirmationPage extends Activity {
 				intentToMainPage.putExtra("busroute", 
 						getIntent().getIntExtra("busroute", 0));
 				
-				Toast.makeText(ConfirmationPage.this, "Alarm is set", 
-						Toast.LENGTH_LONG).show();
+				if (!isAlarmSet) {
+					Toast.makeText(ConfirmationPage.this, "Alarm is set", 
+							Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(ConfirmationPage.this, "Alarm updated", 
+							Toast.LENGTH_LONG).show();
+				}
+				isAlarmSet = true;
 				
 				// performance testing, starting from the onCreate 
 				// up to this point (author: Pyong Byon)
@@ -179,8 +185,14 @@ public class ConfirmationPage extends Activity {
 					new Intent(v.getContext(), AlarmService.class);
 				stopService(intentAlarmService);
 
-				Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
-						Toast.LENGTH_LONG).show();
+				if (isAlarmSet) {
+					Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
+							Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(ConfirmationPage.this, "There is no alarm set!", 
+							Toast.LENGTH_LONG).show();
+				}
+				isAlarmSet = false;
 				
 				setResult(RESULT_OK);
 				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
@@ -218,13 +230,13 @@ public class ConfirmationPage extends Activity {
 				Log.v(TAG, "Bundle :  " + bundle);
 				
 				// get busRouteID
-				int busRouteID = getIntent().getIntExtra("busroute", 0);
-				String busRouteIDString = Integer.toString(busRouteID);
+				String busRouteIDString = getIntent().getStringExtra("busroute");
 				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
 				
 				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
-				busDbAdapter.open();	
-			    busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
+				busDbAdapter.open();
+				Log.v(TAG, "try to save. args: " + busRouteIDString + " " + busStopID);
+				busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
 				busDbAdapter.close();
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
 						Toast.LENGTH_LONG).show();
