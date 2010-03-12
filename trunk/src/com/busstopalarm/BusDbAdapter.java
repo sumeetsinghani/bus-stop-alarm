@@ -204,12 +204,10 @@ public class BusDbAdapter {
      * otherwise return a -1 to indicate failure.
      * 
      * @param route_id The Id of the bus route
+     * @param route_desc The description of the route
      * @param stop_id The Id of the bus stop
-     * @param destination The description of the destination, e.x: 45th & 15th
-     * @param longitude The longitude of the destination
-     * @param latitude The latitude of the destination
-     * @param count The number of times that this route is used
-     * @param time The time of this route being used
+     * @param stop_desc The description of stop
+     * @param major The major
      * @return rowId or -1 if failed
      */
     public long createDest(String route_id, String route_desc,
@@ -367,6 +365,7 @@ public class BusDbAdapter {
     
     	String[] args = {route_desc, stop_desc, route_id, stop_id};
     	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
+    	// once again, empty cursor on update doesn't mean failure.
     	return mCursor.getCount();
     	
     }
@@ -383,10 +382,26 @@ public class BusDbAdapter {
     public int updateDestDesc_TimeCount(String route_id, String stop_id) {
     	String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).
 								   toString();
-    	int count = Integer.parseInt(getDestCount(route_id, stop_id)) + 1;
-    	String[] args = { Integer.toString(count), time, route_id, stop_id};
-    	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
-    	return mCursor.getCount();
+    	int count = 0;
+    	String countS = getDestCount(route_id, stop_id);
+    	Log.v(TAG, "updateDestDesc... countS = " + countS);
+    	if (countS == null) {
+    		createDest(route_id, "hi", stop_id, "there", 0);
+    		return 1;
+    	} else {
+    		try {
+    			count = Integer.parseInt(countS);
+    		} catch (NumberFormatException e) {
+    			// if the entry is malformed, reset
+    			count = 0;
+    		}
+    		count++;
+
+    		String[] args = { Integer.toString(count), time, route_id, stop_id};
+    		Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
+    		// HUY: Cursor being empty on a update statement doesn't mean it failed!
+    		return mCursor.getCount();
+    	}
     }
     
    /**
@@ -597,9 +612,16 @@ public class BusDbAdapter {
   				break;
   			}
     		result = line.split("\t");
-    		createDest(result[0], result[1], result[2], 
-    				   result[3], Integer.parseInt(result[4]));
-    	}
+    		if (result.length == 5) {
+    			try {
+        			createDest(result[0], result[1], result[2], 
+        					result[3], Integer.parseInt(result[4]));
+    			} catch (NumberFormatException e) {
+    				// skip this entry if malformed
+    				Log.v(TAG, "Read malformed entry for major: " + result[4]);
+    			}
+    		}
+  		}
   		bin.close();
   		return true;
    	}
