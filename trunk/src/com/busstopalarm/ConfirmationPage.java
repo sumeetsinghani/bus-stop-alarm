@@ -47,9 +47,13 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ConfirmationPage extends Activity {
 
-	// this TAG is for debugging
+	// This TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-
+	// This keeps the state of whether a notification has been set. This way 
+	// of keeping track state is better than checking for the existence of 
+	// the relevant service in the ActivityManager.
+	//private static boolean isAlarmSet = false;
+	
 	private Uri ringtoneUri;
 
 	// The settings object to be pre-loaded into the page.
@@ -174,8 +178,15 @@ public class ConfirmationPage extends Activity {
 				Intent intentAlarmService = 
 					new Intent(v.getContext(), AlarmService.class);
 				stopService(intentAlarmService);
+
+				Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
+						Toast.LENGTH_LONG).show();
+				
+				setResult(RESULT_OK);
+				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
+				finishActivity(MainPage.MAIN_CONFIRM_TRANSITION);
+
 				startActivity(intentToMainPage);
-				finish();
 			}
 		});
 	}
@@ -211,7 +222,7 @@ public class ConfirmationPage extends Activity {
 				String busRouteIDString = Integer.toString(busRouteID);
 				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
 				
-				BusDbAdapter busDbAdapter = new BusDbAdapter (v.getContext());
+				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
 				busDbAdapter.open();	
 			    busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
 				busDbAdapter.close();
