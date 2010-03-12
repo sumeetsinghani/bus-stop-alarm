@@ -37,6 +37,13 @@ import com.google.android.maps.OverlayItem;
 
 public class MapPage extends MapActivity {
 
+	private static final String TAG = "inMapPage";
+	// This number is arbitrary - this is used in startActivityForResult() and
+	// finishActivity() calls to determine whether the user backed out of 
+	// confirmation page to the map page, or confirmed the alarm.
+	// If it is the latter, then we can finish the map page.
+	public static final int MAP_CONFIRM_TRANSITION = 123;
+	
 	private MapController mapController;
 	private MapView mapView;
 	private LocationManager lm;
@@ -103,6 +110,18 @@ public class MapPage extends MapActivity {
 		}
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.v(TAG, "onActivityResult" + requestCode + " " + resultCode);
+		if (requestCode == MAP_CONFIRM_TRANSITION) {
+			if (resultCode == RESULT_OK) {
+				finish();
+			}
+		}
+		// else, we got here from backing out of confirmation page, we do not
+		// finish the map page.	
+	}
+	
 	public void fillData() {
 		setContentView(mapView);
 	}

@@ -46,10 +46,6 @@ public class MainPage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		Toast.makeText(getApplicationContext(), 
-				"Loading bus route data, please wait...", 
-				Toast.LENGTH_LONG).show();
-		
 		mBusNumDbHelper = new BusNumDbAdapter(this);
 		mBusNumDbHelper.open();
 		
@@ -58,7 +54,10 @@ public class MainPage extends Activity {
 		setupMajorLocsButton();
 		displayRecentRoutes();
 		// We only need read in this file once.
-		if (validBusRoutes == null) {
+		if (validBusRoutes == null) {			
+			Toast.makeText(getApplicationContext(), 
+					"Loading bus route data, please wait...", 
+					Toast.LENGTH_LONG).show();
 			initValidBusRoutes();
 		}
 		
