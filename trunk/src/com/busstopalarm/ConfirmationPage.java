@@ -83,11 +83,12 @@ public class ConfirmationPage extends Activity {
 		
 		setContentView(R.layout.confirmation);
 		BusStop stop = getIntent().getParcelableExtra("busstop");
+
 	
-		int routeID = getIntent().getIntExtra("busroute", 0);
+		String routeID = getIntent().getStringExtra("busroute");
 		
 		TextView routeView = (TextView) findViewById(R.id.RouteNumberSelected);
-		routeView.setText(Integer.toString(routeID));
+		routeView.setText(routeID);
 		TextView stopView = (TextView) findViewById(R.id.BusStopSelected);
 		stopView.setText(stop.getName());
 
@@ -102,8 +103,6 @@ public class ConfirmationPage extends Activity {
 		Log.v(TAG, "ringtone:  " + ringtoneUri);
 
 	}  // ends onCreate method
-
-
 	/**
 	 *  OK Button confirms the alarm setting
 	 *  it calls alarm service to set alarm

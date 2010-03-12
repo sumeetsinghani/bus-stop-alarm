@@ -1,3 +1,4 @@
+package com.busstopalarm.test;
 /**
  * Test driven test case for DataFetcher.java. The intended use for
  * DataFetcher is to allow for easy retrieval of data from queries to
@@ -7,7 +8,6 @@
  * @author Michael Eng
  */
 
-package com.busstopalarm.test;
 
 import java.io.IOException;
 import java.util.List;

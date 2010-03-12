@@ -6,11 +6,14 @@
  */
 package com.busstopalarm.test;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+
+import com.busstopalarm.BusStop;
 import com.busstopalarm.ConfirmationPage;
 
 public class ConfirmationPageTests extends 
@@ -23,10 +26,24 @@ public class ConfirmationPageTests extends
 		super("com.busstopalarm", ConfirmationPage.class);
 	}
 
+	public ConfirmationPage page;
+	public BusStop stop;
+	
 	/**
 	 * Initializes (if any) the set up for the test
 	 */
 	protected void setUp() throws Exception {
+		Intent i = new Intent();
+		stop = new BusStop();
+		stop.setCode("10020");
+		stop.setLatitude(47.6685829);
+		stop.setLongitude(-122.2883);
+		stop.setName("NE 55th St & 37th Ave NE");
+		stop.setStopId("1_10020");
+		i.putExtra("busstop", stop);
+		i.putExtra("busroute", "30");
+		setActivityIntent(i);
+		
 	}
 	
 	/**
@@ -192,20 +209,20 @@ public class ConfirmationPageTests extends
 					 "Meters", result);
 	}
 	
-	/**
-	 * Tests the proximity unit selection
-	 * 
-	 * @throws Throwable
-	 */
-	public void test_ProximityUnitMinutes() throws Throwable{
-		ConfirmationPage cp = (ConfirmationPage) getActivity();
-		final Spinner proxUnit = 
-			(Spinner) cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
-		final int pos = 2; 		
-		
-		String result = proxUnit.getItemAtPosition(pos).toString();
-		assertEquals("the proximity unit should be Minutes", "Minutes", result);
-	}
+//	/**
+//	 * Tests the proximity unit selection
+//	 * 
+//	 * @throws Throwable
+//	 */
+//	public void test_ProximityUnitMinutes() throws Throwable{
+//		ConfirmationPage cp = (ConfirmationPage) getActivity();
+//		final Spinner proxUnit = 
+//			(Spinner) cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
+//		final int pos = 2; 		
+//		
+//		String result = proxUnit.getItemAtPosition(pos).toString();
+//		assertEquals("the proximity unit should be Minutes", "Minutes", result);
+//	}
 	
 	/**
 	 * Tests if the cancel button is clickable
@@ -229,7 +246,7 @@ public class ConfirmationPageTests extends
 	public void test_SaveButton_Clickable() throws Throwable{
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final Button saveButton = 
-			(Button) cp.findViewById(com.busstopalarm.R.id.SetAsFavButton);
+			(Button) cp.findViewById(com.busstopalarm.R.id.SaveDestination);
 		
 		boolean isClicked = saveButton.isClickable();
 		assertEquals("can't click save button", true, isClicked);	

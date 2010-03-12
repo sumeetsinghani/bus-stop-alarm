@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import com.busstopalarm.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -48,7 +46,7 @@ public class MainPage extends Activity {
 		
 		mBusNumDbHelper = new BusNumDbAdapter(this);
 		mBusNumDbHelper.open();
-		
+
 		setupRouteSearchButton();
 		setupFavoriteButton();
 		setupMajorLocsButton();
