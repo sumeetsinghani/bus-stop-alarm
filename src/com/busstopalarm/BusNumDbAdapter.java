@@ -40,6 +40,10 @@ public class BusNumDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final int DATABASE_VERSION = 2;
 	
+    // Database numbers. (We only have two, so no need for enum)
+    public static final int KINGCOUNTY_DB = 0;
+    public static final int SOUNDTRANSIT_DB = 1;
+    
     /**
      * Database Query Statements
      */
@@ -281,9 +285,9 @@ public class BusNumDbAdapter {
    												   FileNotFoundException {
    		
    		InputStream in=null;
-   		if (testFlag == 0) {
+   		if (testFlag == KINGCOUNTY_DB) {
    			in = mCtx.getResources().openRawResource(R.raw.kingcounty);
-   		} else if (testFlag == 1) {
+   		} else if (testFlag == SOUNDTRANSIT_DB) {
    			in = mCtx.getResources().openRawResource(R.raw.soundtransit);
    		} 
    		

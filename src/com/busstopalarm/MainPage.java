@@ -46,6 +46,10 @@ public class MainPage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		Toast.makeText(getApplicationContext(), 
+				"Loading bus route data, please wait...", 
+				Toast.LENGTH_LONG).show();
+		
 		mBusNumDbHelper = new BusNumDbAdapter(this);
 		mBusNumDbHelper.open();
 		
@@ -66,14 +70,17 @@ public class MainPage extends Activity {
 	 * Initializes validBusRoutes, the list of valid bus routes.
 	 */
 	private void initValidBusRoutes() {
+	
 		try {
-			mBusNumDbHelper.readDbFile(0);
-			mBusNumDbHelper.readDbFile(1);
+			// Reading both King County and Sound Transit tables.
+			mBusNumDbHelper.readDbFile(BusNumDbAdapter.KINGCOUNTY_DB);
+			mBusNumDbHelper.readDbFile(BusNumDbAdapter.SOUNDTRANSIT_DB);
 			Log.v(TAG, "Successful read Num DB for valid bus routes!");
 		} catch (IOException e) {
 			// Do nothing, getBusRoutesList will just return an empty list.
 			Log.v(TAG, "Failed to read Num DB for valid bus routes!");
 		}
+		
 		// Read from BusNumDb to get the list of valid bus routes.
 		validBusRoutes = mBusNumDbHelper.getBusRoutesList();
 		Log.v(TAG, validBusRoutes.toString());
@@ -91,10 +98,12 @@ public class MainPage extends Activity {
 				String routeText = 
 					((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
 				String routeID;
+				int routeNumInput;
+				
 				try {
 					// If the route number input is in any way invalid, we
 					// throw an exception.
-					int routeNumInput = Integer.parseInt(routeText);
+					routeNumInput = Integer.parseInt(routeText);
 					if (Collections.binarySearch(validBusRoutes, routeNumInput) < 0) {
 						throw new IllegalArgumentException();
 					}
@@ -104,16 +113,12 @@ public class MainPage extends Activity {
 					t.show();
 					return;
 				}
-				routeID = "1_" + routeText;
-			
-				String s = "PlaceHolder for Route Info.";
+							
+				showTransitionToastMsg(routeNumInput);
+				
 				Intent i = new Intent(v.getContext(), MapPage.class);
-				i.putExtra("routeID", routeID);
+				i.putExtra("routeID", "1_" + routeText);
 				startActivity(i);
-				Toast t = Toast.makeText(v.getContext(), s.substring(0,
-						Math.min(s.length(), 500)), Toast.LENGTH_LONG);
-				t.show();
-				finish();
 			}
 		});
 	}
@@ -183,7 +188,9 @@ public class MainPage extends Activity {
 			final TextView recentItem = new TextView(this);
 			recentItem.setClickable(true);
 			recentItem.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
+				
+				public void onClick(View v) {					
+					showTransitionToastMsg(routeNumber);
 					Intent i = new Intent(v.getContext(), MapPage.class);
 					i.putExtra("routeID", "1_" + routeNumber);
 					startActivity(i);
@@ -198,6 +205,13 @@ public class MainPage extends Activity {
 		}
 		
 		ad.close();
+	}
+	
+	private void showTransitionToastMsg(int routeNumber) {
+		String s = "Drawing route " + routeNumber + " on map. " +
+		"Please wait...";
+		Toast t = Toast.makeText(this, s, Toast.LENGTH_LONG);
+		t.show();
 	}
 	
 	@Override
