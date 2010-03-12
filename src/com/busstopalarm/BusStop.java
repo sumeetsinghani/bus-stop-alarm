@@ -1,5 +1,4 @@
 /**
- * TODO: Stub class for stop element. Not fully tested.
  * Contains information pertaining to a bus stop such as coordinates,
  * bus direction and street location. Currently only getters and setters.
  * 
