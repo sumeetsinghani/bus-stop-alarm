@@ -379,7 +379,8 @@ public class BusDbAdapter {
      * @param route_id Id of the bus route
      * @param stop_id Id of the bus stop
      * @return 1 if the destination is successfully updated. 0 otherwise.
-     */public int updateDestDesc_TimeCount(String route_id, String stop_id) {
+     */
+    public int updateDestDesc_TimeCount(String route_id, String stop_id) {
     	String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).
 								   toString();
     	int count = Integer.parseInt(getDestCount(route_id, stop_id)) + 1;
@@ -596,13 +597,6 @@ public class BusDbAdapter {
   				break;
   			}
     		result = line.split("\t");
-    		/*
-    		Log.v("BusDbAdapter 1st", result[0]);
-    		Log.v("BusDbAdapter 2nd", result[1]);
-    		Log.v("BusDbAdapter 3rd", result[2]);
-    		Log.v("BusDbAdapter 4th", result[3]);
-    		Log.v("BusDbAdapter 5th", result[4]);
-    		*/
     		createDest(result[0], result[1], result[2], 
     				   result[3], Integer.parseInt(result[4]));
     	}
