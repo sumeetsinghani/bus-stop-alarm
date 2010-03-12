@@ -52,6 +52,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 					i.putExtra("busstop", lastSelectedStop);
 					i.putExtra("busroute", routeNum);
 					mCtx.startActivity(i);
+					mCtx.finish();
 				} else {
 					Toast.makeText(v.getContext(), "Please Select a Route", Toast.LENGTH_LONG).show();
 				}
