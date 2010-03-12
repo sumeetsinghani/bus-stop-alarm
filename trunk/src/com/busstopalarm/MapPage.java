@@ -84,9 +84,6 @@ public class MapPage extends MapActivity {
 				mapOverlays.add(po);
 			}
 
-			// place stops on map
-			//List<BusStop> stops = df.getBusStopsForRoute(routeNumber);
-
 			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.busstopicon);
 			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
 
@@ -96,12 +93,10 @@ public class MapPage extends MapActivity {
 			}
 			mapOverlays.add(itemizedoverlay);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
 			t.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
 			t.show();
