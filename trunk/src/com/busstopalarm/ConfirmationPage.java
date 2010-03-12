@@ -142,15 +142,11 @@ public class ConfirmationPage extends Activity {
 				// We give signal that we can finish Map Page here.
 				setResult(RESULT_OK);
 				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
-				// TODO 
-				// Currently we create a new Main Page instead of going back
-				// to the original main page.
-				// If we decide to do the latter, then we need a way to 
-				// somehow feed the data back to the orig main page.
+				finishActivity(MainPage.MAIN_CONFIRM_TRANSITION);
+
 				startActivity(intentToMainPage);
 				// We do not finish here because we want to be able to go back
 				// to change settings.
-				//finish();
 			}
 		});
 	} // ends okButton method

@@ -31,7 +31,10 @@ public class MainPage extends Activity {
 	private static final String TAG = "inMainPage";
 	// The number of most recent routes to display.
 	private static final int numRecentRoutes = 5;
-
+	// This number is arbitrary - this is used in startActivityForResult() and
+	// finishActivity() calls to determine whether the user went to confirmaton
+	// from main page or map page.
+	public static final int MAIN_CONFIRM_TRANSITION = 456;
 	
 	//Add this DB for validating bus route
 	public BusNumDbAdapter mBusNumDbHelper;
@@ -94,7 +97,6 @@ public class MainPage extends Activity {
 			public void onClick(View v) {
 				String routeText = 
 					((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
-				String routeID;
 				int routeNumInput;
 				
 				try {
@@ -115,11 +117,19 @@ public class MainPage extends Activity {
 				
 				Intent i = new Intent(v.getContext(), MapPage.class);
 				i.putExtra("routeID", "1_" + routeText);
-				startActivity(i);
+				startActivityForResult(i,MAIN_CONFIRM_TRANSITION);
 			}
 		});
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.v(TAG, "onActivityResult" + requestCode + " " + resultCode);
+		if (requestCode == MAIN_CONFIRM_TRANSITION) {
+				finish();
+		}
+	}
+	
 	/**
 	 * Sets up the favorite button. Called by onCreate() method.
 	 */
@@ -130,7 +140,7 @@ public class MainPage extends Activity {
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.FAVORITES);
-				startActivity(i);
+				startActivityForResult(i,MAIN_CONFIRM_TRANSITION);
 			}
 		});
 	}
@@ -145,7 +155,7 @@ public class MainPage extends Activity {
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), LocationListPage.class);
 				i.putExtra("listType", LocationListPage.MAJOR);
-				startActivity(i);
+				startActivityForResult(i,MAIN_CONFIRM_TRANSITION);
 			}
 		});
 	}

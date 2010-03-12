@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.google.android.maps.OverlayItem;
 
 public class ItemizedOverlayHelper extends ItemizedOverlay {
 
+	private static final String TAG = "inOverlayHelper";
+	
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private BusStop lastSelectedStop;
 	private Activity mCtx;
@@ -37,8 +40,14 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		super(boundCenterBottom(defaultMarker));
 		this.mCtx = mCtx;
 		lastSelectedStop = null;
-		// TODO try-catch block
-		routeNum = mCtx.getIntent().getStringExtra("routeID").split("_")[1];
+		try {
+			routeNum = mCtx.getIntent().getStringExtra("routeID").split("_")[1];
+		} catch (Exception e) {
+			// NullPointerException, IndexOutOfBoundsException, and
+			// NumberFormatException are caught here.
+			Log.v(TAG, "Error trying to get routeID sent from main page");
+			e.printStackTrace();
+		}
 		TextView tv = (TextView)mCtx.findViewById(R.id.stopinfo);
 		String text = "Route " + routeNum + ": " + "<No Stop Selected>";
 		tv.setText(text);

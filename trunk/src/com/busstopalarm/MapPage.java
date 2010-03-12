@@ -115,6 +115,10 @@ public class MapPage extends MapActivity {
 		Log.v(TAG, "onActivityResult" + requestCode + " " + resultCode);
 		if (requestCode == MAP_CONFIRM_TRANSITION) {
 			if (resultCode == RESULT_OK) {
+				// TODO
+				// Finish the old main page if we have already set the alarm.
+				setResult(RESULT_OK);
+				finishActivity(456);
 				finish();
 			}
 		}
