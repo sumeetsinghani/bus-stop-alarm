@@ -31,11 +31,14 @@ import android.widget.Toast;
 public class MainPage extends Activity {
 	
 	private static final String TAG = "inMainPage";
+	// The number of most recent routes to display.
+	private static final int numRecentRoutes = 5;
+
 	
 	//Add this DB for validating bus route
 	public BusNumDbAdapter mBusNumDbHelper;
 	private static List<Integer> validBusRoutes = null;
-	
+
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -151,9 +154,6 @@ public class MainPage extends Activity {
 	 */
 	private void displayRecentRoutes() {
 		
-		// The number of most recent routes to display.
-		int numRecentRoutes = 5;
-		
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
 		
@@ -179,15 +179,14 @@ public class MainPage extends Activity {
 		
 		while (!recent.isAfterLast()) {
 			final int routeNumber = Integer.parseInt(recent.getString(routeIndex));
-			
+			Log.v(TAG, "main page got recent route number: " + routeNumber);
 			final TextView recentItem = new TextView(this);
 			recentItem.setClickable(true);
 			recentItem.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(v.getContext(), MapPage.class);
-					i.putExtra("routeNumber", routeNumber);
+					i.putExtra("routeID", "1_" + routeNumber);
 					startActivity(i);
-					finish();
 				}
 			});
 			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 8);
