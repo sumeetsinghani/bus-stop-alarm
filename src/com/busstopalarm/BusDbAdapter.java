@@ -365,7 +365,6 @@ public class BusDbAdapter {
     
     	String[] args = {route_desc, stop_desc, route_id, stop_id};
     	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
-    	// once again, empty cursor on update doesn't mean failure.
     	return mCursor.getCount();
     	
     }
@@ -379,7 +378,7 @@ public class BusDbAdapter {
      * @param stop_id Id of the bus stop
      * @return 1 if the destination is successfully updated. 0 otherwise.
      */
-    public int updateDestDesc_TimeCount(String route_id, String stop_id) {
+    public void updateDestDesc_TimeCount(String route_id, String stop_id) {
     	String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).
 								   toString();
     	int count = 0;
@@ -387,7 +386,6 @@ public class BusDbAdapter {
     	Log.v(TAG, "updateDestDesc... countS = " + countS);
     	if (countS == null) {
     		createDest(route_id, "hi", stop_id, "there", 0);
-    		return 1;
     	} else {
     		try {
     			count = Integer.parseInt(countS);
@@ -398,9 +396,8 @@ public class BusDbAdapter {
     		count++;
 
     		String[] args = { Integer.toString(count), time, route_id, stop_id};
-    		Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
-    		// HUY: Cursor being empty on a update statement doesn't mean it failed!
-    		return mCursor.getCount();
+    		mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
+
     	}
     }
     

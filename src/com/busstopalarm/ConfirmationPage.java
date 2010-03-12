@@ -236,6 +236,7 @@ public class ConfirmationPage extends Activity {
 				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
 				busDbAdapter.open();
 				Log.v(TAG, "try to save. args: " + busRouteIDString + " " + busStopID);
+				
 				busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
 				busDbAdapter.close();
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 

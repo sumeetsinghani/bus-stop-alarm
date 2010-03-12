@@ -36,8 +36,9 @@ public class MainPage extends Activity {
 	// from main page or map page.
 	public static final int MAIN_CONFIRM_TRANSITION = 456;
 	
-	//Add this DB for validating bus route
+	// Add this DB for validating bus route
 	public BusNumDbAdapter mBusNumDbHelper;
+	private static boolean dbLoaded = false;
 	private static List<Integer> validBusRoutes = null;
 
 	
@@ -171,17 +172,22 @@ public class MainPage extends Activity {
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
 		
-		// TODO: get rid of this already.
-		//////// temporary /////////
-		ad.deleteAllDestinations();
-		try { 
-			ad.readDbFile(0);
-			ad.readDbFile(1);
-			ad.readDbFile(2);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		if (!dbLoaded) {
+			// TODO: get rid of this already.
+			//////// temporary /////////
+			//ad.deleteAllDestinations();
+			try { 
+				// These load entries from file into the database every time...
+				ad.readDbFile(0);
+				ad.readDbFile(1);
+				ad.readDbFile(2);
+				dbLoaded = true;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		////////////////////////////
 		
