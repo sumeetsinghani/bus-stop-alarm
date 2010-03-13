@@ -38,6 +38,12 @@ import com.google.android.maps.OverlayItem;
 public class MapPage extends MapActivity {
 
 	private static final String TAG = "inMapPage";
+	
+	// This is the GeoPoint we use to set our map view focus on if we were
+	// somehow unable to obtain information about bus stops. This location
+	// is approximately in Downtown Seattle.
+	private static final GeoPoint DEFAULT_MAPVIEW_CENTER =
+		new GeoPoint(47639049,-122345299);
 	// This number is arbitrary - this is used in startActivityForResult() and
 	// finishActivity() calls to determine whether the user backed out of 
 	// confirmation page to the map page, or confirmed the alarm.
@@ -66,12 +72,9 @@ public class MapPage extends MapActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.map);
-		//RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mapview);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
-		mapController = mapView.getController();
-		mapController.setZoom(13);
-		
+	
 		//instantiates gps service
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000,
@@ -85,28 +88,42 @@ public class MapPage extends MapActivity {
 		BusRoute busRoute;
 		try {
 			// draw routes on map
-			busRoute = df.getBusRouteById(Integer.parseInt(routeID.split("_")[1]), true);
+			busRoute = df.getBusRouteById(
+					Integer.parseInt(routeID.split("_")[1]), true);
 			for (Polyline p : busRoute.getPolylines()) {
 				PolylineOverlay po = new PolylineOverlay(p);
 				mapOverlays.add(po);
 			}
 
-			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.busstopicon);
+			Drawable drawable;
+			drawable = getApplicationContext().getResources().getDrawable(
+					R.drawable.busstopicon);
 			getIntent().putExtra("busroutedesc", busRoute.getDescription());
-			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
+			ItemizedOverlayHelper itemizedoverlay = 
+				new ItemizedOverlayHelper(this, drawable);
 
 			for (BusStop bs : busRoute.getBusStops()) {
 				BusStopOverlayItem ov = new BusStopOverlayItem(bs);
 				itemizedoverlay.addOverlay(ov);
 			}
 			mapOverlays.add(itemizedoverlay);
+			
+			// Set the zooming and centering here.
+			setFocus(busRoute.getBusStops());
+				
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(this, "Error occured while trying to " + 
+					"draw bus route. There might have been an error " + 
+					"obtaining route from the server. Please try again later.", 
+					Toast.LENGTH_LONG);
 			t.show();
 		} catch (IOException e) {
 			e.printStackTrace();
-			Toast t = Toast.makeText(this, "Error occured while trying to draw bus route", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(this, "Error occured while trying to " + 
+					"draw bus route. There might have been an error " + 
+					"obtaining route from the server. Please try again later.", 
+					Toast.LENGTH_LONG);
 			t.show();
 		}
 	}
@@ -124,6 +141,87 @@ public class MapPage extends MapActivity {
 		}
 		// else, we got here from backing out of confirmation page, we do not
 		// finish the map page.	
+	}
+	
+	/**
+	 * Sets the focus of the map view, as determined by the list of bus stops.
+	 * @param stopList The list of bus stops.
+	 * 
+	 * @author Derek Cheng
+	 */
+	private void setFocus(List<BusStop> stopList) {
+		// Just in case this happens, we set the center to the 
+		// geolocation of Downtown Seattle.		
+		GeoPoint centroid;
+		if (stopList == null || stopList.size() == 0) {
+			centroid = DEFAULT_MAPVIEW_CENTER;
+		} else {
+			// We compute the centroid to be set as center of map view.
+			centroid = getCentroid(stopList);
+		}
+
+		mapController = mapView.getController();		
+		mapController.setCenter(centroid);
+		mapController.setZoom(12);	
+	}
+	
+	/**
+	 * Computes the location of the centroid of a list of bus stops.
+	 * @param stopList A list of BusStops
+	 * @return The "centroid" of stopList, given as a GeoLocation
+	 * Precondition: stopList has at least 1 element.
+	 * @author - Derek Cheng
+	 */
+	private GeoPoint getCentroid(List<BusStop> stopList) {
+		// We get the "centroid" of all the bus stops' points, by taking the
+		// average between the min and max for each latitude and longitude for
+		// all bus stops on the route.
+		GeoPoint gp, gp2;
+		gp = stopList.get(0).getGeoPoint();		
+		int minLat = gp.getLatitudeE6();
+		int maxLat = minLat;
+		int minLong = gp.getLongitudeE6();
+		int maxLong = minLong;
+		
+		// Finding both the min and max in a list.
+		// This algorithm does 3n/2 comparisons as opposed to the
+		// naive algorithm that does 2n comparisons in worst case.
+		int i;
+		for (i = 1; i < stopList.size()-1; i += 2) {
+			gp = stopList.get(i).getGeoPoint();
+			gp2 = stopList.get(i+1).getGeoPoint();			
+			int gpLat = gp.getLatitudeE6();
+			int gp2Lat = gp2.getLatitudeE6();
+			int gpLong = gp.getLongitudeE6();
+			int gp2Long = gp2.getLongitudeE6();
+			
+			if (gpLat < gp2Lat) {
+				minLat = Math.min(minLat,gpLat);
+				maxLat = Math.max(maxLat,gp2Lat);
+			} else {
+				minLat = Math.min(minLat,gp2Lat);
+				maxLat = Math.max(maxLat,gpLat);
+			}
+			if (gpLong < gp2Long) {
+				minLong = Math.min(minLong,gpLong);
+				maxLong = Math.max(maxLong,gp2Long);
+			} else {
+				minLong = Math.min(minLong,gp2Long);
+				maxLong = Math.max(maxLong,gpLong);
+			}
+		}
+		if (i == stopList.size()-1) {
+			gp = stopList.get(stopList.size()-1).getGeoPoint();
+			int gpLat = gp.getLatitudeE6();
+			int gpLong = gp.getLongitudeE6();
+			// don't even bother optimizating for only 1 point here
+			minLat = Math.min(minLat,gpLat);
+			maxLat = Math.max(maxLat,gpLat);
+			minLong = Math.min(minLong,gpLong);
+			maxLong = Math.max(maxLong,gpLong);
+		}
+
+		return new GeoPoint((minLat + maxLat)/2, (minLong + maxLong)/2);
 	}
 	
 	public void fillData() {

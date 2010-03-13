@@ -15,11 +15,6 @@
 
 package com.busstopalarm;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -28,7 +23,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,15 +44,11 @@ public class ConfirmationPage extends Activity {
 
 	// This TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
-	// This keeps the state of whether a notification has been set. This way 
-	// of keeping track state is better than checking for the existence of 
-	// the relevant service in the ActivityManager.
-	//private static boolean isAlarmSet = false;
 	
-	private Uri ringtoneUri;
-
 	// The settings object to be pre-loaded into the page.
 	private SettingsObj settings;
+	private Uri ringtoneUri;
+
 	
 	/**
 	 * ConfirmationPage constructor
@@ -108,6 +98,7 @@ public class ConfirmationPage extends Activity {
 		Log.v(TAG, "ringtone:  " + ringtoneUri);
 
 	}  // ends onCreate method
+	
 	/**
 	 *  OK Button confirms the alarm setting
 	 *  it calls alarm service to set alarm
@@ -145,8 +136,6 @@ public class ConfirmationPage extends Activity {
 				intentToMainPage.putExtra("busroute", 
 						getIntent().getIntExtra("busroute", 0));
 				
-				
-				
 				// performance testing, starting from the onCreate 
 				// up to this point (author: Pyong Byon)
 				//Debug.stopMethodTracing();
@@ -156,7 +145,6 @@ public class ConfirmationPage extends Activity {
 				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
 				finishActivity(MainPage.MAIN_CONFIRM_TRANSITION);
 				
-				finish();
 				startActivity(intentToMainPage);
 				// We do not finish here because we want to be able to go back
 				// to change settings.
@@ -192,8 +180,8 @@ public class ConfirmationPage extends Activity {
 					Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
 							Toast.LENGTH_LONG).show();
 				} else {
-					Toast.makeText(ConfirmationPage.this, "There is no alarm set!", 
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(ConfirmationPage.this, 
+							"There is no alarm set!", Toast.LENGTH_LONG).show();
 				}
 				
 				setResult(RESULT_OK);
@@ -241,11 +229,10 @@ public class ConfirmationPage extends Activity {
 				
 				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
 				busDbAdapter.open();
-				Log.v(TAG, "try to save. args: " + busRouteIDString + " " + busStopID);
-				
 				busDbAdapter.updateDestDescTimeCount(busRouteIDString, 
 						busRouteDesc, busStopID, busStopDesc);
 				busDbAdapter.close();
+				
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
 						Toast.LENGTH_LONG).show();
 		
