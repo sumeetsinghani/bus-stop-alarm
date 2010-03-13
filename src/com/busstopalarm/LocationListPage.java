@@ -45,7 +45,8 @@ public class LocationListPage extends ListActivity {
 	 */
 	private int listType;
 
-	private ArrayList<HashMap<String, String>> locationList = new ArrayList<HashMap<String, String>>();
+	private ArrayList<HashMap<String, String>> locationList = 
+		new ArrayList<HashMap<String, String>>();
 	private SimpleAdapter listAdapter;
 
 	/** Called when the activity is first created. */
@@ -65,7 +66,10 @@ public class LocationListPage extends ListActivity {
 			finish();
 		}
 
-		listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, new String[] {"routeID", "stopName"}, new int[] {R.id.listItemRouteID, R.id.listItemName});
+		String[] args = {"routeID", "stopName"};
+		int[] resources = {R.id.listItemRouteID, R.id.listItemName};
+		listAdapter = new SimpleAdapter(this, locationList, R.layout.list_item, 
+				args, resources);
 		setListAdapter(listAdapter);
 
 		ListView lv = getListView();
@@ -74,14 +78,15 @@ public class LocationListPage extends ListActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent i = new Intent(view.getContext(), ConfirmationPage.class);
+				Intent i = 
+					new Intent(view.getContext(), ConfirmationPage.class);
 				HashMap<String, String> item = locationList.get(position);
 				DataFetcher df = new DataFetcher();
 				try {
-					BusStop b = df.getStopById(Integer.parseInt(item.get("stopID").split("_")[1]));
+					BusStop b = df.getStopById(
+							Integer.parseInt(item.get("stopID").split("_")[1]));
 					i.putExtra("busstop", b);
 					i.putExtra("busroute", item.get("routeID"));
-					Log.v(TAG, "putting " + item.get("routeDesc") + " as routeDesc");
 					i.putExtra("busroutedesc", item.get("routeDesc"));
 					startActivity(i);
 					finish();
@@ -127,7 +132,9 @@ public class LocationListPage extends ListActivity {
 				String stopName = c.getString(stopDescIndex);
 				String route = c.getString(routeIDIndex);
 				String routeDesc = c.getString(routeDescIndex);
-				Log.v(TAG, "stop desc: " + stopName + ", routeDesc:" + routeDesc);
+				Log.v(TAG, "PUT");
+				Log.v(TAG, "stopID " + stopID + " stopName " + stopName);
+				Log.v(TAG, "routeID " + route + " routeDesc" + routeDesc);
 				item.put("stopID", stopID);
 				item.put("stopName", stopName);
 				item.put("routeID", route);
@@ -150,7 +157,8 @@ public class LocationListPage extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View view, 
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		menu.add(0, SET_STOP_OPTION, SET_STOP_OPTION, "Set alarm for this stop");
+		menu.add(0, SET_STOP_OPTION, SET_STOP_OPTION, 
+				"Set alarm for this stop");
 		menu.add(0, REMOVE_STOP_OPTION, REMOVE_STOP_OPTION, "Remove this stop");
 		menu.add(0, CANCEL, CANCEL, "Cancel");
 	}
@@ -160,20 +168,22 @@ public class LocationListPage extends ListActivity {
 	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		AdapterContextMenuInfo info = 
+			(AdapterContextMenuInfo)item.getMenuInfo();
 		int id = (int)getListAdapter().getItemId(info.position);
 
 		// sets an alarm for the selected stop
 		switch(item.getItemId()) {
 		case SET_STOP_OPTION:
-			Intent i = new Intent(getApplicationContext(), ConfirmationPage.class);
+			Intent i = 
+				new Intent(getApplicationContext(), ConfirmationPage.class);
 			HashMap<String, String> busItem = locationList.get(id);
 			DataFetcher df = new DataFetcher();
 			try {
-				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID").split("_")[1]));
+				BusStop b = df.getStopById(
+						Integer.parseInt(busItem.get("stopID").split("_")[1]));
 				i.putExtra("busstop", b);
 				i.putExtra("busroute", busItem.get("routeID"));
-				Log.v(TAG, "putting " + busItem.get("routeDesc") + " as routeDesc");
 				i.putExtra("busroutedesc", busItem.get("routeDesc"));
 				startActivity(i);
 				finish();
@@ -189,7 +199,7 @@ public class LocationListPage extends ListActivity {
 			// removes the selected stop from the list
 		case REMOVE_STOP_OPTION:
 			locationList.remove(id);
-			//remove from db also
+			// TODO remove from db also
 			listAdapter.notifyDataSetChanged();
 			break;
 		case CANCEL:
