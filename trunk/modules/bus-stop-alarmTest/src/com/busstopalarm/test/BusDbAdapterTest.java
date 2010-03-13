@@ -354,42 +354,6 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
 	}
 
 	/**
-	 * Tests if database can change bus route description
-	 */
-	@SmallTest
-	public void testUpdateDestDesc_newRouteDesc() {
-		activity.mBusDbHelper.open();
-		activity.mBusDbHelper.deleteAllDestinations();
-		activity.mBusDbHelper.createDest
-						("70", "UW", "1_12345", "Paul Allen", 0);
-		
-		activity.mBusDbHelper.updateDestDesc
-						("70", "UW-Seattle", "1_12345", "Paul Allen CSE");
-		String result = activity.mBusDbHelper.getDestRouteDesc("70", "1_12345");
-		activity.mBusDbHelper.close();
-		assertEquals("failed to change bus route description", 
-					 "UW-Seattle", result);
-	}
-	
-	/**
-	 * Tests if database can change stop description
-	 */
-	@SmallTest
-	public void testUpdateDestDesc_newStopDesc() {
-		activity.mBusDbHelper.open();
-		activity.mBusDbHelper.deleteAllDestinations();
-		activity.mBusDbHelper.createDest
-						("70", "UW", "1_12345", "Paul Allen", 0);
-		
-		activity.mBusDbHelper.updateDestDesc
-						("70", "UW-Seattle", "1_12345", "Paul Allen CSE");
-		String result = activity.mBusDbHelper.getDestStopDesc("70", "1_12345");
-		activity.mBusDbHelper.close();
-		assertEquals("failed to change stop description", 
-					 "Paul Allen CSE", result);
-	}
-	
-	/**
 	 * Tests if database increases count for the bus entry correctly
 	 */
 	@SmallTest
@@ -397,7 +361,8 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
 		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
 		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
+		activity.mBusDbHelper.updateDestDescTimeCount
+									("70", "UW", "1_12345", "Paul Allen");
 		String result = activity.mBusDbHelper.getDestCount("70", "1_12345");
 		activity.mBusDbHelper.close();
 		assertEquals("failed to update new count", "2", result);
@@ -410,10 +375,14 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
 	public void testUpdateDestDesc_TimeCount_newCount2(){
 		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
-		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
+		activity.mBusDbHelper.createDest
+								("70", "UW", "1_12345", "Paul Allen", 0);
+		activity.mBusDbHelper.updateDestDescTimeCount
+								("70", "UW", "1_12345", "Paul Allen");
+		activity.mBusDbHelper.updateDestDescTimeCount
+								("70", "UW", "1_12345", "Paul Allen");
+		activity.mBusDbHelper.updateDestDescTimeCount
+								("70", "UW", "1_12345", "Paul Allen");
 		
 		String result = activity.mBusDbHelper.getDestCount("70", "1_12345");
 		activity.mBusDbHelper.close();
@@ -427,10 +396,12 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
 	public void testUpdateDestDesc_TimeCount_newTime1(){
 		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
-		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
+		activity.mBusDbHelper.createDest
+									("70", "UW", "1_12345", "Paul Allen", 0);
 		String result1 = activity.mBusDbHelper.getDestTime("70", "1_12345");
 		
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
+		activity.mBusDbHelper.updateDestDescTimeCount
+									("70", "UW", "1_12345", "Paul Allen");
 		String result2 = activity.mBusDbHelper.getDestTime("70", "1_12345");
 		activity.mBusDbHelper.close();
 		assertTrue("failed to update new timestamp", 
@@ -444,12 +415,16 @@ public class BusDbAdapterTest extends ActivityInstrumentationTestCase2
 	public void testUpdateDestDesc_TimeCount_newTime2(){
 		activity.mBusDbHelper.open();
 		activity.mBusDbHelper.deleteAllDestinations();
-		activity.mBusDbHelper.createDest("70", "UW", "1_12345", "Paul Allen", 0);
+		activity.mBusDbHelper.createDest
+									("70", "UW", "1_12345", "Paul Allen", 0);
 		String result1 = activity.mBusDbHelper.getDestTime("70", "1_12345");
 		
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
-		activity.mBusDbHelper.updateDestDesc_TimeCount("70", "1_12345");
+		activity.mBusDbHelper.updateDestDescTimeCount
+									("70", "UW", "1_12345", "Paul Allen");
+		activity.mBusDbHelper.updateDestDescTimeCount
+									("70", "UW", "1_12345", "Paul Allen");
+		activity.mBusDbHelper.updateDestDescTimeCount
+									("70", "UW", "1_12345", "Paul Allen");
 		String result2 = activity.mBusDbHelper.getDestTime("70", "1_12345");
 		activity.mBusDbHelper.close();
 		assertTrue("failed to update new timestamp", 
