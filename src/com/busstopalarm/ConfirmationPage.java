@@ -143,8 +143,6 @@ public class ConfirmationPage extends Activity {
 						busStopID, busStopDesc);
 				busDbAdapter.close();
 				
-				// TODO addd method to update time here
-				
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 				intentToMainPage.putExtra("busStopSaved", b);				

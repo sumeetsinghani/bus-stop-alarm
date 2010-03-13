@@ -36,6 +36,9 @@ public class BusDbAdapter {
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 
+	// The enumeration for the majordb file to be read.
+	public static final int MAJORDB= 0;
+	
 	/*   
 	 * DESTINATION TABLE INFO
 	 */

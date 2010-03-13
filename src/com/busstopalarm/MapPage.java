@@ -1,10 +1,7 @@
 package com.busstopalarm;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,16 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 /**
  * @author Orkhan Muradov, David Nufer
@@ -55,7 +49,6 @@ public class MapPage extends MapActivity {
 	private LocationManager lm;
 	private String routeID;
 	private List<Overlay> mapOverlays;
-	private ItemizedOverlayHelper currentLocOverlay;
 
 	@Override
 	protected boolean isRouteDisplayed() {
