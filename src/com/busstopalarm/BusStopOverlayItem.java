@@ -1,13 +1,13 @@
-package com.busstopalarm;
-
-import com.google.android.maps.OverlayItem;
-
 /**
  * Overlay Item to display on the map for a bus stop
  * 
  * @author David Nufer
- *
  */
+
+package com.busstopalarm;
+
+import com.google.android.maps.OverlayItem;
+
 public class BusStopOverlayItem extends OverlayItem {
 	
 	/**

@@ -1,3 +1,11 @@
+/**
+ * Service that runs in the background and listens to the GPS.
+ * When the user gets within the defined proximity, it sets an alarm.
+ * 
+ * @author David Nufer, Pyong Byon
+ *
+ */
+
 package com.busstopalarm;
 
 import android.app.Notification;
@@ -14,13 +22,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-/**
- * Service that runs in the background and listens to the GPS.
- * When the user gets within the defined proximity, it sets an alarm.
- * 
- * @author David Nufer, Pyong Byon
- *
- */
 public class AlarmService extends Service {
 
 	private static final int NOTIFICATION_ID1 = 1001;

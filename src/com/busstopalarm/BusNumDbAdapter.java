@@ -6,6 +6,7 @@
  * valid bus numbers which are in Seattle area. This database is used to 
  * validate the input.
  */
+
 package com.busstopalarm;
 
 import java.io.BufferedReader;

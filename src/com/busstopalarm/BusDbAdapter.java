@@ -12,6 +12,7 @@
  * 		 begin. Therefore, this helper class now is also used in MainPage
  *  	 because we initial database at the first page
  */
+
 package com.busstopalarm;
 
 import java.io.BufferedReader;

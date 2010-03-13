@@ -1,9 +1,11 @@
 /**
- * 
+ * @author David Truong, Orkhan Muradov
+ * HelpPage.java
+ * This file contains code for showing the help page. Help page is called from
+ * the main page.
  */
+
 package com.busstopalarm;
-
-
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,11 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-
-/**
- * @author David Truong, Orkhan Muradov
- *
- */
 public class HelpPage extends Activity {
 
 	// Creates a new pop up window displaying the help menu using the help.xml layout

@@ -1,3 +1,11 @@
+/**
+ * @author Orkhan Muradov, David Nufer
+ * 
+ * This class creates a google map which shows current user location and draws 
+ * bus route user requested.
+ * 
+ */
+
 package com.busstopalarm;
 
 import java.io.IOException;
@@ -20,14 +28,6 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-
-/**
- * @author Orkhan Muradov, David Nufer
- * 
- * This class creates a google map which shows current user location and draws 
- * bus route user requested.
- * 
- */
 
 public class MapPage extends MapActivity {
 
