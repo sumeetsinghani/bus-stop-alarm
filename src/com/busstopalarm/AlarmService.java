@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import android.util.Log;
  */
 public class AlarmService extends Service {
 
+	private static final String LOG = "ALARMSERVICE";
 	private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
 	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
@@ -32,9 +34,12 @@ public class AlarmService extends Service {
 	private static final int MIN_DISTANCE_TO_UPDATE_LOCATION = 5; 
 
 	/* Conversion factors from yards to meters, and vice versa. */
-	private static final double METERS_PER_YARD = 0.9144;
-	private static final double YARDS_PER_METER = 1.0936133;
+	private static final float METERS_PER_YARD = 0.9144f;
+	private static final float YARDS_PER_METER = 1.0936133f;
 
+	private static final float METERS_PER_KILOMETER = 1000f;
+	private static final float YARDS_PER_MILE = 1760f;
+	
 	private LocationManager lm;
 	private Location currentLoc;
 	private NotificationManager mNtf;
@@ -42,8 +47,12 @@ public class AlarmService extends Service {
 
 	private int proximity;
 	private String proximityUnit;
+	
+	private float distanceToShow;
+	private String unitToShow;
+	
 	private BusStop busStop;
-
+    
 
 	/**
 	 * Sets up GPS locations and alarms service managers.
@@ -52,10 +61,6 @@ public class AlarmService extends Service {
 		super.onCreate();
 
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		/*
-		 * TODO: by setting minTime and minDistance both to 0, the battery will
-		 * drain out really fast.!!!! Set the approriate value here.
-		 */
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
 				MIN_TIME_TO_UPDATE_LOCATION, MIN_DISTANCE_TO_UPDATE_LOCATION, 
 				new AlarmLocationListener());
@@ -82,6 +87,10 @@ public class AlarmService extends Service {
 		pendingIntentAlarm.cancel();
 
 		Log.d("ALARMSERVICE", "current alarm is destroyed");
+
+		// this is for performance testing, (author: Pyong Byon)
+		//Debug.stopMethodTracing();
+
 	}
 
 
@@ -105,9 +114,12 @@ public class AlarmService extends Service {
 
 		mNtf.notify(NOTIFICATION_ID1, ntf);
 
-		Log.d("ALARMSERVICE", "prox: " + proximity + ", units: " + 
-				proximityUnit + ", stop: " + busStop + ", ringtone: " + 
-				ringtoneUri + ", vibration: " + vibration);
+		// testing purpose
+//		Log.d(LOG, "proximity: " + proximity);
+//		Log.d(LOG, "proximityUnit: " + proximityUnit);
+//		Log.d(LOG, "busStop: " + busStop);
+//		Log.d(LOG, "ringtoneUri: " + ringtoneUri);
+//		Log.d(LOG, "vibration: " + vibration);
 
 		Intent alarmIntent = new Intent(getApplicationContext(), 
 				OneTimeAlarmReceiver.class);
@@ -168,10 +180,13 @@ public class AlarmService extends Service {
 			Location target = new Location(location);
 			target.setLatitude(busStop.getLatitude());
 			target.setLongitude(busStop.getLongitude());
-			float dist = currentLoc.distanceTo(target);  // in meters
+			distanceToShow = currentLoc.distanceTo(target);  // in meters
+			
 			if (proximityUnit.equals("Yards"))
-				dist = convertMetersToYards(dist);
-
+				convertBetweenYardsMiles();
+			else // proximityUnit.equals("Meters")
+                convertBetweenMetersKilometers();
+				
 			PendingIntent pi = PendingIntent.getBroadcast(
 					getApplicationContext(), 0, 
 					new Intent(getApplicationContext(), AlarmService.class), 
@@ -179,13 +194,48 @@ public class AlarmService extends Service {
 
 			// TODO: convert to correct units
 			ntf.setLatestEventInfo(getApplicationContext(), 
-					"Bus Stop: " + busStop.getName(), dist + " " + 
-					proximityUnit + " away", pi); 
+					"Bus Stop: " + busStop.getName(), distanceToShow + " " + 
+					unitToShow + " away", pi); 
 
 			ntf.when = System.currentTimeMillis();
 			mNtf.notify(NOTIFICATION_ID1, ntf);
 			Log.d("ALARMSERVICE", "location updated");
 		}
+		
+
+		/**
+		 * It converts units between Meters and Kilometers according to the
+		 * remaining distance to the destination. 
+		 * If distance is greater than 500 Meters, it changes it to Kilometers
+		 * for a better readability.
+		 * Otherwise it is viewed in Meters. (when destination is near). 
+		 */
+		private void convertBetweenMetersKilometers() {
+			if (distanceToShow > 500) {
+			  distanceToShow = distanceToShow / METERS_PER_KILOMETER;
+			  unitToShow = "Kilometers";
+			} else {
+			  unitToShow = "Meters";
+			}
+		}
+
+		/**
+		 * It converts units between Yards and Miles according to the
+		 * remaining distance to the destination. 
+		 * If distance is greater than 500 Yards, it changes it to Miles
+		 * for a better readability.
+		 * Otherwise it is viewed in Yards. (when destination is near). 
+		 */
+		private void convertBetweenYardsMiles() {
+			distanceToShow = convertMetersToYards(distanceToShow);
+			if (distanceToShow > 500) {
+				  distanceToShow = distanceToShow / YARDS_PER_MILE;
+				  unitToShow = "Miles";
+				} else {
+				  unitToShow = "Yards";
+				}
+			}
+			
 
 		public void onProviderDisabled(String provider) {
 		}
