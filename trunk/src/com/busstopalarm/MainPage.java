@@ -190,6 +190,7 @@ public class MainPage extends Activity {
 		////////////////////////////
 		
 		// Gets the five most recent locations.
+		ad.initRecentTable();
 		Cursor recent = ad.getRecentDest(numRecentRoutes);
 		LinearLayout recentList = 
 			(LinearLayout) findViewById(R.id.recent_routes);

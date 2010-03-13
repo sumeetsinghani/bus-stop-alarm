@@ -114,6 +114,13 @@ public class ConfirmationPage extends Activity {
 				Intent intentAlarmService = 
 					new Intent(v.getContext(), AlarmService.class);
 				
+				String busRouteIDString = 
+					getIntent().getStringExtra("busroute");
+				String busRouteDesc = 
+					getIntent().getStringExtra("busroutedesc");
+				String busStopID = b.getStopId();				
+				String busStopDesc = b.getName();
+				
 				intentAlarmService.putExtra("busstop", b);
 				intentAlarmService.putExtra("proximity", settings.getProximity());
 				intentAlarmService.putExtra("proximityUnit", 
@@ -129,6 +136,14 @@ public class ConfirmationPage extends Activity {
 					Toast.makeText(ConfirmationPage.this, "Alarm updated", 
 							Toast.LENGTH_LONG).show();
 				}
+				
+				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
+				busDbAdapter.open();
+				busDbAdapter.updateRecentEntry(busRouteIDString, busRouteDesc, 
+						busStopID, busStopDesc);
+				busDbAdapter.close();
+				
+				// TODO addd method to update time here
 				
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
