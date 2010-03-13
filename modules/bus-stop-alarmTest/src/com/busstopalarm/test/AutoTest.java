@@ -121,72 +121,72 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 	}
 
 	//this test goes to settings page and tests if settings were saved
-	public void testSavingSettingConfirmationPage() throws Throwable{
-		Solo solo = new Solo(getInstrumentation(), getActivity());
-
-		//click on Favorites
-		solo.clickOnButton("Favorites");
-		solo.assertCurrentActivity("Supposed to be Favorites page", LocationListPage.class);
-
-		ArrayList<View> views = solo.getViews();
-		if (views.size() > 0) {
-			solo.clickOnScreen(views.get(1));
-		}
-		ConfirmationPage cp = (ConfirmationPage) solo.getCurrentActivity();
-		solo.assertCurrentActivity("Supposed to be confirmation page", ConfirmationPage.class);
-
-		//check vibrate	box
-		final CheckBox checkBox= (CheckBox)
-		cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
-		runTestOnUiThread(new Runnable() {
-			public void run() {
-				checkBox.performClick();
-			}
-		});
-		boolean VibCheck = checkBox.isChecked();
-
-		//get spinners
-		ArrayList<Spinner> spinners = solo.getCurrentSpinners();
-
-		//change ringtone
-		solo.pressSpinnerItem(0, (int)Math.random() * spinners.get(0).getCount());
-		String oldRingtone = spinners.get(0).getSelectedItem().toString();
-
-		//change proximity
-		solo.pressSpinnerItem(1, (int)(Math.random() * 100));
-		int oldProximity = Integer.parseInt(spinners.get(1).getSelectedItem().toString());
-
-		//change proximity units
-		final Spinner rSelect = (Spinner) 
-		cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
-		runTestOnUiThread(new Runnable() {
-			public void run() {
-				rSelect.setSelection(1);
-			}
-		});
-		String oldProxUnits = spinners.get(2).getSelectedItem().toString();
-
-		//save settings as exit
-		solo.clickOnButton("Save as favorite");
-		cp.finish();
-
-		//load settings
-		cp = (ConfirmationPage) solo.getCurrentActivity();
-		solo.assertCurrentActivity("Supposed to be confirmation page", ConfirmationPage.class);
-
-		SettingsObj settings = cp.getSettings();
-
-		boolean vibEquals =  (VibCheck == settings.getVibration());
-		boolean ringEquals = (oldRingtone.equals(settings.getRingtoneName()));  
-		boolean proxiEquals = (oldProximity == settings.getProximity());
-		boolean proxUnits = (oldProxUnits.equals(settings.getProximityUnit()));
-
-		//check if settings were loaded correctly
-		assertTrue(vibEquals);
-		assertTrue(ringEquals);
-		assertTrue(proxiEquals);
-		assertTrue(proxUnits);
-	}
+//	public void testSavingSettingConfirmationPage() throws Throwable{
+//		Solo solo = new Solo(getInstrumentation(), getActivity());
+//
+//		//click on Favorites
+//		solo.clickOnButton("Favorites");
+//		solo.assertCurrentActivity("Supposed to be Favorites page", LocationListPage.class);
+//
+//		ArrayList<View> views = solo.getViews();
+//		if (views.size() > 0) {
+//			solo.clickOnScreen(views.get(1));
+//		}
+//		ConfirmationPage cp = (ConfirmationPage) solo.getCurrentActivity();
+//		solo.assertCurrentActivity("Supposed to be confirmation page", ConfirmationPage.class);
+//
+//		//check vibrate	box
+//		final CheckBox checkBox= (CheckBox)
+//		cp.findViewById(com.busstopalarm.R.id.VibrateCheckbox);
+//		runTestOnUiThread(new Runnable() {
+//			public void run() {
+//				checkBox.performClick();
+//			}
+//		});
+//		boolean VibCheck = checkBox.isChecked();
+//
+//		//get spinners
+//		ArrayList<Spinner> spinners = solo.getCurrentSpinners();
+//
+//		//change ringtone
+//		solo.pressSpinnerItem(0, (int)Math.random() * spinners.get(0).getCount());
+//		String oldRingtone = spinners.get(0).getSelectedItem().toString();
+//
+//		//change proximity
+//		solo.pressSpinnerItem(1, (int)(Math.random() * 100));
+//		int oldProximity = Integer.parseInt(spinners.get(1).getSelectedItem().toString());
+//
+//		//change proximity units
+//		final Spinner rSelect = (Spinner) 
+//		cp.findViewById(com.busstopalarm.R.id.ProximityUnits);
+//		runTestOnUiThread(new Runnable() {
+//			public void run() {
+//				rSelect.setSelection(1);
+//			}
+//		});
+//		String oldProxUnits = spinners.get(2).getSelectedItem().toString();
+//
+//		//save settings as exit
+//		solo.clickOnButton("Save as favorite");
+//		cp.finish();
+//
+//		//load settings
+//		cp = (ConfirmationPage) solo.getCurrentActivity();
+//		solo.assertCurrentActivity("Supposed to be confirmation page", ConfirmationPage.class);
+//
+//		SettingsObj settings = cp.getSettings();
+//
+//		boolean vibEquals =  (VibCheck == settings.getVibration());
+//		boolean ringEquals = (oldRingtone.equals(settings.getRingtoneName()));  
+//		boolean proxiEquals = (oldProximity == settings.getProximity());
+//		boolean proxUnits = (oldProxUnits.equals(settings.getProximityUnit()));
+//
+//		//check if settings were loaded correctly
+//		assertTrue(vibEquals);
+//		assertTrue(ringEquals);
+//		assertTrue(proxiEquals);
+//		assertTrue(proxUnits);
+//	}
 
 
 	//test for most recent routes
@@ -309,4 +309,3 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 
 
 }
-
