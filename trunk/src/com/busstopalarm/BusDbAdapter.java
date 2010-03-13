@@ -418,24 +418,6 @@ public class BusDbAdapter {
 	}
 
 	/**
-	 * Updates the destination using the details provided. The destination to be 
-	 * updated is specified using the route_id and stop_id, and it is altered to
-	 * use the description values passed in
-	 * 
-	 * @param route_id Id of the bus route
-	 * @param routeDesc Description of route
-	 * @param stop_id Id of the bus stop
-	 * @param stopDesc Description of stop
-	 */
-	public void updateDestDesc(String route_id, 
-			String route_desc, String stop_id, String stop_desc) {
-
-		String[] args = {route_desc, stop_desc, route_id, stop_id};
-		mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
-
-	}
-
-	/**
 	 * Updates the time stamp and count value of the given destination entry.
 	 * This should only be call in Confirmation page when user saves
 	 * this destination.
