@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.Calendar;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -217,8 +219,9 @@ public class BusDbAdapter {
     	 * Check if the entry is already in the table
     	 */
     	if (checkIfDestExist(route_id, stop_id)) {
-    		updateDestDesc_TimeCount(route_id, stop_id);
-    		return 0;
+    		Log.v(TAG, "createDest: (" + route_id + "," + stop_id + ") " + 
+    				"already existes");
+    		return -1;
     	}
     	
     	/*
@@ -234,9 +237,9 @@ public class BusDbAdapter {
     					 "1", time, Integer.toString(major)};
     	
     	Cursor mCursor = mDb.rawQuery(DATABASE_INSERT_DEST, args);
-    	
+    	Log.v(TAG, "Created new entry (" + route_id + ", " + stop_id + ")");
     	/*
-    	 * mCursot.getCount() returns the number of row it changes, whic
+    	 * mCursor.getCount() returns the number of row it changes, whic
     	 * is supposed to be 1 in this case.
     	 */
     	return mCursor.getCount();
@@ -358,15 +361,15 @@ public class BusDbAdapter {
      * use the description values passed in
      * 
      * @param route_id Id of the bus route
+     * @param routeDesc Description of route
      * @param stop_id Id of the bus stop
-     * @return 1 if the destination is successfully updated. 0 otherwise.
+     * @param stopDesc Description of stop
      */
-    public int updateDestDesc(String route_id, 
+    public void updateDestDesc(String route_id, 
     					String route_desc, String stop_id, String stop_desc) {
     
     	String[] args = {route_desc, stop_desc, route_id, stop_id};
-    	Cursor mCursor = mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
-    	return mCursor.getCount();
+    	mDb.rawQuery(DATABASE_UPDATE_DEST_DESC, args);
     	
     }
     
@@ -374,31 +377,49 @@ public class BusDbAdapter {
      * Updates the time stamp and count value of the given destination entry.
      * This should only be call in Confirmation page when user finally chooses
      * this destination as his/her choice.
+     * If the entry did not exist before, it will be created.
      * 
      * @param route_id Id of the bus route
+     * @param routeDesc Description of route
      * @param stop_id Id of the bus stop
-     * @return 1 if the destination is successfully updated. 0 otherwise.
+     * @param stopDesc Description of stop
      */
-    public void updateDestDesc_TimeCount(String route_id, String stop_id) {
+    public void updateDestDescTimeCount(String routeId, String routeDesc,
+    		String stopId, String stopDesc) {
+    	
     	String time = new Timestamp(Calendar.getInstance().getTimeInMillis()).
 								   toString();
     	int count = 0;
-    	String countS = getDestCount(route_id, stop_id);
+    	String countS = getDestCount(routeId, stopId);
     	Log.v(TAG, "updateDestDesc... countS = " + countS);
     	if (countS == null) {
-    		return;
-    		//createDest(route_id, "hi", stop_id, "there", 0);
+    		// 0 in the last parameter means this is not a major location.
+    		Log.v(TAG, "updateDestDesc... entry did not exist, creating");
+    		createDest(routeId, routeDesc, stopId, stopDesc, 0);
     	} else {
     		try {
     			count = Integer.parseInt(countS);
     		} catch (NumberFormatException e) {
     			// if the entry is malformed, reset
+    			Log.v(TAG, "updateDestDesc... malformed = " + countS);
     			count = 0;
     		}
     		count++;
-
-    		String[] args = { Integer.toString(count), time, route_id, stop_id};
-    		mDb.rawQuery(DATABASE_UPDATE_DEST_TIME_COUNT, args);
+    		Log.v(TAG, "Trying to update using " + count + "," + time + ", " + 
+    				routeId + "," + stopId);
+    		Log.v(TAG, "Query:" + DATABASE_UPDATE_DEST_TIME_COUNT);
+    		// Derek Cheng: I'm using a ContentValues here because rawQuery()
+    		// stopped working for some reason, and it is more appropriate for
+    		// update statements anyway.
+    		ContentValues cv = new ContentValues();
+    		cv.put("count", Integer.toString(count));
+    		cv.put("time", time);
+    		// hopefully this value is 1...
+    		int ret = mDb.update("destination", 
+    				cv, 
+    				"route_id = ? AND stop_id = ?", 
+    				new String[]{routeId, stopId});
+    		Log.v(TAG, "UPDATE " + ret);
 
     	}
     }
@@ -416,11 +437,7 @@ public class BusDbAdapter {
    		mCursor = mDb.rawQuery(DATABASE_RETRIEVE_BY_ROUTEID_STOPID, 
    							   new String[]{route_id, stop_id});
 
-   		if (mCursor.getCount() != 0) {
-               return true;
-   		}
-   		
-        return false;
+   		return (mCursor.getCount() != 0); 
    	}
    	
    	
@@ -620,6 +637,8 @@ public class BusDbAdapter {
     				Log.v(TAG, "Read malformed entry for major: " + result[4]);
     			}
     		}
+    		else
+    			Log.v(TAG, "Malformed line! Length = " + result.length);
   		}
   		bin.close();
   		return true;
