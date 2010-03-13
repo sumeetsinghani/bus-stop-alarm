@@ -21,6 +21,7 @@
 package com.busstopalarm;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -36,9 +37,13 @@ public class SettingsObj {
 	
 	// The filename of settings file.
 	static final String SETTINGS_FILE_NAME = "favorite_settings_data";
+	// The dir of settings file
+	static final String SETTINGS_FILE_DIR = 
+		"/data/data/com.busstopalarm/files/";
 	// The full path of the settings file.
 	static final String SETTINGS_FILE_PATH = 
-		"/data/data/com.busstopalarm/files/" + SETTINGS_FILE_NAME;
+		SETTINGS_FILE_DIR + SETTINGS_FILE_NAME;
+	
 
 	// Units. There are currently two, so we don't really need to use a enum.
 	static final String YARDS = "Yards";
@@ -265,8 +270,26 @@ public class SettingsObj {
 	 */
 	public static boolean writeSettingsToFile(SettingsObj so) {
 	
+		// Construct the directory if it does not exist.
+		File dir = new File(SETTINGS_FILE_DIR);
+		if (!dir.isDirectory()) {
+			Log.v(TAG, "Trying to create directory");
+			if (!dir.mkdirs()) {
+				Log.v(TAG, "Cannot create directories!");
+				return false;
+			}
+		} else {
+			// if the name happens to be the name of a non-dir for some
+			// reason...
+			if (dir.exists()) {
+				Log.v(TAG, "There is a non-dir file with the same name!");
+				return false;
+			}
+		}
+		
 		OutputStreamWriter writer = null; 
 		try {
+
 			writer = new OutputStreamWriter(
 					new FileOutputStream(SETTINGS_FILE_PATH)); 
 			writer.write(so.buildSettingsString()); 
