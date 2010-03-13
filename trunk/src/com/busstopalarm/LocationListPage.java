@@ -81,6 +81,8 @@ public class LocationListPage extends ListActivity {
 					BusStop b = df.getStopById(Integer.parseInt(item.get("stopID").split("_")[1]));
 					i.putExtra("busstop", b);
 					i.putExtra("busroute", item.get("routeID"));
+					Log.v(TAG, "putting " + item.get("routeDesc") + " as routeDesc");
+					i.putExtra("busroutedesc", item.get("routeDesc"));
 					startActivity(i);
 					finish();
 					// if an exception occurs, nothing happens (for now).
@@ -116,6 +118,7 @@ public class LocationListPage extends ListActivity {
 		int stopIDIndex = c.getColumnIndex("stop_id");
 		int stopDescIndex = c.getColumnIndex("stop_desc");
 		int routeIDIndex = c.getColumnIndex("route_id");
+		int routeDescIndex = c.getColumnIndex("route_desc");
 		if (c != null) {
 			for (int i = 0; i < c.getCount(); i++) {
 				HashMap<String, String> item = new HashMap<String, String>();
@@ -123,10 +126,12 @@ public class LocationListPage extends ListActivity {
 				String stopID = c.getString(stopIDIndex);
 				String stopName = c.getString(stopDescIndex);
 				String route = c.getString(routeIDIndex);
-
+				String routeDesc = c.getString(routeDescIndex);
+				Log.v(TAG, "stop desc: " + stopName + ", routeDesc:" + routeDesc);
 				item.put("stopID", stopID);
 				item.put("stopName", stopName);
 				item.put("routeID", route);
+				item.put("routeDesc", routeDesc);
 				c.moveToNext();
 				locationList.add(item);
 			}
@@ -168,6 +173,8 @@ public class LocationListPage extends ListActivity {
 				BusStop b = df.getStopById(Integer.parseInt(busItem.get("stopID").split("_")[1]));
 				i.putExtra("busstop", b);
 				i.putExtra("busroute", busItem.get("routeID"));
+				Log.v(TAG, "putting " + busItem.get("routeDesc") + " as routeDesc");
+				i.putExtra("busroutedesc", busItem.get("routeDesc"));
 				startActivity(i);
 				finish();
 				// if an exception occurs, nothing happens (for now).
@@ -182,6 +189,7 @@ public class LocationListPage extends ListActivity {
 			// removes the selected stop from the list
 		case REMOVE_STOP_OPTION:
 			locationList.remove(id);
+			//remove from db also
 			listAdapter.notifyDataSetChanged();
 			break;
 		case CANCEL:
