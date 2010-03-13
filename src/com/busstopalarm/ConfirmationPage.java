@@ -223,6 +223,7 @@ public class ConfirmationPage extends Activity {
 		SaveButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	
 				BusStop busStop = getIntent().getParcelableExtra("busstop");
+				
 				String busStopID = busStop.getStopId();
 				Bundle bundle = getIntent().getExtras();
 				Log.v(TAG, "busstop is :  " + busStop);
@@ -230,14 +231,19 @@ public class ConfirmationPage extends Activity {
 				Log.v(TAG, "Bundle :  " + bundle);
 				
 				// get busRouteID
+				String busStopDesc = busStop.getName();;//bundle.getString("busstop");
 				String busRouteIDString = getIntent().getStringExtra("busroute");
+				String busRouteDesc = getIntent().getStringExtra("busroutedesc");//bundle.getString("busroutedesc");
 				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
+				Log.v(TAG, "busRouteDesc:  "+ busRouteDesc);
+				Log.v(TAG, "busStopDesc:  "+ busStopDesc);
 				
 				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
 				busDbAdapter.open();
 				Log.v(TAG, "try to save. args: " + busRouteIDString + " " + busStopID);
 				
-				busDbAdapter.updateDestDesc_TimeCount(busRouteIDString, busStopID);
+				busDbAdapter.createDest(busRouteIDString, busRouteDesc, 
+						busStopID, busStopDesc, 0);
 				busDbAdapter.close();
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
 						Toast.LENGTH_LONG).show();
