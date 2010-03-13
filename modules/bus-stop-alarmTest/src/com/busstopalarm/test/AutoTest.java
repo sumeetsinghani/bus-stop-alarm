@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.NotificationManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.test.ActivityInstrumentationTestCase2;
@@ -20,10 +23,12 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.busstopalarm.AlarmService;
 import com.busstopalarm.BusRoute;
 import com.busstopalarm.BusStop;
 import com.busstopalarm.ConfirmationPage;
 import com.busstopalarm.ItemizedOverlayHelper;
+import com.busstopalarm.LocationListPage;
 import com.busstopalarm.MainPage;
 import com.busstopalarm.MapPage;
 import com.google.android.maps.GeoPoint;
@@ -177,11 +182,25 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 	*/
 	//test for favorite locations
 	public void test5() throws Throwable{
-		Solo solo = new Solo(getInstrumentation(), getActivity());
+		MainPage activity = getActivity();
+		Solo solo = new Solo(getInstrumentation(), activity);
+		solo.assertCurrentActivity("must be MainPage", MainPage.class);
+		
 		solo.clickOnButton("Favorites");
-		solo.clickOnScreen(solo.getCurrentListViews().get(2).findFocus());
-		solo.clickOnScreen(solo.getCurrentListViews().get(0));
-		solo.getCurrentListViews().get(0).performClick();
+		solo.assertCurrentActivity("must be location list page", LocationListPage.class);
+		ArrayList<View> views = solo.getViews();
+		if (views.size() > 0) {
+			solo.clickOnScreen(views.get((int)(Math.random() * views.size())));
+		}
+		
+		solo.assertCurrentActivity("must be ConfirmationPage", ConfirmationPage.class);
+		int items = solo.getCurrentSpinners().get(0).getCount();
+		solo.pressSpinnerItem(0, (int)(Math.random() * items));
+		solo.clickOnButton("OK");
+		
+		solo.assertCurrentActivity("must be MainPage", MainPage.class);
+		boolean service = activity.stopService(new Intent(activity, AlarmService.class));
+		assertTrue("alarm service should be running", service);
 	}
 	
 	

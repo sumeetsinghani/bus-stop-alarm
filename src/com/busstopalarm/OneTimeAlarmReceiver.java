@@ -82,6 +82,8 @@ public class OneTimeAlarmReceiver extends BroadcastReceiver {
 		Toast.makeText(context, "Hey Wake up! (Alarm is ringing now!)",
 				Toast.LENGTH_LONG).show();
 		
+		
+		context.stopService(new Intent(context, AlarmService.class));
 		ifSuccessful = true;
 	}
 	

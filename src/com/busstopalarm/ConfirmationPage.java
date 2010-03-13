@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -52,7 +53,7 @@ public class ConfirmationPage extends Activity {
 	// This keeps the state of whether a notification has been set. This way 
 	// of keeping track state is better than checking for the existence of 
 	// the relevant service in the ActivityManager.
-	private static boolean isAlarmSet = false;
+	//private static boolean isAlarmSet = false;
 	
 	private Uri ringtoneUri;
 
@@ -128,22 +129,23 @@ public class ConfirmationPage extends Activity {
 						settings.getProximityUnit());
 				intentAlarmService.putExtra("vibration", settings.getVibration());
 				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
-				startService(intentAlarmService);
-
-				Intent intentToMainPage = new Intent(ConfirmationPage.this,
-						MainPage.class);
-				intentToMainPage.putExtra("busStopSaved", b);				
-				intentToMainPage.putExtra("busroute", 
-						getIntent().getIntExtra("busroute", 0));
 				
-				if (!isAlarmSet) {
+				ComponentName oldService = startService(intentAlarmService);
+				if (oldService == null) {
 					Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 							Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(ConfirmationPage.this, "Alarm updated", 
 							Toast.LENGTH_LONG).show();
 				}
-				isAlarmSet = true;
+				
+				Intent intentToMainPage = new Intent(ConfirmationPage.this,
+						MainPage.class);
+				intentToMainPage.putExtra("busStopSaved", b);				
+				intentToMainPage.putExtra("busroute", 
+						getIntent().getIntExtra("busroute", 0));
+				
+				
 				
 				// performance testing, starting from the onCreate 
 				// up to this point (author: Pyong Byon)
@@ -153,7 +155,8 @@ public class ConfirmationPage extends Activity {
 				setResult(RESULT_OK);
 				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
 				finishActivity(MainPage.MAIN_CONFIRM_TRANSITION);
-
+				
+				finish();
 				startActivity(intentToMainPage);
 				// We do not finish here because we want to be able to go back
 				// to change settings.
@@ -183,16 +186,15 @@ public class ConfirmationPage extends Activity {
 
 				Intent intentAlarmService = 
 					new Intent(v.getContext(), AlarmService.class);
-				stopService(intentAlarmService);
+				boolean stopped = stopService(intentAlarmService);
 
-				if (isAlarmSet) {
+				if (stopped) {
 					Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
 							Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(ConfirmationPage.this, "There is no alarm set!", 
 							Toast.LENGTH_LONG).show();
 				}
-				isAlarmSet = false;
 				
 				setResult(RESULT_OK);
 				finishActivity(MapPage.MAP_CONFIRM_TRANSITION);
