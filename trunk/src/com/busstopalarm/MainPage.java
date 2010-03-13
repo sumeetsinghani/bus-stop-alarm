@@ -7,7 +7,6 @@
 package com.busstopalarm;
 
 import java.io.FileNotFoundException;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -47,6 +47,11 @@ public class MainPage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// performance testing, (author: Pyong Byon)
+		// starting from the creation (onCreate) of the main page 
+		// Debug.startMethodTracing("performance_testing_on_main");
+		
 		setContentView(R.layout.main);
 		
 		mBusNumDbHelper = new BusNumDbAdapter(this);
@@ -173,7 +178,6 @@ public class MainPage extends Activity {
 		BusDbAdapter ad = new BusDbAdapter(getApplicationContext());
 		ad.open();
 		
-
 		if (!dbLoaded) {
 			try { 
 				// These load entries from file into the database every time...
