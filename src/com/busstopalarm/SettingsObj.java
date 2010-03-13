@@ -272,17 +272,18 @@ public class SettingsObj {
 	
 		// Construct the directory if it does not exist.
 		File dir = new File(SETTINGS_FILE_DIR);
-		if (!dir.isDirectory()) {
-			Log.v(TAG, "Trying to create directory");
-			if (!dir.mkdirs()) {
-				Log.v(TAG, "Cannot create directories!");
+		if (dir.exists()) {
+			if (!dir.isDirectory()) {
+				// if the name happens to be the name of a non-dir for some
+				// reason...
+				Log.v(TAG, "There is a non-dir file with the same name!");
 				return false;
 			}
-		} else {
-			// if the name happens to be the name of a non-dir for some
-			// reason...
-			if (dir.exists()) {
-				Log.v(TAG, "There is a non-dir file with the same name!");
+			// else the directory already exists, so it's okay.
+		}
+		else {
+			if (!dir.mkdirs()) {
+				Log.v(TAG, "Cannot create directories!");
 				return false;
 			}
 		}
