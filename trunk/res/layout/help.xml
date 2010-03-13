@@ -76,7 +76,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_height="wrap_content"
 			android:text="Major Features:
 							\n1) Searchable map to select a bus stop
-							\n2) Customizable favoite locations
+							\n2) Customizable favorite locations
 							\n3) Major Locations list
 							\n4) Setting/Confirmation page to customize alarm preferences
 							\n
@@ -106,6 +106,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 							\n1) Select the settings for the vibration, ringtone, and proximity on the confirmation page.
 							\n2) Once the setting are chosen, press OK to set the alarm.
 							\n3) A textbox should appear notifying you that the alarm is set.
+							\n
+							\nAdding a bus stop as favorite:
+							\n1) Go to the Confirmation Page with the desired bus route and bus stop.
+							\n2) Press 'Save destination'
 							\n
 							\nUpdating/canceling the alarm
 							\n1) The alarm can be viewed from the drop down notifications (accessed by sliding your finger from the top to the bottom of the screen)."
