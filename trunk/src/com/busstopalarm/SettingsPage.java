@@ -202,8 +202,8 @@ public class SettingsPage extends Activity {
 		
 		proximityUnitsSpinner.setOnItemSelectedListener( 
 				new OnItemSelectedListener() { 
-					public void onItemSelected(AdapterView<?> adapterView, View arg1,
-							int arg2, long arg3) {
+					public void onItemSelected(AdapterView<?> adapterView, 
+							View arg1, int arg2, long arg3) {
 
 						int indexProx = adapterView.getSelectedItemPosition();
 						CharSequence selectedUnit =
@@ -214,7 +214,8 @@ public class SettingsPage extends Activity {
 						Log.v(TAG, "under onItemSelected(proximity unit): " +
 								selectedUnit);
 						
-						currentSettings.setProximityUnit(selectedUnit.toString());						
+						currentSettings.setProximityUnit(
+								selectedUnit.toString());						
 					}
 
 					public void onNothingSelected(AdapterView<?> arg0) {
@@ -254,7 +255,8 @@ public class SettingsPage extends Activity {
 			ringtoneList[i] = titleOfRingtone;
 			
 			if (!ringtoneFound) {
-				if (settingsRtName != null && settingsRtName.equals(titleOfRingtone)) {
+				if (settingsRtName != null && 
+						settingsRtName.equals(titleOfRingtone)) {
 					ringtoneFound = true;
 					defaultRingtoneIndex = i;
 				}

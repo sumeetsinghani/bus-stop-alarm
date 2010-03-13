@@ -85,7 +85,8 @@ public class DataFetcher {
 			busRoute.setDescription(data.getString("description"));
 			busRoute.setType(data.getString("type"));
 		} catch (Exception e) {
-			Log.e("getBusRouteById", "Error getting BusRoute from json response.", e);
+			Log.e("getBusRouteById", 
+					"Error getting BusRoute from json response.", e);
 		}
 		
 		
@@ -112,7 +113,8 @@ public class DataFetcher {
 	 * @return List of polylines containing the encoded polyline and the encoded level.
 	 *         List is empty if there are now line for given route id.
 	 */
-	public List<Polyline> getPolylines(int routeId) throws IOException, IllegalArgumentException {
+	public List<Polyline> getPolylines(int routeId) throws IOException, 
+													IllegalArgumentException {
 		if(routeId < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -142,13 +144,15 @@ public class DataFetcher {
 	
 	/**
 	 * Parses json response from OneBusAway api for polylines.
-	 * @param json is the response from OneBusAway by a "Stops for a route" query.
-	 * @return List of polylines containing the encoded polyline and the encoded level.
-	 *         List is empty if there are now line for given route id.
+	 * @param json is the response from OneBusAway by a "Stops for a route" 
+	 * query.
+	 * @return List of polylines containing the encoded polyline and the encoded 
+	 * level. List is empty if there are no line for given route id.
 	 */
 	private List<Polyline> getPolylinesParser(JSONObject json) {
 		if(json == null) {
-			throw new IllegalArgumentException("getPolylinesParser: json parameter is null");
+			throw new IllegalArgumentException("getPolylinesParser: json " +
+					"parameter is null");
 		}
 		
 		ArrayList<Polyline> polylines = new ArrayList<Polyline>();
@@ -174,7 +178,8 @@ public class DataFetcher {
 				}
 			}
 		} catch (Exception e) {
-			Log.e("getPolylinesParser", "Error getting polylines from json response.", e);
+			Log.e("getPolylinesParser", "Error getting polylines from json " +
+					"response.", e);
 		}
 		
 		return polylines;
@@ -182,7 +187,8 @@ public class DataFetcher {
 	
 	/**
 	 * Parses json response from OneBusAway api for bus stops.
-	 * @param json is the response from OneBusAway by a "Stops for a route" query.
+	 * @param json is the response from OneBusAway by a "Stops for a route" 
+	 * query.
 	 * @return List of bus stops on the route.
 	 * @throws JSONException 
 	 */
@@ -221,7 +227,8 @@ public class DataFetcher {
 	 */
 	private BusStop getStopByIdParser(JSONObject json) {
 		if(json == null) {
-			throw new IllegalArgumentException("getStopByIdParser: json parameter is null");
+			throw new IllegalArgumentException("getStopByIdParser: json " +
+					"parameter is null");
 		}
 		
 		BusStop busStop = new BusStop();
@@ -244,7 +251,8 @@ public class DataFetcher {
 			busStop.setCode(data.getString("code"));
 			busStop.setLocationType(data.getString("locationType"));
 		} catch (Exception e) {
-			Log.e("getStopByIdParser", "Error getting bus stop from json response.");
+			Log.e("getStopByIdParser", "Error getting bus stop from json " +
+					"response.");
 		}
 		
 		return busStop;
@@ -266,7 +274,7 @@ public class DataFetcher {
 			StringBuilder sb = new StringBuilder();
 			sb.append(HOST_NAME);
 			sb.append(action);
-			sb.append(DEFAULT_AGENCY); // The default agency, (example: Seattle is 1).
+			sb.append(DEFAULT_AGENCY); // The default agency, Seattle is 1.
 			sb.append("_"); // Add divider between agency and id.
 			sb.append(id);
 			sb.append(".json?key="); // Request a json response.
@@ -292,7 +300,8 @@ public class DataFetcher {
 	 * @return the converted string
 	 * @throws IOException
 	 */
-	private String convertStreamToString(InputStream inStream) throws IOException {
+	private String convertStreamToString(InputStream inStream) throws 
+																IOException {
 		/*
 		 * To convert the InputStream to String we use the
 		 * BufferedReader.readLine() method. We iterate until the BufferedReader

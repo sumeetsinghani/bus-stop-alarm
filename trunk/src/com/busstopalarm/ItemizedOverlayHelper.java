@@ -55,14 +55,17 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		b.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (lastSelectedStop != null) {
-					Intent i = new Intent(v.getContext(), ConfirmationPage.class);
+					Intent i = 
+						new Intent(v.getContext(), ConfirmationPage.class);
 					i.putExtra("busstop", lastSelectedStop);
 					i.putExtra("busroute", routeNum);
 					i.putExtra("busroutedesc", busRouteDesc);
 					Log.v(TAG, "busRouteDesc = " + busRouteDesc);
-					mCtx.startActivityForResult(i,MapPage.MAP_CONFIRM_TRANSITION);
+					mCtx.startActivityForResult(i,
+							MapPage.MAP_CONFIRM_TRANSITION);
 				} else {
-					Toast.makeText(v.getContext(), "Please Select a Route", Toast.LENGTH_LONG).show();
+					Toast.makeText(v.getContext(), "Please Select a Route", 
+							Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -106,7 +109,10 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		lastSelectedStop = stop.getStop();
 		
 		TextView tv = (TextView)mCtx.findViewById(R.id.stopinfo);
-		String text = "Route " + mCtx.getIntent().getStringExtra("routeID").split("_")[1] + ": " + lastSelectedStop.getName();
+		String text = 
+			"Route " + 
+			mCtx.getIntent().getStringExtra("routeID").split("_")[1] + 
+			": " + lastSelectedStop.getName();
 		tv.setText(text);
 		return super.onTap(index);
 	}
