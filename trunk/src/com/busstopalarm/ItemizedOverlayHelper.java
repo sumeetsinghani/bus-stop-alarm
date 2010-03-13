@@ -29,7 +29,8 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 	private BusStop lastSelectedStop;
 	private Activity mCtx;
 	private String routeNum;
-
+	private String busRouteDesc;
+	
 	/**
 	 * It shows current bus route and a button to set alarm.
 	 * @param mCtx gets activity
@@ -41,6 +42,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 		lastSelectedStop = null;
 		try {
 			routeNum = mCtx.getIntent().getStringExtra("routeID").split("_")[1];
+			busRouteDesc = mCtx.getIntent().getStringExtra("busroutedesc");
 		} catch (Exception e) {
 			// NullPointerException, IndexOutOfBoundsException, and
 			// NumberFormatException are caught here.
@@ -58,6 +60,8 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 					Intent i = new Intent(v.getContext(), ConfirmationPage.class);
 					i.putExtra("busstop", lastSelectedStop);
 					i.putExtra("busroute", routeNum);
+					i.putExtra("busroutedesc", busRouteDesc);
+					Log.v(TAG, "busRouteDesc = " + busRouteDesc);
 					mCtx.startActivityForResult(i,MapPage.MAP_CONFIRM_TRANSITION);
 				} else {
 					Toast.makeText(v.getContext(), "Please Select a Route", Toast.LENGTH_LONG).show();
