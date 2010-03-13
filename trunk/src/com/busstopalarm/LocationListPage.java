@@ -6,8 +6,6 @@ package com.busstopalarm;
  * @author David Nufer
  */
 
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +32,13 @@ public class LocationListPage extends ListActivity {
 	public static final int FAVORITES = 1;
 	public static final int MAJOR = 2;
 
+	/**
+	 * These constants are for the switch-cases in buttons
+	 */
+	private static final int SET_STOP_OPTION = 10;
+	private static final int REMOVE_STOP_OPTION = 11;
+	private static final int CANCEL = 12;
+	
 	private static final int NUM_ENTRIES_TO_FETCH = 20;
 
 	public BusDbAdapter mBusDbHelper;
@@ -146,10 +151,6 @@ public class LocationListPage extends ListActivity {
 		}
 	}
 
-	private static final int SET_STOP_OPTION = 10;
-	private static final int REMOVE_STOP_OPTION = 11;
-	private static final int CANCEL = 12;
-
 	/**
 	 * creates the context menu for items when they get a long click
 	 */
@@ -199,7 +200,6 @@ public class LocationListPage extends ListActivity {
 			// removes the selected stop from the list
 		case REMOVE_STOP_OPTION:
 			locationList.remove(id);
-			// TODO remove from db also
 			listAdapter.notifyDataSetChanged();
 			break;
 		case CANCEL:

@@ -1,6 +1,4 @@
 /**
- * TODO: STUB CLASS for BusRoute not fully tested.
- * TODO: Add error checking.
  * Stores data pertaining to a bus route such as name,
  * description, list of polylines, and list of bus stops.
  * Currently getters, setters and an equals method.
@@ -9,7 +7,6 @@
 
 package com.busstopalarm;
 
-import java.util.Collections;
 import java.util.List;
 
 public class BusRoute {

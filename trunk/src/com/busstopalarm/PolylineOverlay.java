@@ -10,14 +10,10 @@ package com.busstopalarm;
 
 import java.util.Iterator;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;

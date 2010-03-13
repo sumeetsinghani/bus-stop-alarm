@@ -147,7 +147,6 @@ public class BusStop implements Parcelable {
 	 * required by Parcelable but unused.
 	 */
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

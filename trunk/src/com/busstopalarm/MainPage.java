@@ -174,12 +174,9 @@ public class MainPage extends Activity {
 		
 
 		if (!dbLoaded) {
-			// TODO: get rid of this already.
-			//////// temporary /////////
-			//ad.deleteAllDestinations();
 			try { 
 				// These load entries from file into the database every time...
-				ad.readDbFile(0);
+				ad.readDbFile(BusDbAdapter.MAJORDB);
 				dbLoaded = true;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -187,7 +184,6 @@ public class MainPage extends Activity {
 				e.printStackTrace();
 			}
 		}
-		////////////////////////////
 		
 		// Gets the five most recent locations.
 		ad.initRecentTable();
@@ -245,19 +241,10 @@ public class MainPage extends Activity {
 		switch (item.getItemId()) {
 		case 1:
 			BusStop stop = getIntent().getParcelableExtra("busStopSaved");
-			int routeID = getIntent().getIntExtra("busroute", -1);
 			
 			Log.v(TAG, "bus stop:  " + stop);
 			
 			if (stop != null) {
-				/*
-			  Intent intentConfirmationPage = 
-				  new Intent(this, ConfirmationPage.class);
-			  intentConfirmationPage.putExtra("busstop", stop);
-			  intentConfirmationPage.putExtra("busroute", routeID);
-			  
-			  startActivity(intentConfirmationPage);
-			  */
 			  finish();
 			  break;
 			}

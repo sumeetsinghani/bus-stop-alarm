@@ -11,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -24,7 +23,6 @@ import android.util.Log;
  */
 public class AlarmService extends Service {
 
-	private static final String LOG = "ALARMSERVICE";
 	private static final int NOTIFICATION_ID1 = 1001;
 	private static final int PENDING_INTENT_REQUEST_CODE1 = 1000001;
 	private static final int PENDING_INTENT_REQUEST_CODE2 = 1000002;
