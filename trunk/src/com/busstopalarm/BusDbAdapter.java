@@ -217,7 +217,8 @@ public class BusDbAdapter {
     	 * Check if the entry is already in the table
     	 */
     	if (checkIfDestExist(route_id, stop_id)) {
-    		return -1;
+    		updateDestDesc_TimeCount(route_id, stop_id);
+    		return 0;
     	}
     	
     	/*
@@ -385,7 +386,8 @@ public class BusDbAdapter {
     	String countS = getDestCount(route_id, stop_id);
     	Log.v(TAG, "updateDestDesc... countS = " + countS);
     	if (countS == null) {
-    		createDest(route_id, "hi", stop_id, "there", 0);
+    		return;
+    		//createDest(route_id, "hi", stop_id, "there", 0);
     	} else {
     		try {
     			count = Integer.parseInt(countS);
