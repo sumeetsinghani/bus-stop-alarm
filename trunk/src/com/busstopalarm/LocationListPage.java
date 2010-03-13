@@ -200,6 +200,10 @@ public class LocationListPage extends ListActivity {
 			break;	
 			// removes the selected stop from the list
 		case REMOVE_STOP_OPTION:
+			HashMap<String, String> itemToRemove = locationList.get(id);
+			mBusDbHelper.open();
+			mBusDbHelper.deleteDest(itemToRemove.get("routeID"), itemToRemove.get("stopID"));
+			mBusDbHelper.close();
 			locationList.remove(id);
 			listAdapter.notifyDataSetChanged();
 			break;
