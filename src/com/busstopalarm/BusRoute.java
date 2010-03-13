@@ -10,7 +10,8 @@ package com.busstopalarm;
 import java.util.List;
 
 public class BusRoute {
-	private List<Polyline> polylines; // List of polylines that are used to draw the route.
+	// List of polylines that are used to draw the route.
+	private List<Polyline> polylines; 
 	private List<BusStop> busStops; // List of bus stops along this route.
 	private String routeId; // Route id of this route.
 	private String shortName; // shortName is the route id without the agency.

@@ -37,7 +37,8 @@ public class SettingsObj {
 	// The filename of settings file.
 	static final String SETTINGS_FILE_NAME = "favorite_settings_data";
 	// The full path of the settings file.
-	static final String SETTINGS_FILE_PATH = "/data/data/com.busstopalarm/files/" + SETTINGS_FILE_NAME;
+	static final String SETTINGS_FILE_PATH = 
+		"/data/data/com.busstopalarm/files/" + SETTINGS_FILE_NAME;
 
 	// Units. There are currently two, so we don't really need to use a enum.
 	static final String YARDS = "Yards";
