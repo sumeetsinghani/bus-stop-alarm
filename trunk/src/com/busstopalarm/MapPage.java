@@ -71,7 +71,7 @@ public class MapPage extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapController.setZoom(13);
-
+		
 		//instantiates gps service
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000,
@@ -92,6 +92,7 @@ public class MapPage extends MapActivity {
 			}
 
 			Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.busstopicon);
+			getIntent().putExtra("busroutedesc", busRoute.getDescription());
 			ItemizedOverlayHelper itemizedoverlay = new ItemizedOverlayHelper(this, drawable);
 
 			for (BusStop bs : busRoute.getBusStops()) {
