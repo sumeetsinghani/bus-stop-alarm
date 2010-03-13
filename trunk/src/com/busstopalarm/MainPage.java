@@ -1,3 +1,9 @@
+/**
+ * Main page of the Bus Stop Alarm
+ * 
+ * @author David Nufer, Orkhan Muradov, Pyong Byon
+ */
+
 package com.busstopalarm;
 
 import java.io.FileNotFoundException;
@@ -21,11 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Main page of the Bus Stop Alarm
- * 
- * @author David Nufer, Orkhan Muradov, Pyong Byon
- */
 public class MainPage extends Activity {
 	
 	private static final String TAG = "inMainPage";
