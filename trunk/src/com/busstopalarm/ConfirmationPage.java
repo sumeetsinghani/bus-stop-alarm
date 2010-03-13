@@ -226,26 +226,25 @@ public class ConfirmationPage extends Activity {
 			public void onClick(View v) {	
 				BusStop busStop = getIntent().getParcelableExtra("busstop");
 				
-				String busStopID = busStop.getStopId();
-				Bundle bundle = getIntent().getExtras();
-				Log.v(TAG, "busstop is :  " + busStop);
-				Log.v(TAG, "bus id:  " +  busStopID);
-				Log.v(TAG, "Bundle :  " + bundle);
+				String busRouteIDString = 
+					getIntent().getStringExtra("busroute");
+				String busRouteDesc = 
+					getIntent().getStringExtra("busroutedesc");
+				String busStopID = busStop.getStopId();				
+				String busStopDesc = busStop.getName();
+	
 				
-				// get busRouteID
-				String busStopDesc = busStop.getName();;//bundle.getString("busstop");
-				String busRouteIDString = getIntent().getStringExtra("busroute");
-				String busRouteDesc = getIntent().getStringExtra("busroutedesc");//bundle.getString("busroutedesc");
 				Log.v(TAG, "busRouteIDString:  "+ busRouteIDString);
 				Log.v(TAG, "busRouteDesc:  "+ busRouteDesc);
+				Log.v(TAG, "busStopID:  "+ busStopID);
 				Log.v(TAG, "busStopDesc:  "+ busStopDesc);
 				
 				BusDbAdapter busDbAdapter = new BusDbAdapter(v.getContext());
 				busDbAdapter.open();
 				Log.v(TAG, "try to save. args: " + busRouteIDString + " " + busStopID);
 				
-				busDbAdapter.createDest(busRouteIDString, busRouteDesc, 
-						busStopID, busStopDesc, 0);
+				busDbAdapter.updateDestDescTimeCount(busRouteIDString, 
+						busRouteDesc, busStopID, busStopDesc);
 				busDbAdapter.close();
 				Toast.makeText(ConfirmationPage.this, "Destination Saved", 
 						Toast.LENGTH_LONG).show();
