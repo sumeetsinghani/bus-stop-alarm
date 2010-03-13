@@ -97,20 +97,22 @@ public class MainPage extends Activity {
 	 * Sets up the route search button. Called by onCreate() method.
 	 */
 	private void setupRouteSearchButton() {
-		final Button RouteSearchButton = (Button) findViewById(R.id.RouteSearchButton);
+		final Button RouteSearchButton = 
+			(Button) findViewById(R.id.RouteSearchButton);
 		// search button behavior
 		RouteSearchButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				String routeText = 
-					((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
+			((EditText)findViewById(R.id.RouteSearchBox)).getText().toString();
 				int routeNumInput;
 				
 				try {
 					// If the route number input is in any way invalid, we
 					// throw an exception.
 					routeNumInput = Integer.parseInt(routeText);
-					if (Collections.binarySearch(validBusRoutes, routeNumInput) < 0) {
+					if (Collections.binarySearch(validBusRoutes, 
+							routeNumInput) < 0) {
 						throw new IllegalArgumentException();
 					}
 				} catch (IllegalArgumentException e) {
@@ -130,7 +132,8 @@ public class MainPage extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, 
+									Intent data) {
 		Log.v(TAG, "onActivityResult" + requestCode + " " + resultCode);
 		if (requestCode == MAIN_CONFIRM_TRANSITION) {
 			if (resultCode == RESULT_OK) {
