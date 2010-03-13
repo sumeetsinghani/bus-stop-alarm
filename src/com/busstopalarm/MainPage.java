@@ -180,8 +180,6 @@ public class MainPage extends Activity {
 			try { 
 				// These load entries from file into the database every time...
 				ad.readDbFile(0);
-				ad.readDbFile(1);
-				ad.readDbFile(2);
 				dbLoaded = true;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -193,12 +191,14 @@ public class MainPage extends Activity {
 		
 		// Gets the five most recent locations.
 		Cursor recent = ad.getRecentDest(numRecentRoutes);
-		LinearLayout recentList = (LinearLayout) findViewById(R.id.recent_routes);
+		LinearLayout recentList = 
+			(LinearLayout) findViewById(R.id.recent_routes);
 		int routeIndex = recent.getColumnIndex("route_id");
 		int routeDescIndex = recent.getColumnIndex("route_desc");
 		
 		while (!recent.isAfterLast()) {
-			final int routeNumber = Integer.parseInt(recent.getString(routeIndex));
+			final int routeNumber = 
+				Integer.parseInt(recent.getString(routeIndex));
 			Log.v(TAG, "main page got recent route number: " + routeNumber);
 			final TextView recentItem = new TextView(this);
 			recentItem.setClickable(true);
@@ -250,7 +250,8 @@ public class MainPage extends Activity {
 			
 			if (stop != null) {
 				/*
-			  Intent intentConfirmationPage = new Intent(this, ConfirmationPage.class);
+			  Intent intentConfirmationPage = 
+				  new Intent(this, ConfirmationPage.class);
 			  intentConfirmationPage.putExtra("busstop", stop);
 			  intentConfirmationPage.putExtra("busroute", routeID);
 			  
