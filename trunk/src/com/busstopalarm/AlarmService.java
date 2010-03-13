@@ -192,7 +192,6 @@ public class AlarmService extends Service {
 					new Intent(getApplicationContext(), AlarmService.class), 
 					PendingIntent.FLAG_UPDATE_CURRENT);
 
-			// TODO: convert to correct units
 			ntf.setLatestEventInfo(getApplicationContext(), 
 					"Bus Stop: " + busStop.getName(), distanceToShow + " " + 
 					unitToShow + " away", pi); 

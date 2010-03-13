@@ -57,15 +57,15 @@
 		android:layout_height="fill_parent" 
 		android:gravity="bottom" android:id="@+id/ButtonsArea">
 		
-		<Button android:text="    Cancel    " 
+		<Button android:text="Cancel" 
 			android:id="@+id/CancelButton"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"/>
 		<Button android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" android:id="@+id/SaveDestination" android:text="Save Destination"/>
-		<Button android:text="        OK         " 
+		<Button android:text="OK" 
 			android:id="@+id/OKButton"
-			android:layout_width="wrap_content" 
+			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"/>
 			
 	</LinearLayout>
