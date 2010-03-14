@@ -49,6 +49,9 @@ public class DataFetcher {
 		
 		// HTTP GET request for a bus stop in JSON format.
 		JSONObject json = doQuery(ACTION_GET_STOP_BY_ID, stopId);	
+		if(json == null) {
+			throw new IllegalArgumentException("No stop for ID.");
+		}
 		
 		return getStopByIdParser(json);
 	}
@@ -62,13 +65,20 @@ public class DataFetcher {
 	 * @return BusRoute object loaded with retrieved data
 	 * @throws IOException
 	 */
-	public BusRoute getBusRouteById(int routeId, boolean includePolylinesAndStops) throws IOException {
+	public BusRoute getBusRouteById(int routeId, boolean includePolylinesAndStops) throws IOException, IllegalArgumentException, JSONException {
+		if(routeId < 0) {
+			throw new IllegalArgumentException();
+		}
 		BusRoute busRoute = new BusRoute();
 		
 		// Query for info on the bus route.
 		
 		// HTTP GET request for a bus route in JSON format.
 		JSONObject jsonBusRoute = doQuery(ACTION_GET_ROUTE_BY_ID, routeId);
+		
+		if(jsonBusRoute == null) {
+			throw new IllegalArgumentException("No route for ID.");
+		}
 		
 		// Retrieve the list of polylines from the JSON response.
 		try {
@@ -84,9 +94,10 @@ public class DataFetcher {
 			busRoute.setShortName(data.getString("shortName"));
 			busRoute.setDescription(data.getString("description"));
 			busRoute.setType(data.getString("type"));
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			Log.e("getBusRouteById", 
 					"Error getting BusRoute from json response.", e);
+			throw e;
 		}
 		
 		
@@ -131,13 +142,17 @@ public class DataFetcher {
 	 * @param routeID
 	 * @return list of stops as JSONObject, null if no such routeID.
 	 */
-	public List<BusStop> getBusStopsForRoute(int routeId) throws IOException {
+	public List<BusStop> getBusStopsForRoute(int routeId) throws IOException, JSONException {
 		if(routeId < 0) {
 			throw new IllegalArgumentException();
 		}
 		
 		// HTTP GET request for the stops for a route in JSON format.
 		JSONObject json = doQuery(ACTION_GET_STOPS_FOR_A_ROUTE, routeId);
+		if(json == null) {
+			throw new IllegalArgumentException("No route for ID.");
+		}
+		
 		
 		return getBusStopsForRouteParser(json);
 	}

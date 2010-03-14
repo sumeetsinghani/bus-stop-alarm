@@ -14,41 +14,15 @@ import com.google.android.maps.GeoPoint;
 
 public class BusStop implements Parcelable {
 
-	/**
-	 * Builds a BusStop from a Parcel
-	 */
-	public static final Parcelable.Creator<BusStop> CREATOR = 
-		new Parcelable.Creator<BusStop>() {
-
-		public BusStop createFromParcel(Parcel source) {
-			BusStop b = new BusStop();
-			b.setStopId(source.readString());
-			b.setCode(source.readString());
-			b.setName(source.readString());
-			b.setLatitude(source.readDouble());
-			b.setLongitude(source.readDouble());
-			b.setDirection(source.readString());
-			b.setLocationType(source.readString());
-			return b;
-		}
-
-		public BusStop[] newArray(int size) {
-			return new BusStop[size];
-		}
-		
-	};
-	
 	private String stopId;			// The stop id
 	private String code;		// Passenger-facing stop identifier
 	private String name;		// Passenger-facing name for the stop
 	private double latitude;	// The latitude location of the stop
 	private double longitude;	// The longitude location of the stop
-	// The direction of travel for routes serving this stop
-	private String direction;	
-	/* Corresponds to the stop location_type field defined in the GTFS spec 
-	 * found at OneBusAway website
-	 */
-	private String locationType;
+	private String direction;	// The direction of travel for routes serving this stop
+	private String locationType;	/* Corresponds to the stop location_type field 
+									   defined in the GTFS spec found at OneBusAway website*/
+	
 	/**
 	 * BusStop constructor.
 	 */
@@ -188,26 +162,34 @@ public class BusStop implements Parcelable {
 		dest.writeString(direction);
 		dest.writeString(locationType);
 	}
-
+	
 	/**
-	 * Compares this BusStop with given BusStop.
-	 * Returns true if their stopId, code, direction, 
-	 * latitude(with 100000 precision) and longitude(with 100000 precision).
-	 * @param other
-	 * @return
+	 * Builds a BusStop from a Parcel
 	 */
-	public boolean equals(BusStop other) {
+	public static final Parcelable.Creator<BusStop> CREATOR = new Parcelable.Creator<BusStop>() {
+
+		public BusStop createFromParcel(Parcel source) {
+			BusStop b = new BusStop();
+			b.setStopId(source.readString());
+			b.setCode(source.readString());
+			b.setName(source.readString());
+			b.setLatitude(source.readDouble());
+			b.setLongitude(source.readDouble());
+			b.setDirection(source.readString());
+			b.setLocationType(source.readString());
+			return b;
+		}
+
+		public BusStop[] newArray(int size) {
+			return new BusStop[size];
+		}
+		
+	};
+
+	@Override
+	public boolean equals(Object o) {
+		BusStop other = (BusStop)o;
 		if(!this.stopId.equals(other.stopId)) {
-			return false;
-		} else if(!this.code.equals(other.code)) {
-			return false;
-		} else if(!this.direction.equals(other.direction)) {
-			return false;
-		} else if(Math.round(this.latitude * 100000) != 
-			Math.round(other.latitude * 100000)) {
-			return false;
-		} else if(Math.round(this.longitude * 100000) != 
-			Math.round(other.longitude * 100000)) {
 			return false;
 		}
 		

@@ -147,7 +147,9 @@ public class BusRoute {
 	 * @param other
 	 * @return true if both BusRoutes' IDs are equal. False otherwise.
 	 */
-	public boolean equals(BusRoute other) {
+	@Override
+	public boolean equals(Object o) {
+		BusRoute other = (BusRoute)o;
 		return this.routeId.equals(other.routeId);
 	}
 }
