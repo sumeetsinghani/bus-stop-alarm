@@ -112,9 +112,9 @@ public class BusDbAdapter {
 		" SELECT * FROM destination " +
 		" WHERE route_id = ? AND stop_id = ? ;";
 
-	private static final String DATABASE_RECENT_RETRIEVE_BY_ROUTEID_STOPID =
+	private static final String DATABASE_RECENT_RETRIEVE_BY_ROUTEID =
 		" SELECT * FROM recent " +
-		" WHERE route_id = ? AND stop_id = ? ;";
+		" WHERE route_id = ? ;";
 
 	private static final String DATABASE_DELETE_ALL_DEST =
 		" DELETE FROM destination;";
@@ -535,8 +535,8 @@ public class BusDbAdapter {
 	 */
 	public boolean checkIfRecentExist(String route_id, String stop_id) {
 		Cursor mCursor = null;
-		mCursor = mDb.rawQuery(DATABASE_RECENT_RETRIEVE_BY_ROUTEID_STOPID, 
-				new String[]{route_id, stop_id});
+		mCursor = mDb.rawQuery(DATABASE_RECENT_RETRIEVE_BY_ROUTEID, 
+				new String[]{route_id});
 
 		return (mCursor.getCount() != 0); 
 	}

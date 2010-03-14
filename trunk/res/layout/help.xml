@@ -1,5 +1,6 @@
 
-<!-- The android xml does not allow for line text wrapping, thus there are very long lines of code -->
+<!-- The android xml does not allow for line text wrapping, thus there are very long lines of code
+-->
 
 <LinearLayout
 android:id="@+id/linlayoutBase"
@@ -112,7 +113,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 							\n2) Press 'Save destination'
 							\n
 							\nUpdating/canceling the alarm
-							\n1) The alarm can be viewed from the drop down notifications (accessed by sliding your finger from the top to the bottom of the screen)."
+							\n1) The alarm can be viewed from the drop down notifications (accessed by sliding your finger from the top to the bottom of the screen).
+							\n2) To update or cancel the alarm, go to the confirmation page through the main page (Menu button).
+							\n3) Pressing 'cancel' will cancel the alarm, while pressing 'Ok' will update the alarm.
+							\n
+							\nExiting the app
+							\n1) To exit the app, press the 'Home' button."
 			>
 			</TextView>
 			<TextView
@@ -127,7 +133,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/helpTroubleshootText "
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="1)No routes are available:
+			android:text="\nYou can only set one alarm at a time. Setting a new alarm will overwrite the existing one.
+			\nMap page currently does not highlight the bus stop selected by the user.
+			\nRestarting the app after setting an alarm will not let you go back to the confirmation page directly. You must set a new alarm to get there.
+							\n\nTroubleshooting
+							\n1)No routes are available:
 							\n\tCheck the wireless internet connection
 							\n2)Maps do not load properly in the correct location: 
 							\n\tCheck that your GPS is turned on"
