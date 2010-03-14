@@ -255,7 +255,7 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 
 		//go to Major Locations
 		solo.clickOnButton("Major Locations");
-
+		Thread.sleep(2000);
 		solo.assertCurrentActivity("must be location list page", LocationListPage.class);
 		ArrayList<View> views = solo.getViews();
 		if (views.size() > 0) {
@@ -290,6 +290,7 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 
 		solo.clickOnButton("Favorites");
 
+		Thread.sleep(2000);
 		solo.assertCurrentActivity("must be location list page", LocationListPage.class);
 		ArrayList<View> views = solo.getViews();
 		if (views.size() > 0) {
