@@ -30,7 +30,7 @@ elif [ $# -ge 1 ]; then
     elif [ $1 = 'setup' ]; then
         "$2"/android update project -p ../..
         "$2"/android update test-project -p ./ -m ../..
-    elif [ $1 = 'coverage' ]; then
+    elif [ $1 = 'run' ]; then
       run  
     fi
 else
