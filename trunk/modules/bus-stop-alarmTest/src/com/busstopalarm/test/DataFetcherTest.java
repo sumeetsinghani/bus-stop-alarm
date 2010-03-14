@@ -12,6 +12,8 @@ package com.busstopalarm.test;
 import java.io.IOException;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.busstopalarm.BusRoute;
@@ -56,12 +58,12 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesLast()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesLast()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		Polyline actual = busRoute.getPolylines().get(busRoute.getPolylines().size()-1);
 		
 		
-		assertEquals("g|_bHtpfiV?uE?mBAsBAmCiGFCBCJ@dFrGB",
+		assertEquals("i|_bHrpfiV?uE?mB?oBAoCiGDCDCJ@bFpGB",
 				actual.getEncodedPolyline());
 		assertEquals("BBBBBBBBBB", actual.getEncodedLevels());
 	}
@@ -74,14 +76,14 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesFirst()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesFirst()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		List<Polyline> actual = busRoute.getPolylines();
 		
 		
-		assertEquals("cetaHnpxiViFCcGC?_C?aC@eG?cG?iO?eCBcCA_G?uE?i@@EAk@@iE?O?K?kB?iA?Y?S?S?W?uC?wA?{C?C?cB?cCAaCeB?e@?e@@SFODEDMFOH_An@}AbAsBpA_CbBwBvASLu@b@g@Pm@Le@@cA?uJA_@?a@?A?e@AYCMAACOAQCuAa@y@U_@GYKg@KE?_AG_B@gIDyB?E?y@@iARq@Ps@\\uEtBk@VuAr@{DtBgB`As@^kDlBo@d@i@b@eA|@]ZsAbAa@\\W`@Sf@y@xBAB{BnHELELK\\mA~DQj@eBnESDgA?u@?G?a@?E?I?C?W?s@?_@?}@Cq@?aA?oB?s@?e@BsCLS?E?MBhAqNBI?MjAqNToCLkAXcDBS}EIqLU{GMkBEoCGASGe@UuBQuBG]?yDBuF?qF@kF?qFDsFDqF@kF?mFBqF?iF@sE?aC@}A?aFBqA@sA?mAAmC^?pCBT??I?M?Q@W?aA@aF?WCk@Ee@CgA?a@PgANq@DMJa@TaA^w@\\u@Ra@ZoABODk@@}@@I?Q?a@B{FK[?iCe@?]?s@Ca@?cEE_CC@uB@oBm@C{BAgHGgHEgHGkJEgJE?O?gB?}A?M?M@cB?qB@mB?qB?g@?sB?qB@qB?qB@eCM?iHC}H?iBCsABk@?GyAYuBGe@Eo@AaA@_BFi@bCQ~AGp@AJCSyAG]kAoHGm@GcA?iB?U?}D?sE?wF?qE@sB?qBAwB@wB?{B?W?_B?{B?sB?{B?W?eB?mB?q@?_A?kB?a@?mA?oB?O?aB?mB?K?aB?wD?_NGw@}AwOi@iGKgAEeACcAB}APeDPQTIRBt@H|@JR@HiB@aACaAE{@AICWGe@G]Gc@Ke@Ma@Qg@Si@KUu@qAAAeAeBKMw@mAg@u@oAqBqAmBsBeDGI]i@g@w@y@qAS[qCgEiByC??e@u@CEkCkEiCaEc@WEC]]YKOGc@Ek@?qCBeLFsB@iNJ}@???cA@{ABmB?YFe@Hi@VmBvAg@X}D`AoAZMoAGw@Ao@@iC?kI?gF?Y?c@D[Fy@Ny@DUh@eB`BoFPaAHqAJyDJ_ARq@SOs@EwADCMEKICI@IJARDRNJ?`@BdHuABGOGGGCC?IDEP?B?LDHJJHEJIBS",
+		assertEquals("cetaHlpxiViFCeG??aC?aC@eG?cG@iO@eC?cC?_G?uE?k@?C?k@?iE?O?K?mB@gA?YAU@Q?W?wC?uA?yC?E?cB?cC?aCiB?c@?g@BSDMDEBMJMFaAl@}AdAsBpA_CbBwBvASJu@b@g@Tm@Je@@aA?yJA_@?]?C?e@CYAMAACOAQEuA_@y@U_@G[Kg@IEC}@E_B?gIDyB?E?y@DgANq@Ru@\\uEtBm@VsAr@{DtBgB`As@^kDnBo@b@i@`@gA|@[ZsAdAa@\\W`@Sd@{@zB?@}BpHCLELK\\mA~DQl@cBlEUBgA?u@?I?_@?E?G?E?W?q@?a@?}@Cq@?aA?oB?s@?e@BsCLU@C?MBjAqN?I@MjAqNRoCLkAZeDBQ}EIsLWyGMkBCoCIAQGe@UwBSuBE]?wDBwF?oF@mF?oFDuFDoF@mF@mF@oF?gF@uE?aC@}A@aF?qABuA?mAAmC^?pCDT??I?M?S?U@aA@aF?YCi@Eg@CeA?a@PgAPs@BMH_@VaA`@y@Zs@Ra@XmABQFm@@}@@I?Q?_@B}FMW@mCc@?_@?s@Ca@?cEC_CC@sB@qBm@?{BGgHCgHGgHGkJEiJE@O?gB?_B?I?Q@cB?oB@oB?oB?g@?sB?qB@sB?oB@gCM?iHA}H?iBCsABk@?GyAYuBIe@Cq@AaA@}AFi@`CS`BEp@CJASyAG]kAoHGm@GcA?iB?W?{D?qE?{F?qE@oB?uB?wB?wB?yB?W?_B?yB?uB?{B?W?eB?mB?q@?_A?mB?]?oA?qB?M?}A?oB?M?aB?wD?_NIy@yAwOk@gGKiAGcAAcAByANiDRSRGRBv@Hz@JT@HiB?aAAaAG{@?KCWGe@E]Ic@Me@K_@Qg@Ui@IUu@qAAAeAeBKOw@kAi@w@mAkBqAsBsBeDGG]k@g@w@y@oAS[oCiEkBwC??e@w@CCkCgEkCgEc@QCI_@]WIOGc@Ek@?qC@eLHsB@iNH}@?eA@yABkB@]Dc@Jk@VkBvAi@V{DfAoAVMoAIy@?m@?iC@kIAgF?YBc@@[H{@Nw@DSf@gBbBqFPaAHoAJyDJaAPo@SQo@CyABCIGMIAE?KHATDPNJAb@DdHuABGMGIGCC?IBEP?D?LDHJHJEHIBQ",
 				actual.get(0).getEncodedPolyline());
-		assertEquals("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", actual.get(0).getEncodedLevels());
+		assertEquals("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", actual.get(0).getEncodedLevels());
 	}
 	
 	/**
@@ -92,7 +94,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesSize()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesSize()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		int actual = busRoute.getPolylines().size();
 		int expected = 12;
@@ -107,7 +109,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsLast()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsLast()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		BusStop actual = busRoute.getBusStops().get(108);
 		
@@ -121,7 +123,12 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setName("NE 55th St & 45th Ave NE");
 		expected.setCode("9990");
 		
-		assertEquals(expected, actual);
+		/* Forced to used assertTrue because assertEquals was
+		 * calling the two parameter's toString method an comparing those strings, 
+		 * instead of calling their .equals() methods.
+		 */
+		//assertEquals(expected, actual);
+		assertTrue(expected.equals(actual));
 	}
 	
 	/**
@@ -131,7 +138,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsFirst()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsFirst()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		BusStop actual = busRoute.getBusStops().get(0);
 		
@@ -145,7 +152,13 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setName("NE 55th St & 43rd Ave NE");
 		expected.setCode("10000");
 		
-		assertEquals(expected, actual);
+		
+		/* Forced to used assertTrue because assertEquals was
+		 * calling the two parameter's toString method an comparing those strings, 
+		 * instead of calling their .equals() methods.
+		 */
+		//assertEquals(expected, actual);
+		assertTrue(expected.equals(actual));
 	}
 	
 	/**
@@ -155,7 +168,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsSize()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsSize()throws IOException, JSONException {
 		BusRoute actual = fetcher.getBusRouteById(30, true);
 		int expected = 109;
 		
@@ -172,7 +185,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method does try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckRouteInfo()throws IOException {
+	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckRouteInfo()throws IOException, JSONException {
 		BusRoute actual = fetcher.getBusRouteById(30, true);
 		
 		// Assert state of object.
@@ -190,7 +203,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method doesn't try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckPolylinesAndStopsNull()throws IOException {
+	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckPolylinesAndStopsNull()throws IOException, JSONException {
 		BusRoute actual = fetcher.getBusRouteById(30, false);
 		
 		// Test to make sure no polylines or stops were added.
@@ -205,7 +218,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * the method doesn't try to get polylines or stops.
 	 * @throws IOException
 	 */
-	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckRouteInfo()throws IOException {
+	public void testGetBusRouteById_KnownRoute_NoPolylinesAndStops_CheckRouteInfo()throws IOException, JSONException {
 		BusRoute actual = fetcher.getBusRouteById(30, false);
 		
 		// Assert state of the object.
@@ -230,7 +243,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		} catch(IllegalArgumentException e) {
 			// Test Passes!
 		} catch(Exception e) {
-			fail("getBusRouteById() threw the wrong exception.");
+			fail("getBusRouteById() threw the wrong exception." + e.toString());
 		}
 	}
 	
@@ -311,10 +324,15 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLatitude(47.6685791);
 		expected.setLongitude(-122.2883);
 		expected.setLocationType("0");
-		expected.setName("NE 55th St &amp; 37th Ave N");
+		expected.setName("NE 55th St & 37th Ave N");
 		expected.setCode("10020");
 		
-		assertEquals(expected, actual);
+		/* Forced to used assertTrue because assertEquals was
+		 * calling the two parameter's toString method an comparing those strings, 
+		 * instead of calling their .equals() methods.
+		 */
+		//assertEquals(expected, actual);
+		assertTrue(expected.equals(actual));
 	}
 	
 	/**
@@ -363,9 +381,9 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * giving it a valid stop id. Check the boundary case of the last stop.
 	 * @throws IOException
 	 */
-	public void testGetBusStopsForRoute_KnownRoute_CheckLastStop() throws IOException{
+	public void testGetBusStopsForRoute_KnownRoute_CheckLastStop() throws IOException, JSONException{
 		List<BusStop> busStops = fetcher.getBusStopsForRoute(30);
-		BusStop actual = busStops.get(0);
+		BusStop actual = busStops.get(busStops.size() - 1);
 		
 		// Create expected
 		BusStop expected = new BusStop();
@@ -374,10 +392,15 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLatitude(47.6690254);
 		expected.setLongitude(-122.279846);
 		expected.setLocationType("0");
-		expected.setName("NE 55th St &amp; 45th Ave NE");
+		expected.setName("NE 55th St & 45th Ave NE");
 		expected.setCode("9990");
 		
-		assertEquals(expected, actual);
+		/* Forced to used assertTrue because assertEquals was
+		 * calling the two parameter's toString method an comparing those strings, 
+		 * instead of calling their .equals() methods.
+		 */
+		//assertEquals(expected, actual);
+		assertTrue(expected.equals(actual));
 	}
 	
 	/**
@@ -385,7 +408,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * giving it a valid stop id. Check the boundary case of the first stop.
 	 * @throws IOException
 	 */
-	public void testGetBusStopsForRoute_KnownRoute_CheckFirstStop() throws IOException{
+	public void testGetBusStopsForRoute_KnownRoute_CheckFirstStop() throws IOException, JSONException{
 		List<BusStop> busStops = fetcher.getBusStopsForRoute(30);
 		BusStop actual = busStops.get(0);
 		
@@ -396,10 +419,15 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLatitude(47.6685753);
 		expected.setLongitude(-122.283653);
 		expected.setLocationType("0");
-		expected.setName("NE 55th St &amp; 43rd Ave NE");
+		expected.setName("NE 55th St & 43rd Ave NE");
 		expected.setCode("10000");
 		
-		assertEquals(expected, actual);
+		/* Forced to used assertTrue because assertEquals was
+		 * calling the two parameter's toString method an comparing those strings, 
+		 * instead of calling their .equals() methods.
+		 */
+		//assertEquals(expected, actual);
+		assertTrue(expected.equals(actual));
 	}
 	
 	/**
@@ -407,7 +435,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 * giving it a valid stop id.
 	 * @throws IOException
 	 */
-	public void testGetBusStopsForRoute_KnownRoute_CheckSize() throws IOException{
+	public void testGetBusStopsForRoute_KnownRoute_CheckSize() throws IOException, JSONException{
 		List<BusStop> busStops = fetcher.getBusStopsForRoute(30);
 		int actual = busStops.size();
 		int expected = 109;
@@ -477,7 +505,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		List<Polyline> polylines = fetcher.getPolylines(30);
 		Polyline actual = polylines.get(polylines.size()-1);
 		
-		assertEquals("g|_bHtpfiV?uE?mBAsBAmCiGFCBCJ@dFrGB",
+		assertEquals("i|_bHrpfiV?uE?mB?oBAoCiGDCDCJ@bFpGB",
 				actual.getEncodedPolyline());
 		assertEquals("BBBBBBBBBB", actual.getEncodedLevels());
 	}
@@ -491,9 +519,9 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		List<Polyline> polylines = fetcher.getPolylines(30);
 		Polyline actual = polylines.get(0);
 		
-		assertEquals("cetaHnpxiViFCcGC?_C?aC@eG?cG?iO?eCBcCA_G?uE?i@@EAk@@iE?O?K?kB?iA?Y?S?S?W?uC?wA?{C?C?cB?cCAaCeB?e@?e@@SFODEDMFOH_An@}AbAsBpA_CbBwBvASLu@b@g@Pm@Le@@cA?uJA_@?a@?A?e@AYCMAACOAQCuAa@y@U_@GYKg@KE?_AG_B@gIDyB?E?y@@iARq@Ps@\\uEtBk@VuAr@{DtBgB`As@^kDlBo@d@i@b@eA|@]ZsAbAa@\\W`@Sf@y@xBAB{BnHELELK\\mA~DQj@eBnESDgA?u@?G?a@?E?I?C?W?s@?_@?}@Cq@?aA?oB?s@?e@BsCLS?E?MBhAqNBI?MjAqNToCLkAXcDBS}EIqLU{GMkBEoCGASGe@UuBQuBG]?yDBuF?qF@kF?qFDsFDqF@kF?mFBqF?iF@sE?aC@}A?aFBqA@sA?mAAmC^?pCBT??I?M?Q@W?aA@aF?WCk@Ee@CgA?a@PgANq@DMJa@TaA^w@\\u@Ra@ZoABODk@@}@@I?Q?a@B{FK[?iCe@?]?s@Ca@?cEE_CC@uB@oBm@C{BAgHGgHEgHGkJEgJE?O?gB?}A?M?M@cB?qB@mB?qB?g@?sB?qB@qB?qB@eCM?iHC}H?iBCsABk@?GyAYuBGe@Eo@AaA@_BFi@bCQ~AGp@AJCSyAG]kAoHGm@GcA?iB?U?}D?sE?wF?qE@sB?qBAwB@wB?{B?W?_B?{B?sB?{B?W?eB?mB?q@?_A?kB?a@?mA?oB?O?aB?mB?K?aB?wD?_NGw@}AwOi@iGKgAEeACcAB}APeDPQTIRBt@H|@JR@HiB@aACaAE{@AICWGe@G]Gc@Ke@Ma@Qg@Si@KUu@qAAAeAeBKMw@mAg@u@oAqBqAmBsBeDGI]i@g@w@y@qAS[qCgEiByC??e@u@CEkCkEiCaEc@WEC]]YKOGc@Ek@?qCBeLFsB@iNJ}@???cA@{ABmB?YFe@Hi@VmBvAg@X}D`AoAZMoAGw@Ao@@iC?kI?gF?Y?c@D[Fy@Ny@DUh@eB`BoFPaAHqAJyDJ_ARq@SOs@EwADCMEKICI@IJARDRNJ?`@BdHuABGOGGGCC?IDEP?B?LDHJJHEJIBS",
+		assertEquals("cetaHlpxiViFCeG??aC?aC@eG?cG@iO@eC?cC?_G?uE?k@?C?k@?iE?O?K?mB@gA?YAU@Q?W?wC?uA?yC?E?cB?cC?aCiB?c@?g@BSDMDEBMJMFaAl@}AdAsBpA_CbBwBvASJu@b@g@Tm@Je@@aA?yJA_@?]?C?e@CYAMAACOAQEuA_@y@U_@G[Kg@IEC}@E_B?gIDyB?E?y@DgANq@Ru@\\uEtBm@VsAr@{DtBgB`As@^kDnBo@b@i@`@gA|@[ZsAdAa@\\W`@Sd@{@zB?@}BpHCLELK\\mA~DQl@cBlEUBgA?u@?I?_@?E?G?E?W?q@?a@?}@Cq@?aA?oB?s@?e@BsCLU@C?MBjAqN?I@MjAqNRoCLkAZeDBQ}EIsLWyGMkBCoCIAQGe@UwBSuBE]?wDBwF?oF@mF?oFDuFDoF@mF@mF@oF?gF@uE?aC@}A@aF?qABuA?mAAmC^?pCDT??I?M?S?U@aA@aF?YCi@Eg@CeA?a@PgAPs@BMH_@VaA`@y@Zs@Ra@XmABQFm@@}@@I?Q?_@B}FMW@mCc@?_@?s@Ca@?cEC_CC@sB@qBm@?{BGgHCgHGgHGkJEiJE@O?gB?_B?I?Q@cB?oB@oB?oB?g@?sB?qB@sB?oB@gCM?iHA}H?iBCsABk@?GyAYuBIe@Cq@AaA@}AFi@`CS`BEp@CJASyAG]kAoHGm@GcA?iB?W?{D?qE?{F?qE@oB?uB?wB?wB?yB?W?_B?yB?uB?{B?W?eB?mB?q@?_A?mB?]?oA?qB?M?}A?oB?M?aB?wD?_NIy@yAwOk@gGKiAGcAAcAByANiDRSRGRBv@Hz@JT@HiB?aAAaAG{@?KCWGe@E]Ic@Me@K_@Qg@Ui@IUu@qAAAeAeBKOw@kAi@w@mAkBqAsBsBeDGG]k@g@w@y@oAS[oCiEkBwC??e@w@CCkCgEkCgEc@QCI_@]WIOGc@Ek@?qC@eLHsB@iNH}@?eA@yABkB@]Dc@Jk@VkBvAi@V{DfAoAVMoAIy@?m@?iC@kIAgF?YBc@@[H{@Nw@DSf@gBbBqFPaAHoAJyDJaAPo@SQo@CyABCIGMIAE?KHATDPNJAb@DdHuABGMGIGCC?IBEP?D?LDHJHJEHIBQ",
 				actual.getEncodedPolyline());
-		assertEquals("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", actual.getEncodedLevels());
+		assertEquals("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", actual.getEncodedLevels());
 	}
 	
 	/**
