@@ -11,6 +11,8 @@ package com.busstopalarm;
 import java.io.IOException;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -112,6 +114,13 @@ public class MapPage extends MapActivity {
 					Toast.LENGTH_LONG);
 			t.show();
 		} catch (IOException e) {
+			e.printStackTrace();
+			Toast t = Toast.makeText(this, "Error occured while trying to " + 
+					"draw bus route. There might have been an error " + 
+					"obtaining route from the server. Please try again later.", 
+					Toast.LENGTH_LONG);
+			t.show();
+		} catch (JSONException e) {
 			e.printStackTrace();
 			Toast t = Toast.makeText(this, "Error occured while trying to " + 
 					"draw bus route. There might have been an error " + 
