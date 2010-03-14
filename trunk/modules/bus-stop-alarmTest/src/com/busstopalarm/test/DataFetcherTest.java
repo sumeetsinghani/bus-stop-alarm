@@ -118,7 +118,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLatitude(47.6690254);
 		expected.setLongitude(-122.279846);
 		expected.setLocationType("0");
-		expected.setName("NE 55th St &amp; 45th Ave NE");
+		expected.setName("NE 55th St & 45th Ave NE");
 		expected.setCode("9990");
 		
 		assertEquals(expected, actual);
@@ -142,7 +142,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLatitude(47.6685753);
 		expected.setLongitude(-122.283653);
 		expected.setLocationType("0");
-		expected.setName("NE 55th St &amp; 43rd Ave NE");
+		expected.setName("NE 55th St & 43rd Ave NE");
 		expected.setCode("10000");
 		
 		assertEquals(expected, actual);

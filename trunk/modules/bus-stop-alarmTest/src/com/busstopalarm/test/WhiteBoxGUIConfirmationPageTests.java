@@ -37,6 +37,7 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 		stop.setStopId("1_10020");
 		i.putExtra("busstop", stop);
 		i.putExtra("busroute", "30");
+		i.putExtra("busroutedesc", "Sandpoint/U-Dist/Seattle Center");
 		setActivityIntent(i);
 		solo = new Solo(getInstrumentation(), getActivity());	
 	}
@@ -55,7 +56,7 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 		});
 		boolean oldCheck = checkBox.isChecked();
 		//save settings as exit
-		solo.clickOnButton("Save as favorite");
+		solo.clickOnButton("Save Destination");
 		cp.finish();
 		cp = (ConfirmationPage) getActivity();
 		final CheckBox checkBox2= (CheckBox)
@@ -75,7 +76,7 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 			}
 		});
 		Object oldRingtone = rSelect.getSelectedItem();
-		solo.clickOnButton("Save as favorite");
+		solo.clickOnButton("Save Destination");
 		cp.finish();
 		cp = (ConfirmationPage) getActivity();
 		final Spinner rSelect2 = (Spinner) 
@@ -95,7 +96,7 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 			}
 		});
 		Object oldProximity = rSelect.getSelectedItem();
-		solo.clickOnButton("Save as favorite");
+		solo.clickOnButton("Save Destination");
 		cp.finish();
 		cp = (ConfirmationPage) getActivity();
 		final Spinner rSelect2 = (Spinner) 
@@ -109,18 +110,20 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar = (SeekBar) 
 		cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		int initialValue = proxBar.getProgress();
+		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				proxBar.incrementProgressBy(4);
 			}
 		});
-		solo.clickOnButton("Save as favorite");
+		solo.clickOnButton("Save Destination");
 		cp.finish();
 		cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar2 = (SeekBar) 
 		cp.findViewById(com.busstopalarm.R.id.ProximityBar);
 		int newProximity = proxBar2.getProgress();
-		assertEquals("proximity setting wasn't saved", 4, newProximity);
+		assertEquals("proximity setting wasn't saved", initialValue + 4, newProximity);
 	}
 
 	//testing for buttons if they are clickable
@@ -215,7 +218,7 @@ ActivityInstrumentationTestCase2<ConfirmationPage> {
 	
 	// Test for Save button linking
 	public void test_SaveButtonLinksToRightClass() throws Throwable{
-		solo.clickOnButton("Save as favorite");
+		solo.clickOnButton("Save Destination");
 		String expected = "com.busstopalarm.ConfirmationPage";
 		String actual = solo.getCurrentActivity().toString().replaceAll("@.*", "");
 		assertEquals("favorites button links to a wrong class", expected, actual);	

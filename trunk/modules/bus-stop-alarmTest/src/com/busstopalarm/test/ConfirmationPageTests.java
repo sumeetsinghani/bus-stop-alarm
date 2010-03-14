@@ -42,6 +42,7 @@ public class ConfirmationPageTests extends
 		stop.setStopId("1_10020");
 		i.putExtra("busstop", stop);
 		i.putExtra("busroute", "30");
+		i.putExtra("busroutedesc", "Sandpoint/U-Dist/Seattle Center");
 		setActivityIntent(i);
 		
 	}
@@ -93,6 +94,7 @@ public class ConfirmationPageTests extends
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar = 
 			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		int initalValue = proxBar.getProgress();
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -106,7 +108,7 @@ public class ConfirmationPageTests extends
 		});
 		
 		int result = proxBar.getProgress();
-		assertEquals("the bar should be in zero mode", 0, result);
+		assertEquals("the bar should be in zero mode", initalValue - 5, result);
 	}
 	
 	/**
@@ -118,6 +120,7 @@ public class ConfirmationPageTests extends
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar = 
 			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		int initalValue = proxBar.getProgress();
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
@@ -132,7 +135,7 @@ public class ConfirmationPageTests extends
 		});
 		
 		int result = proxBar.getProgress();
-		assertEquals("the bar should be in 5 mode", 5, result);
+		assertEquals("the bar should be in 5 mode", initalValue + 5, result);
 	}
 	
 	/**

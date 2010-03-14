@@ -297,5 +297,10 @@ public class SettingsPage extends Activity {
 			}
 		});
 	}  // ends getRingtones method
+
+
+	public SettingsObj getSettings() {
+		return currentSettings;
+	}
 	
 } // class ends

@@ -131,6 +131,7 @@ public class ConfirmationPage extends Activity {
 				intentAlarmService.putExtra("vibration", settings.getVibration());
 				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
 				
+				startService(intentAlarmService);
 				if (!alarmSet) {
 					Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 							Toast.LENGTH_LONG).show();
