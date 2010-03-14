@@ -105,6 +105,7 @@ public class ItemizedOverlayHelper extends ItemizedOverlay {
 	 * @return Bus Stop Text information
 	 */
 	public boolean onTap(int index) {
+		Toast.makeText(mCtx, "Bus stop selected", Toast.LENGTH_SHORT).show();
 		BusStopOverlayItem stop = (BusStopOverlayItem)mOverlays.get(index);
 		lastSelectedStop = stop.getStop();
 		

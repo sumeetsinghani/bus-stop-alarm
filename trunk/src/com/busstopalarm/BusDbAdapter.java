@@ -502,8 +502,8 @@ public class BusDbAdapter {
 			// hopefully this value is 1...
 			int ret = mDb.update("recent", 
 					cv, 
-					"route_id = ? AND stop_id = ?", 
-					new String[]{routeId, stopId});
+					"route_id = ?", 
+					new String[]{routeId});
 			Log.v(TAG, "UPDATE " + ret);
 
 		}
