@@ -62,7 +62,6 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		Polyline actual = busRoute.getPolylines().get(busRoute.getPolylines().size()-1);
 		
-		
 		assertEquals("i|_bHrpfiV?uE?mB?oBAoCiGDCDCJ@bFpGB",
 				actual.getEncodedPolyline());
 		assertEquals("BBBBBBBBBB", actual.getEncodedLevels());
@@ -79,7 +78,6 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckPolylinesFirst()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
 		List<Polyline> actual = busRoute.getPolylines();
-		
 		
 		assertEquals("cetaHlpxiViFCeG??aC?aC@eG?cG@iO@eC?cC?_G?uE?k@?C?k@?iE?O?K?mB@gA?YAU@Q?W?wC?uA?yC?E?cB?cC?aCiB?c@?g@BSDMDEBMJMFaAl@}AdAsBpA_CbBwBvASJu@b@g@Tm@Je@@aA?yJA_@?]?C?e@CYAMAACOAQEuA_@y@U_@G[Kg@IEC}@E_B?gIDyB?E?y@DgANq@Ru@\\uEtBm@VsAr@{DtBgB`As@^kDnBo@b@i@`@gA|@[ZsAdAa@\\W`@Sd@{@zB?@}BpHCLELK\\mA~DQl@cBlEUBgA?u@?I?_@?E?G?E?W?q@?a@?}@Cq@?aA?oB?s@?e@BsCLU@C?MBjAqN?I@MjAqNRoCLkAZeDBQ}EIsLWyGMkBCoCIAQGe@UwBSuBE]?wDBwF?oF@mF?oFDuFDoF@mF@mF@oF?gF@uE?aC@}A@aF?qABuA?mAAmC^?pCDT??I?M?S?U@aA@aF?YCi@Eg@CeA?a@PgAPs@BMH_@VaA`@y@Zs@Ra@XmABQFm@@}@@I?Q?_@B}FMW@mCc@?_@?s@Ca@?cEC_CC@sB@qBm@?{BGgHCgHGgHGkJEiJE@O?gB?_B?I?Q@cB?oB@oB?oB?g@?sB?qB@sB?oB@gCM?iHA}H?iBCsABk@?GyAYuBIe@Cq@AaA@}AFi@`CS`BEp@CJASyAG]kAoHGm@GcA?iB?W?{D?qE?{F?qE@oB?uB?wB?wB?yB?W?_B?yB?uB?{B?W?eB?mB?q@?_A?mB?]?oA?qB?M?}A?oB?M?aB?wD?_NIy@yAwOk@gGKiAGcAAcAByANiDRSRGRBv@Hz@JT@HiB?aAAaAG{@?KCWGe@E]Ic@Me@K_@Qg@Ui@IUu@qAAAeAeBKOw@kAi@w@mAkBqAsBsBeDGG]k@g@w@y@oAS[oCiEkBwC??e@w@CCkCgEkCgEc@QCI_@]WIOGc@Ek@?qC@eLHsB@iNH}@?eA@yABkB@]Dc@Jk@VkBvAi@V{DfAoAVMoAIy@?m@?iC@kIAgF?YBc@@[H{@Nw@DSf@gBbBqFPaAHoAJyDJaAPo@SQo@CyABCIGMIAE?KHATDPNJAb@DdHuABGMGIGCC?IBEP?D?LDHJHJEHIBQ",
 				actual.get(0).getEncodedPolyline());
@@ -111,14 +109,14 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 	 */
 	public void testGetBusRouteById_KnownRoute_IncludePolylinesAndStops_CheckBusStopsLast()throws IOException, JSONException {
 		BusRoute busRoute = fetcher.getBusRouteById(30, true);
-		BusStop actual = busRoute.getBusStops().get(108);
+		BusStop actual = busRoute.getBusStops().get(busRoute.getBusStops().size() - 1);
 		
 		// Create expected
 		BusStop expected = new BusStop();
 		expected.setStopId("1_9990");
 		expected.setDirection("W");
 		expected.setLatitude(47.6690254);
-		expected.setLongitude(-122.279846);
+		expected.setLongitude(-122.279839);
 		expected.setLocationType("0");
 		expected.setName("NE 55th St & 45th Ave NE");
 		expected.setCode("9990");
@@ -151,7 +149,6 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setLocationType("0");
 		expected.setName("NE 55th St & 43rd Ave NE");
 		expected.setCode("10000");
-		
 		
 		/* Forced to used assertTrue because assertEquals was
 		 * calling the two parameter's toString method an comparing those strings, 
@@ -390,7 +387,7 @@ public class DataFetcherTest extends ActivityInstrumentationTestCase2<MainPage> 
 		expected.setStopId("1_9990");
 		expected.setDirection("W");
 		expected.setLatitude(47.6690254);
-		expected.setLongitude(-122.279846);
+		expected.setLongitude(-122.279839);
 		expected.setLocationType("0");
 		expected.setName("NE 55th St & 45th Ave NE");
 		expected.setCode("9990");

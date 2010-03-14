@@ -261,6 +261,7 @@ public class DataFetcher {
 			busStop.setStopId(data.getString("id"));
 			busStop.setLatitude(data.getDouble("lat"));
 			busStop.setLongitude(data.getDouble("lon"));
+			// TODO: i think direction comes up null for some reason
 			busStop.setDirection(data.getString("direction"));
 			busStop.setName(data.getString("name"));
 			busStop.setCode(data.getString("code"));
@@ -283,6 +284,9 @@ public class DataFetcher {
 	 * @throws IOException
 	 */
 	private JSONObject doQuery(String action, int id) throws IOException {
+		if (id < 1) 
+			throw new IllegalArgumentException("id should not be less than 0, was " + id);
+		
 		JSONObject json = null;
 		
 		try {

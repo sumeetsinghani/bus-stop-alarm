@@ -94,6 +94,7 @@ public class ConfirmationPageTests extends
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar = 
 			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		proxBar.setProgress(proxBar.getMax() / 2);
 		int initalValue = proxBar.getProgress();
 		
 		runTestOnUiThread(new Runnable() {
@@ -120,6 +121,7 @@ public class ConfirmationPageTests extends
 		ConfirmationPage cp = (ConfirmationPage) getActivity();
 		final SeekBar proxBar = 
 			(SeekBar) cp.findViewById(com.busstopalarm.R.id.ProximityBar);
+		proxBar.setProgress(proxBar.getMax() / 2);
 		int initalValue = proxBar.getProgress();
 		
 		runTestOnUiThread(new Runnable() {
