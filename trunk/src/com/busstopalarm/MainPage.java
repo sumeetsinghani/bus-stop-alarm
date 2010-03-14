@@ -14,6 +14,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -207,8 +208,8 @@ public class MainPage extends Activity {
 			Log.v(TAG, "main page got recent route number: " + routeNumber);
 			final TextView recentItem = new TextView(this);
 			recentItem.setClickable(true);
+			
 			recentItem.setOnClickListener(new View.OnClickListener() {
-				
 				public void onClick(View v) {					
 					showTransitionToastMsg(routeNumber);
 					Intent i = new Intent(v.getContext(), MapPage.class);
@@ -216,6 +217,7 @@ public class MainPage extends Activity {
 					startActivity(i);
 				}
 			});
+			
 			recentItem.setTextSize(TypedValue.COMPLEX_UNIT_PT, 8);
 			recentItem.setText("Route " + recent.getString(routeIndex) + ", "
 					+ recent.getString(routeDescIndex));

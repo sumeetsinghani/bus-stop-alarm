@@ -9,6 +9,7 @@ package com.busstopalarm;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -190,6 +191,21 @@ public class BusStop implements Parcelable {
 	public boolean equals(Object o) {
 		BusStop other = (BusStop)o;
 		if(!this.stopId.equals(other.stopId)) {
+			Log.d("TEST", "stopid fail: this: " + this.stopId + ", other: " + other.stopId);
+			return false;
+		} else if(!this.code.equals(other.code)) {
+			Log.d("TEST", "code fail: this: " + this.code + ", other: " + other.code);
+			return false;
+		//} else if(!this.direction.equals(other.direction)) {
+		//	Log.d("TEST", "dir fail: this: " + this.direction + ", other: " + other.direction);
+		//	return false;
+		} else if(Math.round(this.latitude * 100000) != 
+			Math.round(other.latitude * 100000)) {
+			Log.d("TEST", "lat fail: this: " + this.latitude + ", other: " + other.latitude);
+			return false;
+		} else if(Math.round(this.longitude * 100000) != 
+			Math.round(other.longitude * 100000)) {
+			Log.d("TEST", "lon fail: this: " + this.longitude + ", other: " + other.longitude);
 			return false;
 		}
 		
