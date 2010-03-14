@@ -16,7 +16,6 @@
 package com.busstopalarm;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -44,6 +43,10 @@ public class ConfirmationPage extends Activity {
 
 	// This TAG is for debugging
 	private static final String TAG = "inConfirmationPage";
+	
+	// Keeps track of state of whether an alarm has been set. This is used
+	// instead of getService for performance reasons.
+	private static boolean alarmSet = false;
 	
 	// The settings object to be pre-loaded into the page.
 	private SettingsObj settings;
@@ -128,10 +131,10 @@ public class ConfirmationPage extends Activity {
 				intentAlarmService.putExtra("vibration", settings.getVibration());
 				intentAlarmService.putExtra("ringtoneUri", ringtoneUri);
 				
-				ComponentName oldService = startService(intentAlarmService);
-				if (oldService == null) {
+				if (!alarmSet) {
 					Toast.makeText(ConfirmationPage.this, "Alarm is set", 
 							Toast.LENGTH_LONG).show();
+					alarmSet = true;
 				} else {
 					Toast.makeText(ConfirmationPage.this, "Alarm updated", 
 							Toast.LENGTH_LONG).show();
@@ -185,13 +188,11 @@ public class ConfirmationPage extends Activity {
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 
-				Intent intentAlarmService = 
-					new Intent(v.getContext(), AlarmService.class);
-				boolean stopped = stopService(intentAlarmService);
-
-				if (stopped) {
+				
+				if (alarmSet) {
 					Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
 							Toast.LENGTH_LONG).show();
+					alarmSet = false;
 				} else {
 					Toast.makeText(ConfirmationPage.this, 
 							"There is no alarm set!", Toast.LENGTH_LONG).show();
