@@ -7,12 +7,14 @@
 package com.busstopalarm.test;
 
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.busstopalarm.AlarmService;
 import com.busstopalarm.MainPage;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -199,11 +201,17 @@ public class WhiteBoxGUIMainPageTests extends ActivityInstrumentationTestCase2<M
 		assertEquals("Major Locations button links to a wrong class", expected, actual);	
 	}
 	
-	public void test_ConfirmationButtonLinksToRightClass() throws Throwable{
+	public void test_ConfirmationButtonLinksToRightClass() throws Throwable {
+		MainPage activity = getActivity();
 		solo.pressMenuItem(0);
-		String expected = "com.busstopalarm.ConfirmationPage";
+		//String expected = "com.busstopalarm.ConfirmationPage";
 		String actual = solo.getCurrentActivity().toString().replaceAll("@.*", "");
-		assertEquals("Confirmation button links to a wrong class", expected, actual);	
+		boolean service = activity.stopService(new Intent(activity, AlarmService.class));
+		if (service) {
+			assertEquals("Confirmation button links to a wrong class", "com.busstopalarm.ConfirmationPage", actual);	
+		} else {
+			assertEquals("Confirmation button links to a wrong class", "com.busstopalarm.MainPage", actual);
+		}
 	}
 
 	//tests if help page button links to help page
@@ -212,15 +220,6 @@ public class WhiteBoxGUIMainPageTests extends ActivityInstrumentationTestCase2<M
 		String expected = "com.busstopalarm.HelpPage";
 		String actual = solo.getCurrentActivity().toString().replaceAll("@.*", "");
 		assertEquals("Help button links to a wrong class", expected, actual);	
-	}
-
-	
-	//test if exit button in menu exits the program
-	public void test_ExitButtonLinksToRightClass() throws Throwable{
-		solo.pressMenuItem(4);
-		String expected = "com.busstopalarm.MainPage";
-		String actual = solo.getCurrentActivity().toString().replaceAll("@.*", "");
-		assertEquals("Confirmation button links to a wrong class", expected, actual);	
 	}
 	
 	protected void tearDown() throws Exception {

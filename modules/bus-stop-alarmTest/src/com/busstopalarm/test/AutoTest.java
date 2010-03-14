@@ -261,7 +261,7 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 		if (views.size() > 0) {
 			solo.clickOnScreen(views.get((int)(Math.random() * views.size())));
 		}
-
+		Thread.sleep(2000);
 		//Goes to confirmation page by selecting route
 		solo.assertCurrentActivity("must be ConfirmationPage", ConfirmationPage.class);
 
@@ -296,7 +296,7 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 		if (views.size() > 0) {
 			solo.clickOnScreen(views.get((int)(Math.random() * views.size())));
 		}
-
+		Thread.sleep(2000);
 		solo.assertCurrentActivity("must be ConfirmationPage", ConfirmationPage.class);
 
 		//change ringtone
