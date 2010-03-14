@@ -16,6 +16,7 @@
 package com.busstopalarm;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -189,7 +190,10 @@ public class ConfirmationPage extends Activity {
 				Intent intentToMainPage = new Intent(ConfirmationPage.this,
 						MainPage.class);
 
-				
+				Intent intentAlarmService = 
+					new Intent(v.getContext(), AlarmService.class);
+				stopService(intentAlarmService);
+
 				if (alarmSet) {
 					Toast.makeText(ConfirmationPage.this, "Alarm canceled", 
 							Toast.LENGTH_LONG).show();
