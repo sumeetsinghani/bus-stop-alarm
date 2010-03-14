@@ -176,6 +176,7 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 	}
 
 	/**
+	 * pre: Recent route list is not empty
 	 * This test selects most recently selected route and then selects a busstop for that route. Then test 
 	 * checks if alarm is set after randomly changing settings and pressing OK button to start the alarm
 	 * @throws Throwable
@@ -184,8 +185,8 @@ public class AutoTest extends ActivityInstrumentationTestCase2<MainPage> {
 		Solo solo = new Solo(getInstrumentation(), getActivity());
 		ArrayList<View> views = solo.getViews();
 		if (views.size() > 0) {
-			solo.clickOnScreen(views.get(1));
-		}
+			solo.clickOnScreen(views.get(0));
+		} 
 		Solo solo2 = new Solo(getInstrumentation(), getActivity());
 		Thread.sleep(2000);
 		//select busstop
