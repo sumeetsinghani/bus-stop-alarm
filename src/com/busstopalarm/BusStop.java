@@ -2,7 +2,7 @@
  * Contains information pertaining to a bus stop such as coordinates,
  * bus direction and street location. Currently only getters and setters.
  * 
- * @author Michael Eng and David Nufer
+ * @author Michael Eng and Orkhan Muradov
  */
 
 package com.busstopalarm;

@@ -1,5 +1,5 @@
 /**
- * @author Orkhan Muradov, David Nufer
+ * @author Orkhan Muradov
  * 
  * This class creates a google map which shows current user location and draws 
  * bus route user requested.
@@ -74,7 +74,7 @@ public class MapPage extends MapActivity {
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000,
 				10.0f, new GPSUpdateHandler());
-
+	
 		//array of overlay items
 		mapOverlays = mapView.getOverlays();
 

@@ -2,7 +2,7 @@
  * Class DataFetcher allows for querying and interpretation of OneBusAway API for
  * bus stop and bus route data relavant to Bus Stop Alarm.
  * 
- * @author Michael Eng, David Nufer
+ * @author Michael Eng, Orkhan Muradov
  */
 
 package com.busstopalarm;

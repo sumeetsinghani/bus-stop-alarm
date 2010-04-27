@@ -1,5 +1,5 @@
 /**
- * @author Orkhan Muradov, David Nufer, Michael Eng
+ * @author Orkhan Muradov, Michael Eng
  * This class is used to draw overlay items on the map.
  * It uses an array of overlay items.
  */

@@ -15,7 +15,7 @@
  * proximity - is an integer from 0 to 1000
  * proximityUnit - is either "Meters" or "Yards"
  * 
- * @author Derek Cheng
+ * @author Pyong Byon
  */
 
 package com.busstopalarm;

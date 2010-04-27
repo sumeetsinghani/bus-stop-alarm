@@ -1,7 +1,7 @@
 /**
  * Overlay Item to display on the map for a bus stop
  * 
- * @author David Nufer
+ * @author Orkhan Muradov
  */
 
 package com.busstopalarm;

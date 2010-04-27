@@ -1,7 +1,7 @@
 /**
  * Main page of the Bus Stop Alarm
  * 
- * @author David Nufer, Orkhan Muradov, Pyong Byon
+ * @author Orkhan Muradov, Pyong Byon
  */
 
 package com.busstopalarm;
