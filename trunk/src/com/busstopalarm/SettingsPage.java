@@ -1,5 +1,5 @@
 /**
- * Author: Orkhan Muradov, Derek Cheng
+ * Author: Orkhan Muradov, Pyong Byon
  * Date: 02/03/2010
  * 
  * Settings Page where the user interacts with this page to 

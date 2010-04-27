@@ -3,7 +3,7 @@
  * 
  * CAUTION: NOT YET FULLY TESTED.
  * 
- * @author Michael Eng and David Nufer.
+ * @author Michael Eng 
  */
 
 package com.busstopalarm;

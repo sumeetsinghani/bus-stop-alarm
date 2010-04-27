@@ -1,5 +1,5 @@
 /**
- * Author: Pyong Byon, Orkhan Muradov, David Nufer
+ * Author: Pyong Byon, Orkhan Muradov
  * Date: 03/01/2010
  * 
  * Confirmation Page where the user interacts with this page to 
