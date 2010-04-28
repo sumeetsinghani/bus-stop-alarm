@@ -167,7 +167,6 @@ public class AlarmService extends Service {
 	 * {@link AlarmLocationListener} listens to the GPS, and updates the 
 	 * user's location
 	 * 
-	 * @author David Nufer
 	 */
 	private class AlarmLocationListener implements LocationListener {
 

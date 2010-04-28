@@ -181,7 +181,6 @@ public class BusNumDbAdapter {
      * 
      * @return A sorted, immutable list of integers of available bus routes.
      * 
-     * @author Derek Cheng
      */
     public List<Integer> getBusRoutesList() {
     	
