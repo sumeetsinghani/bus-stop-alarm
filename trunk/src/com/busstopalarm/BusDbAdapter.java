@@ -451,7 +451,7 @@ public class BusDbAdapter {
 			count++;
 			Log.v(TAG, "Trying to update using " + count + "," + time + ", " + 
 					routeId + "," + stopId);
-			// Derek Cheng: I'm using a ContentValues here because rawQuery()
+			// I'm using a ContentValues here because rawQuery()
 			// stopped working for some reason, and it is more appropriate for
 			// update statements anyway.
 			ContentValues cv = new ContentValues();
@@ -494,7 +494,7 @@ public class BusDbAdapter {
 
 			Log.v(TAG, "Trying to update using " + "," + time + ", " + 
 					routeId + "," + stopId);
-			// Derek Cheng: I'm using a ContentValues here because rawQuery()
+			// I'm using a ContentValues here because rawQuery()
 			// stopped working for some reason, and it is more appropriate for
 			// update statements anyway.
 			ContentValues cv = new ContentValues();

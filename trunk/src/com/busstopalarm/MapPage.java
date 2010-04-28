@@ -149,7 +149,6 @@ public class MapPage extends MapActivity {
 	 * Sets the focus of the map view, as determined by the list of bus stops.
 	 * @param stopList The list of bus stops.
 	 * 
-	 * @author Derek Cheng
 	 */
 	private void setFocus(List<BusStop> stopList) {
 		// Just in case this happens, we set the center to the 
@@ -172,7 +171,6 @@ public class MapPage extends MapActivity {
 	 * @param stopList A list of BusStops
 	 * @return The "centroid" of stopList, given as a GeoLocation
 	 * Precondition: stopList has at least 1 element.
-	 * @author - Derek Cheng
 	 */
 	private GeoPoint getCentroid(List<BusStop> stopList) {
 		// We get the "centroid" of all the bus stops' points, by taking the
